@@ -6,28 +6,48 @@ import astropy.units as u
 import asyncio
 import websockets
 import json
+import re
 
 received_data = {}
+greek_alphabet_order = {
+    "α": 1, "β": 2, "γ": 3, "δ": 4, "ε": 5, "ζ": 6, "η": 7, "θ": 8, "ι": 9, "κ": 10,
+    "λ": 11, "μ": 12, "ν": 13, "ξ": 14, "ο": 15, "π": 16, "ρ": 17, "σ": 18, "τ": 19, 
+    "υ": 20, "φ": 21, "χ": 22, "ψ": 23, "ω": 24
+}
 
-# 예시 데이터 1
-star_names = [
-    'Tau Ceti',
-    'Deneb',
-    'Regulus',
-    'Rigel',
-    "Luyten's Star",
-    'Meissa',
-    'Zeta Ophiuchi',
-    'Vega',
-    'Betelgeuse',
-    'Spica',
-    'Sirius',
-    'Antares',
-    'Algieba',
-    'Aldebaran',
-    'Altair',
-    'Alpha Centauri',
-    'Epsilon Eridani',
+# Orion 오리온 자리
+ori = [
+    'κ Ori',
+    'ζ Ori',
+    'α Ori',
+    'μ Ori',
+    'ξ Ori',
+    'ν Ori',
+    'χ1 Ori',
+    'χ2 Ori',
+    'ε Ori',
+    'λ Ori',
+    'β Ori',
+    'δ Ori',
+    'γ Ori',
+    'π1 Ori',
+    'π2 Ori',
+    'π3 Ori',
+    'π4 Ori',
+    'π5 Ori',
+    'π6 Ori',
+]
+
+# Ursa Minor 작은 곰 자리
+umi = [
+    'γ UMi',
+    'β UMi',
+    'η UMi',
+    'θ UMi',
+    'ζ UMi',
+    'ε UMi',
+    'δ UMi',
+    'α UMi',
 ]
 
 # 예시 데이터 2
@@ -71,7 +91,7 @@ async def data_server(websocket, path):
             new_data = {
                 'location': received_data['location'],
                 'time': Time.now().strftime('%Y-%m-%d %H:%M:%S'),
-                'stars': get_star_datas(star_names, location)
+                'stars': get_star_datas(ori, location)
             }
 
             json_data = json.dumps(new_data)
@@ -92,14 +112,14 @@ async def main():
 # 태양계 외부 천체 검색 (SIMBAD)
 def get_star_datas(star_names, obs_loc):
     simbad = Simbad()
-    simbad.add_votable_fields('pmra', 'pmdec', 'plx', 'rv_value')
+    simbad.add_votable_fields('flux(V)', 'pmra', 'pmdec', 'plx', 'rv_value')
     result_table = simbad.query_objects(star_names)
     obs_location = EarthLocation(lat=obs_loc[0] * u.deg, lon=obs_loc[1] * u.deg, height=0 * u.m)
     obs_time = Time.now()
     star_datas = []
     i = 0
 
-    for star_name, ra, dec, pm_ra_cosdec, pm_dec, parallax, radial_velocity in zip(result_table['MAIN_ID'], result_table['RA'], result_table['DEC'], result_table['PMRA'], result_table['PMDEC'], result_table['PLX_VALUE'], result_table['RV_VALUE']):
+    for star_name, ra, dec, pm_ra_cosdec, pm_dec, parallax, radial_velocity, flux_v in zip(result_table['MAIN_ID'], result_table['RA'], result_table['DEC'], result_table['PMRA'], result_table['PMDEC'], result_table['PLX_VALUE'], result_table['RV_VALUE'], result_table['FLUX_V']):
 
     # SkyCoord 객체로 변환
         star_coord = SkyCoord(
@@ -125,6 +145,7 @@ def get_star_datas(star_names, obs_loc):
             'dec': star_now.dec.degree,
             'alt': star_altaz.alt.degree,
             'az': star_altaz.az.degree,
+            'flux_v': flux_v,
         }
 
         star_datas.append(star_data)
@@ -216,8 +237,9 @@ def get_planet_data(planet_id, obs_loc):
 
 if __name__ == '__main__':
     # 서버 실행
-    asyncio.run(main())
+    # asyncio.run(main())
 
     # 예시 코드
-    # get_star_datas(star_names, (37.5665, 126.9780))
+    # get_constellation_datas()
+    print(get_star_datas(ori, (37.4882, 126.7083)))
     # get_planet_data("299", (37.5665, 126.9780))

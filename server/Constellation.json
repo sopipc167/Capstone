@@ -1,0 +1,252 @@
+{
+    "constellations": {
+        "ari": {
+            "stars": [
+                "41 Ari",
+                "alf Ari",
+                "bet Ari",
+                "gam Ari"
+            ],
+            "lines": [
+                [0, 1, 2, 3]
+            ]
+        },
+        "tau": {
+            "stars": [
+                "bet Tau",
+                "tau Tau",
+                "eps Tau",
+                "del Tau",
+                "eta Tau",
+                "zet Tau",
+                "alf Tau",
+                "tet01 Tau",
+                "gam Tau",
+                "lam Tau",
+                "omi Tau"
+            ],
+            "lines": [
+                [0, 1, 2, 3, 4],
+                [5, 6, 7, 8, 9, 10],
+                [6, 2],
+                [8, 3]
+            ]
+        },
+        "gem": {
+            "stars": [
+                "tet Gem",
+                "tau Gem",
+                "iot Gem",
+                "ups Gem",
+                "kap Gem",
+                "alf Gem",
+                "eps Gem",
+                "nu Gem",
+                "mu Gem",
+                "eta Gem",
+                "1 Gem",
+                "bet Gem",
+                "del Gem",
+                "zet Gem",
+                "gam Gem",
+                "lam Gem",
+                "ksi Gem"
+            ],
+            "lines": [
+                [0, 1, 2, 3, 4],
+                [5, 1, 6, 8, 9, 10],
+                [6, 7],
+                [11, 3, 12, 13, 14],
+                [12, 15, 16]
+            ]
+        },
+        "cnc": {
+            "stars": [
+                "chi Cnc",
+                "iot Cnc",
+                "gam Cnc",
+                "del Cnc",
+                "alf Cnc",
+                "bet Cnc"
+            ],
+            "lines": [
+                [0, 2, 3, 5],
+                [1, 2],
+                [3, 4]
+            ]
+        },
+        "leo": {
+            "stars": [
+                "eps Leo",
+                "mu Leo",
+                "zet Leo",
+                "gam Leo",
+                "eta Leo",
+                "alf Leo",
+                "tet Leo",
+                "bet Leo",
+                "del Leo"
+            ],
+            "lines": [
+                [0, 1, 2, 3, 4, 5, 6, 7, 8, 3],
+                [6, 8]
+            ]
+        },
+        "vir": {
+            "stars": [
+                "nu Vir",
+                "eta Vir",
+                "gam Vir",
+                "del Vir",
+                "eps Vir",
+                "zet Vir",
+                "tau Vir",
+                "109 Vir",
+                "alf Vir",
+                "kap Vir",
+                "iot Vir",
+                "mu Vir"
+            ],
+            "lines": [
+                [0, 1, 2, 8, 9, 10, 11],
+                [4, 3, 5, 6, 7],
+                [3, 4],
+                [5, 8]
+            ]
+        },
+        "lib": {
+            "stars": [
+                "tet Lib",
+                "gam Lib",
+                "bet Lib",
+                "alf Lib",
+                "sig Lib"
+            ],
+            "lines": [
+                [0, 1, 2, 3, 4, 1]
+            ]
+        },
+        "sco": {
+            "stars": [
+                "lam Sco",
+                "kap Sco",
+                "iot Sco",
+                "tet Sco",
+                "eta Sco",
+                "zet01 Sco",
+                "mu01 Sco",
+                "eps Sco",
+                "tau Sco",
+                "alf Sco",
+                "bet01 Sco",
+                "del Sco",
+                "pi Sco"
+            ],
+            "lines": [
+                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                [9, 11],
+                [12, 9]
+            ]
+        },
+        "sgr": {
+            "stars": [
+                "alf Sgr",
+                "bet01 Sgr",
+                "iot Sgr",
+                "tet01 Sgr",
+                "c Sgr",
+                "h01 Sgr",
+                "tau Sgr",
+                "sig Sgr",
+                "ksi02 Sgr",
+                "omi Sgr",
+                "d Sgr",
+                "rho01 Sgr",
+                "zet Sgr",
+                "phi Sgr",
+                "lam Sgr",
+                "mu Sgr",
+                "del Sgr",
+                "gam02 Sgr",
+                "X Sgr",
+                "eps Sgr",
+                "eta Sgr"
+            ],
+            "lines": [
+                [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+                [0, 2],
+                [7, 13, 14, 15],
+                [6, 12, 19, 20],
+                [12, 13, 16, 19, 17, 16, 14],
+                [17, 18]
+            ]
+        },
+        "cap": {
+            "stars": [
+                "del Cap",
+                "gam Cap",
+                "iot Cap",
+                "zet Cap",
+                "tet Cap",
+                "ome Cap",
+                "bet01 Cap",
+                "psi Cap",
+                "alf02 Cap"
+            ],
+            "lines": [
+                [0, 1, 2, 3, 4, 2],
+                [8, 6, 4, 5],
+                [6, 7]
+            ]
+        },
+        "aqr": {
+            "stars": [
+                "eps Aqr",
+                "bet Aqr",
+                "alf Aqr",
+                "gam Aqr",
+                "zet Aqr",
+                "eta Aqr",
+                "lam Aqr",
+                "psi01 Aqr",
+                "b01 Aqr",
+                "tet Aqr",
+                "iot Aqr",
+                "sig Aqr",
+                "tau Aqr",
+                "del Aqr",
+                "c02 Aqr"
+            ],
+            "lines": [
+                [0, 1, 2, 3, 4, 5, 6, 7, 8],
+                [2, 9, 11, 12, 13, 14],
+                [9, 10]
+            ]
+        },
+        "psc": {
+            "stars": [
+                "sig Psc",
+                "ups Psc",
+                "phi Psc",
+                "eta Psc",
+                "omi Psc",
+                "alf Psc",
+                "ksi Psc",
+                "nu Psc",
+                "mu Psc",
+                "eps Psc",
+                "del Psc",
+                "d Psc",
+                "ome Psc",
+                "iot Psc",
+                "lam Psc",
+                "kap Psc",
+                "gam Psc",
+                "tet Psc"
+            ],
+            "lines": [
+                [2, 1, 0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 13]
+            ]
+        }
+    }
+}
