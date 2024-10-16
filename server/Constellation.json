@@ -247,6 +247,237 @@
             "lines": [
                 [2, 1, 0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 13]
             ]
+        },
+        "and": {
+            "stars": [
+                "alf And",
+                "del And",
+                "bet And",
+                "gam And",
+                "mu And",
+                "nu And"
+            ],
+            "lines": [
+                [0, 1, 2, 3],
+                [2, 4, 5]
+            ]
+        },
+        "ant": {
+            "stars": [
+                "alf Ant",
+                "eta Ant"
+            ],
+            "lines": [
+                [0, 1]
+            ]
+        },
+        "aps": {
+            "stars": [
+                "alf Aps",
+                "gam Aps",
+                "bet Aps"
+            ],
+            "lines": [
+                [0, 1, 2]
+            ]
+        },
+        "aql": {
+            "stars": [
+                "bet Aql",
+                "alf Aql",
+                "gam Aql",
+                "del Aql",
+                "lam Aql",
+                "tet Aql",
+                "eta Aql",
+                "zet Aql",
+                "eps Aql"
+            ],
+            "lines": [
+                [0, 1, 2],
+                [1, 3, 4],
+                [5, 6, 3, 7, 8]
+            ]
+        },
+        "ara": {
+            "stars": [
+                "alf Ara",
+                "tet Ara",
+                "bet Ara",
+                "gam Ara",
+                "del Ara",
+                "eta Ara",
+                "zet Ara"
+            ],
+            "lines": [
+                [0, 1, 2, 3, 4, 5, 6, 0]
+            ]
+        },
+        "aur": {
+            "stars": [
+                "alf Aur",
+                "bet Aur",
+                "tet Aur",
+                "gam Aur",
+                "iot Aur",
+                "zet Aur"
+            ],
+            "lines": [
+                [0, 1, 2, 3, 4, 5, 0]
+            ]
+        },
+        "boo": {
+            "stars": [
+                "alf Boo",
+                "eps Boo",
+                "del Boo",
+                "bet Boo",
+                "gam Boo",
+                "rho Boo",
+                "ups Boo",
+                "eta Boo",
+                "zet Boo"
+            ],
+            "lines": [
+                [0, 1, 2, 3, 4, 5, 0],
+                [6, 7, 0, 8]
+            ]
+        },
+        "cae": {
+            "stars": [
+                "bet Cae",
+                "alf Cae",
+                "del Cae"
+            ],
+            "lines": [
+                [0, 1, 2]
+            ]
+        },
+        "cam": {
+            "stars": [
+                "HD 33564",
+                "gam Cam",
+                "HD 21291",
+                "HD 24479",
+                "alf Cam"
+            ],
+            "lines": [
+                [0, 1, 2, 3, 4, 1]
+            ]
+        },
+        "cvn": {
+            "stars": [
+                "alf CVn",
+                "bet CVn"
+            ],
+            "lines": [
+                [0, 1]
+            ]
+        },
+        "cma": {
+            "stars": [
+                "iot CMa",
+                "tet CMa",
+                "gam CMa",
+                "alf CMa",
+                "omi02 CMa",
+                "del CMa",
+                "sig CMa",
+                "omi01 CMa",
+                "nu02 CMa",
+                "bet CMa",
+                "ksi02 CMa",
+                "eta CMa",
+                "ome CMa",
+                "eps CMa",
+                "zet CMa",
+                "kap CMa"
+            ],
+            "lines": [
+                [0, 1, 2, 0, 3, 4, 5, 6, 7, 8, 3],
+                [6, 13, 14],
+                [8, 10],
+                [9, 8],
+                [11, 12, 5],
+                [15, 13]
+            ]
+        },
+        "cmi": {
+            "stars": [
+                "alf CMi",
+                "bet CMi"
+            ],
+            "lines": [
+                [0, 1]
+            ]
+        },
+        "car": {
+            "stars": [
+                "alf Car",
+                "bet Car",
+                "ome Car",
+                "tet Car",
+                "iot Car",
+                "eps Car",
+                "chi Car",
+                "ups Car"
+            ],
+            "lines": [
+                [0, 1, 2, 3, 4, 5, 6],
+                [1, 7]
+            ]
+        },
+        "cas": {
+            "stars": [
+                "bet Cas",
+                "alf Cas",
+                "gam Cas",
+                "del Cas",
+                "eps Cas"
+            ],
+            "lines": [
+                [0, 1, 2, 3, 4]
+            ]
+        },
+        "cen": {
+            "stars": [
+                "alf Cen B",
+                "bet Cen",
+                "eps Cen",
+                "zet Cen",
+                "ups01 Cen",
+                "mu Cen",
+                "nu Cen",
+                "tet Cen",
+                "d Cen",
+                "iot Cen",
+                "eta Cen",
+                "kap Cen",
+                "gam Cen",
+                "sig Cen",
+                "del Cen",
+                "a Cen",
+                "lam Cen"
+            ],
+            "lines": [
+                [0, 1, 2, 3, 4, 5, 6, 7],
+                [6, 8, 9],
+                [5, 10, 11],
+                [3, 12, 13, 14, 15, 16]
+            ]
+        },
+        "cep": {
+            "stars": [
+                "alf Cep",
+                "bet Cep",
+                "gam Cep",
+                "iot Cep",
+                "zet Cep"
+            ],
+            "lines": [
+                [0, 1, 2, 3, 4, 0],
+                [1, 3]
+            ]
         }
     }
 }
