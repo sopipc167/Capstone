@@ -1,483 +1,944 @@
-{
-    "constellations": {
-        "ari": {
-            "stars": [
-                "41 Ari",
-                "alf Ari",
-                "bet Ari",
-                "gam Ari"
-            ],
-            "lines": [
-                [0, 1, 2, 3]
-            ]
-        },
-        "tau": {
-            "stars": [
-                "bet Tau",
-                "tau Tau",
-                "eps Tau",
-                "del Tau",
-                "eta Tau",
-                "zet Tau",
-                "alf Tau",
-                "tet01 Tau",
-                "gam Tau",
-                "lam Tau",
-                "omi Tau"
-            ],
-            "lines": [
-                [0, 1, 2, 3, 4],
-                [5, 6, 7, 8, 9, 10],
-                [6, 2],
-                [8, 3]
-            ]
-        },
-        "gem": {
-            "stars": [
-                "tet Gem",
-                "tau Gem",
-                "iot Gem",
-                "ups Gem",
-                "kap Gem",
-                "alf Gem",
-                "eps Gem",
-                "nu Gem",
-                "mu Gem",
-                "eta Gem",
-                "1 Gem",
-                "bet Gem",
-                "del Gem",
-                "zet Gem",
-                "gam Gem",
-                "lam Gem",
-                "ksi Gem"
-            ],
-            "lines": [
-                [0, 1, 2, 3, 4],
-                [5, 1, 6, 8, 9, 10],
-                [6, 7],
-                [11, 3, 12, 13, 14],
-                [12, 15, 16]
-            ]
-        },
-        "cnc": {
-            "stars": [
-                "chi Cnc",
-                "iot Cnc",
-                "gam Cnc",
-                "del Cnc",
-                "alf Cnc",
-                "bet Cnc"
-            ],
-            "lines": [
-                [0, 2, 3, 5],
-                [1, 2],
-                [3, 4]
-            ]
-        },
-        "leo": {
-            "stars": [
-                "eps Leo",
-                "mu Leo",
-                "zet Leo",
-                "gam Leo",
-                "eta Leo",
-                "alf Leo",
-                "tet Leo",
-                "bet Leo",
-                "del Leo"
-            ],
-            "lines": [
-                [0, 1, 2, 3, 4, 5, 6, 7, 8, 3],
-                [6, 8]
-            ]
-        },
-        "vir": {
-            "stars": [
-                "nu Vir",
-                "eta Vir",
-                "gam Vir",
-                "del Vir",
-                "eps Vir",
-                "zet Vir",
-                "tau Vir",
-                "109 Vir",
-                "alf Vir",
-                "kap Vir",
-                "iot Vir",
-                "mu Vir"
-            ],
-            "lines": [
-                [0, 1, 2, 8, 9, 10, 11],
-                [4, 3, 5, 6, 7],
-                [3, 4],
-                [5, 8]
-            ]
-        },
-        "lib": {
-            "stars": [
-                "tet Lib",
-                "gam Lib",
-                "bet Lib",
-                "alf Lib",
-                "sig Lib"
-            ],
-            "lines": [
-                [0, 1, 2, 3, 4, 1]
-            ]
-        },
-        "sco": {
-            "stars": [
-                "lam Sco",
-                "kap Sco",
-                "iot Sco",
-                "tet Sco",
-                "eta Sco",
-                "zet01 Sco",
-                "mu01 Sco",
-                "eps Sco",
-                "tau Sco",
-                "alf Sco",
-                "bet01 Sco",
-                "del Sco",
-                "pi Sco"
-            ],
-            "lines": [
-                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-                [9, 11],
-                [12, 9]
-            ]
-        },
-        "sgr": {
-            "stars": [
-                "alf Sgr",
-                "bet01 Sgr",
-                "iot Sgr",
-                "tet01 Sgr",
-                "c Sgr",
-                "h01 Sgr",
-                "tau Sgr",
-                "sig Sgr",
-                "ksi02 Sgr",
-                "omi Sgr",
-                "d Sgr",
-                "rho01 Sgr",
-                "zet Sgr",
-                "phi Sgr",
-                "lam Sgr",
-                "mu Sgr",
-                "del Sgr",
-                "gam02 Sgr",
-                "X Sgr",
-                "eps Sgr",
-                "eta Sgr"
-            ],
-            "lines": [
-                [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-                [0, 2],
-                [7, 13, 14, 15],
-                [6, 12, 19, 20],
-                [12, 13, 16, 19, 17, 16, 14],
-                [17, 18]
-            ]
-        },
-        "cap": {
-            "stars": [
-                "del Cap",
-                "gam Cap",
-                "iot Cap",
-                "zet Cap",
-                "tet Cap",
-                "ome Cap",
-                "bet01 Cap",
-                "psi Cap",
-                "alf02 Cap"
-            ],
-            "lines": [
-                [0, 1, 2, 3, 4, 2],
-                [8, 6, 4, 5],
-                [6, 7]
-            ]
-        },
-        "aqr": {
-            "stars": [
-                "eps Aqr",
-                "bet Aqr",
-                "alf Aqr",
-                "gam Aqr",
-                "zet Aqr",
-                "eta Aqr",
-                "lam Aqr",
-                "psi01 Aqr",
-                "b01 Aqr",
-                "tet Aqr",
-                "iot Aqr",
-                "sig Aqr",
-                "tau Aqr",
-                "del Aqr",
-                "c02 Aqr"
-            ],
-            "lines": [
-                [0, 1, 2, 3, 4, 5, 6, 7, 8],
-                [2, 9, 11, 12, 13, 14],
-                [9, 10]
-            ]
-        },
-        "psc": {
-            "stars": [
-                "sig Psc",
-                "ups Psc",
-                "phi Psc",
-                "eta Psc",
-                "omi Psc",
-                "alf Psc",
-                "ksi Psc",
-                "nu Psc",
-                "mu Psc",
-                "eps Psc",
-                "del Psc",
-                "d Psc",
-                "ome Psc",
-                "iot Psc",
-                "lam Psc",
-                "kap Psc",
-                "gam Psc",
-                "tet Psc"
-            ],
-            "lines": [
-                [2, 1, 0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 13]
-            ]
-        },
-        "and": {
-            "stars": [
-                "alf And",
-                "del And",
-                "bet And",
-                "gam And",
-                "mu And",
-                "nu And"
-            ],
-            "lines": [
-                [0, 1, 2, 3],
-                [2, 4, 5]
-            ]
-        },
-        "ant": {
-            "stars": [
-                "alf Ant",
-                "eta Ant"
-            ],
-            "lines": [
-                [0, 1]
-            ]
-        },
-        "aps": {
-            "stars": [
-                "alf Aps",
-                "gam Aps",
-                "bet Aps"
-            ],
-            "lines": [
-                [0, 1, 2]
-            ]
-        },
-        "aql": {
-            "stars": [
-                "bet Aql",
-                "alf Aql",
-                "gam Aql",
-                "del Aql",
-                "lam Aql",
-                "tet Aql",
-                "eta Aql",
-                "zet Aql",
-                "eps Aql"
-            ],
-            "lines": [
-                [0, 1, 2],
-                [1, 3, 4],
-                [5, 6, 3, 7, 8]
-            ]
-        },
-        "ara": {
-            "stars": [
-                "alf Ara",
-                "tet Ara",
-                "bet Ara",
-                "gam Ara",
-                "del Ara",
-                "eta Ara",
-                "zet Ara"
-            ],
-            "lines": [
-                [0, 1, 2, 3, 4, 5, 6, 0]
-            ]
-        },
-        "aur": {
-            "stars": [
-                "alf Aur",
-                "bet Aur",
-                "tet Aur",
-                "gam Aur",
-                "iot Aur",
-                "zet Aur"
-            ],
-            "lines": [
-                [0, 1, 2, 3, 4, 5, 0]
-            ]
-        },
-        "boo": {
-            "stars": [
-                "alf Boo",
-                "eps Boo",
-                "del Boo",
-                "bet Boo",
-                "gam Boo",
-                "rho Boo",
-                "ups Boo",
-                "eta Boo",
-                "zet Boo"
-            ],
-            "lines": [
-                [0, 1, 2, 3, 4, 5, 0],
-                [6, 7, 0, 8]
-            ]
-        },
-        "cae": {
-            "stars": [
-                "bet Cae",
-                "alf Cae",
-                "del Cae"
-            ],
-            "lines": [
-                [0, 1, 2]
-            ]
-        },
-        "cam": {
-            "stars": [
-                "HD 33564",
-                "gam Cam",
-                "HD 21291",
-                "HD 24479",
-                "alf Cam"
-            ],
-            "lines": [
-                [0, 1, 2, 3, 4, 1]
-            ]
-        },
-        "cvn": {
-            "stars": [
-                "alf CVn",
-                "bet CVn"
-            ],
-            "lines": [
-                [0, 1]
-            ]
-        },
-        "cma": {
-            "stars": [
-                "iot CMa",
-                "tet CMa",
-                "gam CMa",
-                "alf CMa",
-                "omi02 CMa",
-                "del CMa",
-                "sig CMa",
-                "omi01 CMa",
-                "nu02 CMa",
-                "bet CMa",
-                "ksi02 CMa",
-                "eta CMa",
-                "ome CMa",
-                "eps CMa",
-                "zet CMa",
-                "kap CMa"
-            ],
-            "lines": [
-                [0, 1, 2, 0, 3, 4, 5, 6, 7, 8, 3],
-                [6, 13, 14],
-                [8, 10],
-                [9, 8],
-                [11, 12, 5],
-                [15, 13]
-            ]
-        },
-        "cmi": {
-            "stars": [
-                "alf CMi",
-                "bet CMi"
-            ],
-            "lines": [
-                [0, 1]
-            ]
-        },
-        "car": {
-            "stars": [
-                "alf Car",
-                "bet Car",
-                "ome Car",
-                "tet Car",
-                "iot Car",
-                "eps Car",
-                "chi Car",
-                "ups Car"
-            ],
-            "lines": [
-                [0, 1, 2, 3, 4, 5, 6],
-                [1, 7]
-            ]
-        },
-        "cas": {
-            "stars": [
-                "bet Cas",
-                "alf Cas",
-                "gam Cas",
-                "del Cas",
-                "eps Cas"
-            ],
-            "lines": [
-                [0, 1, 2, 3, 4]
-            ]
-        },
-        "cen": {
-            "stars": [
-                "alf Cen B",
-                "bet Cen",
-                "eps Cen",
-                "zet Cen",
-                "ups01 Cen",
-                "mu Cen",
-                "nu Cen",
-                "tet Cen",
-                "d Cen",
-                "iot Cen",
-                "eta Cen",
-                "kap Cen",
-                "gam Cen",
-                "sig Cen",
-                "del Cen",
-                "a Cen",
-                "lam Cen"
-            ],
-            "lines": [
-                [0, 1, 2, 3, 4, 5, 6, 7],
-                [6, 8, 9],
-                [5, 10, 11],
-                [3, 12, 13, 14, 15, 16]
-            ]
-        },
-        "cep": {
-            "stars": [
-                "alf Cep",
-                "bet Cep",
-                "gam Cep",
-                "iot Cep",
-                "zet Cep"
-            ],
-            "lines": [
-                [0, 1, 2, 3, 4, 0],
-                [1, 3]
-            ]
-        }
+[
+    {
+        "name": "Andromeda",
+        "stars": [
+            "alf And",
+            "del And",
+            "bet And",
+            "gam And",
+            "mu And",
+            "nu And"
+        ],
+        "lines": [
+            [0, 1, 2, 3],
+            [2, 4, 5]
+        ]
+    },
+    {
+        "name": "Antlia",
+        "stars": [
+            "alf Ant",
+            "eta Ant"
+        ],
+        "lines": [
+            [0, 1]
+        ]
+    },
+    {
+        "name": "Apus",
+        "stars": [
+            "alf Aps",
+            "gam Aps",
+            "bet Aps"
+        ],
+        "lines": [
+            [0, 1, 2]
+        ]
+    },
+    {
+        "name": "Aquarius",
+        "stars": [
+            "eps Aqr",
+            "bet Aqr",
+            "alf Aqr",
+            "gam Aqr",
+            "zet Aqr",
+            "eta Aqr",
+            "lam Aqr",
+            "psi01 Aqr",
+            "98 Aqr",
+            "tet Aqr",
+            "iot Aqr",
+            "sig Aqr",
+            "tau Aqr",
+            "del Aqr",
+            "88 Aqr"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 5, 6, 7, 8],
+            [2, 9, 11, 12, 13, 14],
+            [9, 10]
+        ]
+    },
+    {
+        "name": "Aquila",
+        "stars": [
+            "bet Aql",
+            "alf Aql",
+            "gam Aql",
+            "del Aql",
+            "lam Aql",
+            "tet Aql",
+            "eta Aql",
+            "zet Aql",
+            "eps Aql"
+        ],
+        "lines": [
+            [0, 1, 2],
+            [1, 3, 4],
+            [5, 6, 3, 7, 8]
+        ]
+    },
+    {
+        "name": "Ara",
+        "stars": [
+            "alf Ara",
+            "tet Ara",
+            "bet Ara",
+            "gam Ara",
+            "del Ara",
+            "eta Ara",
+            "zet Ara"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 5, 6, 0]
+        ]
+    },
+    {
+        "name": "Aries",
+        "stars": [
+            "41 Ari",
+            "alf Ari",
+            "bet Ari",
+            "gam Ari"
+        ],
+        "lines": [
+            [0, 1, 2, 3]
+        ]
+    },
+    {
+        "name": "Auriga",
+        "stars": [
+            "alf Aur",
+            "bet Aur",
+            "tet Aur",
+            "gam Aur",
+            "iot Aur",
+            "zet Aur"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 5, 0]
+        ]
+    },
+    {
+        "name": "Bootes",
+        "stars": [
+            "alf Boo",
+            "eps Boo",
+            "del Boo",
+            "bet Boo",
+            "gam Boo",
+            "rho Boo",
+            "ups Boo",
+            "eta Boo",
+            "zet Boo"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 5, 0],
+            [6, 7, 0, 8]
+        ]
+    },
+    {
+        "name": "Caelum",
+        "stars": [
+            "bet Cae",
+            "alf Cae",
+            "del Cae"
+        ],
+        "lines": [
+            [0, 1, 2]
+        ]
+    },
+    {
+        "name": "Camelopardalis",
+        "stars": [
+            "HD 33564",
+            "gam Cam",
+            "HD 21291",
+            "HD 24479",
+            "alf Cam"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 1]
+        ]
+    },
+    {
+        "name": "Cancer",
+        "stars": [
+            "chi Cnc",
+            "iot Cnc",
+            "gam Cnc",
+            "del Cnc",
+            "alf Cnc",
+            "bet Cnc"
+        ],
+        "lines": [
+            [0, 2, 3, 5],
+            [1, 2],
+            [3, 4]
+        ]
+    },
+    {
+        "name": "Canes Venatici",
+        "stars": [
+            "alf CVn",
+            "bet CVn"
+        ],
+        "lines": [
+            [0, 1]
+        ]
+    },
+    {
+        "name": "Canis Major",
+        "stars": [
+            "iot CMa",
+            "tet CMa",
+            "gam CMa",
+            "alf CMa",
+            "omi02 CMa",
+            "del CMa",
+            "sig CMa",
+            "omi01 CMa",
+            "nu02 CMa",
+            "bet CMa",
+            "ksi02 CMa",
+            "eta CMa",
+            "ome CMa",
+            "eps CMa",
+            "zet CMa",
+            "kap CMa"
+        ],
+        "lines": [
+            [0, 1, 2, 0, 3, 4, 5, 6, 7, 8, 3],
+            [6, 13, 14],
+            [8, 10],
+            [9, 8],
+            [11, 12, 5],
+            [15, 13]
+        ]
+    },
+    {
+        "name": "Canis Minor",
+        "stars": [
+            "alf CMi",
+            "bet CMi"
+        ],
+        "lines": [
+            [0, 1]
+        ]
+    },
+    {
+        "name": "Capricornus",
+        "stars": [
+            "del Cap",
+            "gam Cap",
+            "iot Cap",
+            "zet Cap",
+            "tet Cap",
+            "ome Cap",
+            "bet01 Cap",
+            "psi Cap",
+            "alf02 Cap"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 2],
+            [8, 6, 4, 5],
+            [6, 7]
+        ]
+    },
+    {
+        "name": "Carina",
+        "stars": [
+            "alf Car",
+            "bet Car",
+            "ome Car",
+            "tet Car",
+            "iot Car",
+            "eps Car",
+            "chi Car",
+            "ups Car"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 5, 6],
+            [1, 7]
+        ]
+    },
+    {
+        "name": "Cassiopeia",
+        "stars": [
+            "bet Cas",
+            "alf Cas",
+            "gam Cas",
+            "del Cas",
+            "eps Cas"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4]
+        ]
+    },
+    {
+        "name": "Centaurus",
+        "stars": [
+            "alf Cen B",
+            "bet Cen",
+            "eps Cen",
+            "zet Cen",
+            "ups01 Cen",
+            "mu Cen",
+            "nu Cen",
+            "tet Cen",
+            "d Cen",
+            "iot Cen",
+            "eta Cen",
+            "kap Cen",
+            "gam Cen",
+            "sig Cen",
+            "del Cen",
+            "a Cen",
+            "lam Cen"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 5, 6, 7],
+            [6, 8, 9],
+            [5, 10, 11],
+            [3, 12, 13, 14, 15, 16]
+        ]
+    },
+    {
+        "name": "Cepheus",
+        "stars": [
+            "alf Cep",
+            "bet Cep",
+            "gam Cep",
+            "iot Cep",
+            "zet Cep"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 0],
+            [1, 3]
+        ]
+    },
+    {
+        "name": "Cetus",
+        "stars": [
+            "ksi01 Cet",
+            "ksi02 Cet",
+            "mu Cet",
+            "lam Cet",
+            "alf Cet",
+            "gam Cet",
+            "nu Cet",
+            "del Cet",
+            "omi Cet",
+            "eps Cet",
+            "pi Cet",
+            "sig Cet",
+            "tau Cet",
+            "bet Cet",
+            "eta Cet",
+            "tet Cet",
+            "zet Cet",
+            "rho Cet",
+            "iot Cet"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+            [1, 6, 5],
+            [13, 18]
+        ]
+    },
+    {
+        "name": "Chamaeleon",
+        "stars": [
+            "alf Cha",
+            "gam Cha",
+            "bet Cha"
+        ],
+        "lines": [
+            [0, 1, 2]
+        ]
+    },
+    {
+        "name": "Circinus",
+        "stars": [
+            "bet Cir",
+            "tet Cir",
+            "alf Cir",
+            "gam Cir"
+        ],
+        "lines": [
+            [0, 1, 2, 3]
+        ]
+    },
+    {
+        "name": "Columba",
+        "stars": [
+            "eps Col",
+            "alf Col",
+            "bet Col",
+            "gam Col",
+            "kap Col",
+            "del Col",
+            "eta Col"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 5],
+            [2, 6]
+        ]
+    },
+    {
+        "name": "Coma Berenices",
+        "stars": [
+            "alf Com",
+            "bet Com",
+            "gam Com"
+        ],
+        "lines": [
+            [0, 1, 2]
+        ]
+    },
+    {
+        "name": "Corona Australis",
+        "stars": [
+            "zet CrA",
+            "del CrA",
+            "bet CrA",
+            "alf CrA",
+            "gam CrA",
+            "eps CrA"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 5]
+        ]
+    },
+    {
+        "name": "Corona Borealis",
+        "stars": [
+            "tet CrB",
+            "bet CrB",
+            "alf CrB",
+            "gam CrB",
+            "del CrB",
+            "eps CrB",
+            "iot CrB"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 5, 6]
+        ]
+    },
+    {
+        "name": "Corvus",
+        "stars": [
+            "alf Crv",
+            "eps Crv",
+            "gam Crv",
+            "del Crv",
+            "bet Crv"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 1]
+        ]
+    },
+    {
+        "name": "Crater",
+        "stars": [
+            "alf Crt",
+            "bet Crt",
+            "gam Crt",
+            "zet Crt",
+            "eta Crt",
+            "tet Crt",
+            "eps Crt",
+            "del Crt"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 5, 6, 7, 0],
+            [2, 7]
+        ]
+    },
+    {
+        "name": "Crux",
+        "stars": [
+            "alf Cru",
+            "gam Cru",
+            "bet Cru",
+            "del Cru"
+        ],
+        "lines": [
+            [0, 1],
+            [2, 3]
+        ]
+    },
+    {
+        "name": "Cygnus",
+        "stars": [
+            "alf Cyg",
+            "gam Cyg",
+            "eta Cyg",
+            "bet02 Cyg",
+            "mu Cyg",
+            "zet Cyg",
+            "eps Cyg",
+            "del Cyg",
+            "iot Cyg",
+            "kap Cyg"
+        ],
+        "lines": [
+            [0, 1, 2, 3],
+            [4, 5, 6, 1, 7, 8, 9]
+        ]
+    },
+    {
+        "name": "Delphinus",
+        "stars": [
+            "eps Del",
+            "bet Del",
+            "alf Del",
+            "gam01 Del",
+            "del Del"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 1]
+        ]
+    },
+    {
+        "name": "Dorado",
+        "stars": [
+            "gam Dor",
+            "alf Dor",
+            "bet Dor",
+            "36 Dor",
+            "del Dor"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 2]
+        ]
+    },
+    {
+        "name": "Draco",
+        "stars": [
+            "gam Dra",
+            "bet Dra",
+            "nu01 Dra",
+            "ksi Dra",
+            "del Dra",
+            "eps Dra",
+            "tau Dra",
+            "chi Dra",
+            "zet Dra",
+            "eta Dra",
+            "tet Dra",
+            "iot Dra",
+            "alf Dra",
+            "kap Dra",
+            "lam Dra"
+        ],
+        "lines": [
+            [3, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+        ]
+    },
+    {
+        "name": "Equuleus",
+        "stars": [
+            "alf Equ",
+            "bet Equ",
+            "del Equ",
+            "gam Equ"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 0]
+        ]
+    },
+    {
+        "name": "Eridanus",
+        "stars": [
+            "alf Eri",
+            "chi Eri",
+            "phi Eri",
+            "kap Eri",
+            "64 Eri",
+            "iot Eri",
+            "tet Eri",
+            "e Eri",
+            "HD 24072",
+            "g Eri",
+            "ups04 Eri",
+            "ups03 Eri",
+            "ups02 Eri",
+            "tau06 Eri",
+            "tau05 Eri",
+            "tau04 Eri",
+            "tau03 Eri",
+            "tau01 Eri",
+            "eta Eri",
+            "zet Eri",
+            "eps Eri",
+            "del Eri",
+            "nu Eri",
+            "mu Eri",
+            "ome Eri",
+            "bet Eri",
+            "lam Eri",
+            "1 Eri"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
+        ]
+    },
+    {
+        "name": "Fornax",
+        "stars": [
+            "alf For",
+            "bet For"
+        ],
+        "lines": [
+            [0, 1]
+        ]
+    },
+    {
+        "name": "Gemini",
+        "stars": [
+            "tet Gem",
+            "tau Gem",
+            "iot Gem",
+            "ups Gem",
+            "kap Gem",
+            "alf Gem",
+            "eps Gem",
+            "nu Gem",
+            "mu Gem",
+            "eta Gem",
+            "1 Gem",
+            "bet Gem",
+            "del Gem",
+            "zet Gem",
+            "gam Gem",
+            "lam Gem",
+            "ksi Gem"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4],
+            [5, 1, 6, 8, 9, 10],
+            [6, 7],
+            [11, 3, 12, 13, 14],
+            [12, 15, 16]
+        ]
+    },
+    {
+        "name": "Grus",
+        "stars": [
+            "gam Gru",
+            "lam Gru",
+            "alf Gru",
+            "del01 Gru",
+            "tet Gru",
+            "iot Gru",
+            "bet Gru",
+            "zet Gru",
+            "eps Gru"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 5, 6, 7],
+            [6, 8]
+        ]
+    },
+    {
+        "name": "Hercules",
+        "stars": [
+            "gam Her",
+            "bet Her",
+            "zet Her",
+            "eta Her",
+            "sig Her",
+            "tau Her",
+            "chi Her",
+            "omi Her",
+            "ksi Her",
+            "mu Her",
+            "lam Her",
+            "del Her",
+            "eps Her",
+            "pi Her",
+            "e Her",
+            "rho Her",
+            "tet Her",
+            "iot Her"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 5, 6],
+            [7, 8, 9, 10, 12, 13, 14, 15, 16, 17],
+            [10, 11],
+            [12, 2],
+            [3, 13]
+        ]
+    },
+    {
+        "name": "Horologium",
+        "stars": [
+            "alf Hor",
+            "zet Hor",
+            "mu Her"
+        ],
+        "lines": [
+            [0, 1, 2]
+        ]
+    },
+    {
+        "name": "Hydra",
+        "stars": [
+            "eta Hya",
+            "sig Hya",
+            "del Hya",
+            "eps Hya",
+            "rho Hya",
+            "zet Hya",
+            "tet Hya",
+            "tau02 Hya",
+            "tau01 Hya",
+            "alf Hya",
+            "ups01 Hya",
+            "lam Hya",
+            "mu Hya",
+            "nu Hya",
+            "ksi Hya",
+            "bet Hya",
+            "psi Hya",
+            "gam Hya"
+        ],
+        "lines": [
+            [4, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+        ]
+    },
+    {
+        "name": "Hydrus",
+        "stars": [
+            "alf Hyi",
+            "del Hyi",
+            "eps Hyi",
+            "gam Hyi",
+            "bet Hyi"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4]
+        ]
+    },
+    {
+        "name": "Indus",
+        "stars": [
+            "alf Ind",
+            "tet Ind",
+            "bet Ind"
+        ],
+        "lines": [
+            [0, 1, 2, 0]
+        ]
+    },
+    {
+        "name": "Lacerta",
+        "stars": [
+            "1 Lac",
+            "6 Lac",
+            "5 Lac",
+            "4 Lac",
+            "bet Lac",
+            "alf Lac"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 5, 2]
+        ]
+    },
+    {
+        "name": "Leo",
+        "stars": [
+            "eps Leo",
+            "mu Leo",
+            "zet Leo",
+            "gam Leo",
+            "eta Leo",
+            "alf Leo",
+            "tet Leo",
+            "bet Leo",
+            "del Leo"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 5, 6, 7, 8, 3],
+            [6, 8]
+        ]
+    },
+    {
+        "name": "Leo Minor",
+        "stars": [
+            "10 LMi",
+            "21 LMi",
+            "46 LMi",
+            "bet LMi"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 1]
+        ]
+    },
+    {
+        "name": "Lepus",
+        "stars": [
+            "tet Lep",
+            "eta Lep",
+            "zet Lep",
+            "alf Lep",
+            "del Lep",
+            "gam Lep",
+            "bet Lep",
+            "eps Lep",
+            "mu Lep",
+            "kap Lep",
+            "iot Lep",
+            "lam Lep",
+            "nu Lep"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 5, 6, 7, 8, 3, 6],
+            [8, 9, 10],
+            [12, 11, 8]
+        ]
+    },
+    {
+        "name": "Libra",
+        "stars": [
+            "tet Lib",
+            "gam Lib",
+            "bet Lib",
+            "alf Lib",
+            "sig Lib"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 1]
+        ]
+    },
+    {   
+        "name": "Pisces",
+        "stars": [
+            "sig Psc",
+            "ups Psc",
+            "phi Psc",
+            "eta Psc",
+            "omi Psc",
+            "alf Psc",
+            "ksi Psc",
+            "nu Psc",
+            "mu Psc",
+            "eps Psc",
+            "del Psc",
+            "d Psc",
+            "ome Psc",
+            "iot Psc",
+            "lam Psc",
+            "kap Psc",
+            "gam Psc",
+            "tet Psc"
+        ],
+        "lines": [
+            [2, 1, 0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 13]
+        ]
+    },
+    {
+        "name": "Scorpius",
+        "stars": [
+            "lam Sco",
+            "kap Sco",
+            "iot Sco",
+            "tet Sco",
+            "eta Sco",
+            "zet01 Sco",
+            "mu01 Sco",
+            "eps Sco",
+            "tau Sco",
+            "alf Sco",
+            "bet01 Sco",
+            "del Sco",
+            "pi Sco"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            [9, 11],
+            [12, 9]
+        ]
+    },
+    {
+        "name": "Sagittarius",
+        "stars": [
+            "alf Sgr",
+            "bet01 Sgr",
+            "iot Sgr",
+            "tet01 Sgr",
+            "c Sgr",
+            "51 Sgr",
+            "tau Sgr",
+            "sig Sgr",
+            "ksi02 Sgr",
+            "omi Sgr",
+            "d Sgr",
+            "rho01 Sgr",
+            "zet Sgr",
+            "phi Sgr",
+            "lam Sgr",
+            "mu Sgr",
+            "del Sgr",
+            "gam02 Sgr",
+            "X Sgr",
+            "eps Sgr",
+            "eta Sgr"
+        ],
+        "lines": [
+            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+            [0, 2],
+            [7, 13, 14, 15],
+            [6, 12, 19, 20],
+            [12, 13, 16, 19, 17, 16, 14],
+            [17, 18]
+        ]
+    },
+    {
+        "name": "Taurus",
+        "stars": [
+            "bet Tau",
+            "tau Tau",
+            "eps Tau",
+            "del Tau",
+            "eta Tau",
+            "zet Tau",
+            "alf Tau",
+            "tet01 Tau",
+            "gam Tau",
+            "lam Tau",
+            "omi Tau"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4],
+            [5, 6, 7, 8, 9, 10],
+            [6, 2],
+            [8, 3]
+        ]
+    },
+    {
+        "name": "Virgo",
+        "stars": [
+            "nu Vir",
+            "eta Vir",
+            "gam Vir",
+            "del Vir",
+            "eps Vir",
+            "zet Vir",
+            "tau Vir",
+            "109 Vir",
+            "alf Vir",
+            "kap Vir",
+            "iot Vir",
+            "mu Vir"
+        ],
+        "lines": [
+            [0, 1, 2, 8, 9, 10, 11],
+            [4, 3, 5, 6, 7],
+            [3, 4],
+            [5, 8]
+        ]
     }
-}
+]

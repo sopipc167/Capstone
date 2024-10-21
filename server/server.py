@@ -6,7 +6,7 @@ import astropy.units as u
 import asyncio
 import websockets
 import json
-import re
+import numpy as np
 
 received_data = {}
 greek_alphabet_order = {
@@ -14,41 +14,6 @@ greek_alphabet_order = {
     "λ": 11, "μ": 12, "ν": 13, "ξ": 14, "ο": 15, "π": 16, "ρ": 17, "σ": 18, "τ": 19, 
     "υ": 20, "φ": 21, "χ": 22, "ψ": 23, "ω": 24
 }
-
-# Orion 오리온 자리
-ori = [
-    'κ Ori',
-    'ζ Ori',
-    'α Ori',
-    'μ Ori',
-    'ξ Ori',
-    'ν Ori',
-    'χ1 Ori',
-    'χ2 Ori',
-    'ε Ori',
-    'λ Ori',
-    'β Ori',
-    'δ Ori',
-    'γ Ori',
-    'π1 Ori',
-    'π2 Ori',
-    'π3 Ori',
-    'π4 Ori',
-    'π5 Ori',
-    'π6 Ori',
-]
-
-# Ursa Minor 작은 곰 자리
-umi = [
-    'γ UMi',
-    'β UMi',
-    'η UMi',
-    'θ UMi',
-    'ζ UMi',
-    'ε UMi',
-    'δ UMi',
-    'α UMi',
-]
 
 # 예시 데이터 2
 planets = [
@@ -80,6 +45,9 @@ def process_data(data):
 async def data_server(websocket, path):
     global received_data
 
+    # 별자리 데이터 파싱
+    parsed_data = parse_constellations_data()
+
     # Unity에서 보낸 메시지 파싱
     init_msg = await websocket.recv()
     received_data = json.loads(init_msg)
@@ -88,12 +56,25 @@ async def data_server(websocket, path):
     # 데이터 생성 및 전송
     while True:
         try:
+            cst = []
+            for obj in parsed_data:
+                cst_name = obj['name']
+                cst_data = get_star_datas(obj['stars'], location)
+                cst_line = obj['lines']
+                new_cst = {
+                    'name': cst_name,
+                    'stars': cst_data,
+                    'lines': cst_line
+                }
+                cst.append(new_cst)
+
             new_data = {
                 'location': received_data['location'],
                 'time': Time.now().strftime('%Y-%m-%d %H:%M:%S'),
-                'stars': get_star_datas(ori, location)
+                'constellations': cst
             }
 
+            print(new_data)
             json_data = json.dumps(new_data)
             await websocket.send(json_data)
             print(f'Sent data: {json_data}')
@@ -137,15 +118,16 @@ def get_star_datas(star_names, obs_loc):
         star_now = star_coord.apply_space_motion(new_obstime=obs_time)
         altaz_frame = AltAz(obstime=obs_time, location=obs_location)
         star_altaz = star_now.transform_to(altaz_frame)
+        if np.ma.is_masked(flux_v):
+            flux_v = flux_v.filled(np.nan)
 
         star_data = {
-            'name': star_names[i],
             'id': star_name,
             'ra': star_now.ra.degree,
             'dec': star_now.dec.degree,
             'alt': star_altaz.alt.degree,
             'az': star_altaz.az.degree,
-            'flux_v': flux_v,
+            'flux_v': float(flux_v),
         }
 
         star_datas.append(star_data)
@@ -235,11 +217,17 @@ def get_planet_data(planet_id, obs_loc):
     print(f'RA {ra}, DEC {dec}, ALT {alt}, AZ {az}')
     print(f'V {v}')
 
+# 별자리 데이터 파싱
+def parse_constellations_data():
+    with open('constellation.json', 'r') as f:
+        data = json.load(f)
+    return data
+
 if __name__ == '__main__':
     # 서버 실행
-    # asyncio.run(main())
+    asyncio.run(main())
 
     # 예시 코드
     # get_constellation_datas()
-    print(get_star_datas(ori, (37.4882, 126.7083)))
+    # print(get_star_datas(ori, (37.4882, 126.7083)))
     # get_planet_data("299", (37.5665, 126.9780))
