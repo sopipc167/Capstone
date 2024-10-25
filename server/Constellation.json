@@ -1,6 +1,7 @@
 [
     {
         "name": "Andromeda",
+        "nameUnicode": "안드로메다",
         "stars": [
             "alf And",
             "del And",
@@ -16,6 +17,7 @@
     },
     {
         "name": "Antlia",
+        "nameUnicode": "공기펌프",
         "stars": [
             "alf Ant",
             "eta Ant"
@@ -26,6 +28,7 @@
     },
     {
         "name": "Apus",
+        "nameUnicode": "극락조",
         "stars": [
             "alf Aps",
             "gam Aps",
@@ -37,6 +40,7 @@
     },
     {
         "name": "Aquarius",
+        "nameUnicode": "물병",
         "stars": [
             "eps Aqr",
             "bet Aqr",
@@ -62,6 +66,7 @@
     },
     {
         "name": "Aquila",
+        "nameUnicode": "독수리",
         "stars": [
             "bet Aql",
             "alf Aql",
@@ -81,6 +86,7 @@
     },
     {
         "name": "Ara",
+        "nameUnicode": "제단",
         "stars": [
             "alf Ara",
             "tet Ara",
@@ -96,6 +102,7 @@
     },
     {
         "name": "Aries",
+        "nameUnicode": "양",
         "stars": [
             "41 Ari",
             "alf Ari",
@@ -108,6 +115,7 @@
     },
     {
         "name": "Auriga",
+        "nameUnicode": "마차부",
         "stars": [
             "alf Aur",
             "bet Aur",
@@ -122,6 +130,7 @@
     },
     {
         "name": "Bootes",
+        "nameUnicode": "목동",
         "stars": [
             "alf Boo",
             "eps Boo",
@@ -140,6 +149,7 @@
     },
     {
         "name": "Caelum",
+        "nameUnicode": "조각칼",
         "stars": [
             "bet Cae",
             "alf Cae",
@@ -151,6 +161,7 @@
     },
     {
         "name": "Camelopardalis",
+        "nameUnicode": "기린",
         "stars": [
             "HD 33564",
             "gam Cam",
@@ -164,6 +175,7 @@
     },
     {
         "name": "Cancer",
+        "nameUnicode": "게",
         "stars": [
             "chi Cnc",
             "iot Cnc",
@@ -180,6 +192,7 @@
     },
     {
         "name": "Canes Venatici",
+        "nameUnicode": "사냥개",
         "stars": [
             "alf CVn",
             "bet CVn"
@@ -190,6 +203,7 @@
     },
     {
         "name": "Canis Major",
+        "nameUnicode": "큰개",
         "stars": [
             "iot CMa",
             "tet CMa",
@@ -219,6 +233,7 @@
     },
     {
         "name": "Canis Minor",
+        "nameUnicode": "작은개",
         "stars": [
             "alf CMi",
             "bet CMi"
@@ -229,6 +244,7 @@
     },
     {
         "name": "Capricornus",
+        "nameUnicode": "염소",
         "stars": [
             "del Cap",
             "gam Cap",
@@ -248,6 +264,7 @@
     },
     {
         "name": "Carina",
+        "nameUnicode": "용골",
         "stars": [
             "alf Car",
             "bet Car",
@@ -265,6 +282,7 @@
     },
     {
         "name": "Cassiopeia",
+        "nameUnicode": "카시오페이아",
         "stars": [
             "bet Cas",
             "alf Cas",
@@ -278,6 +296,7 @@
     },
     {
         "name": "Centaurus",
+        "nameUnicode": "센타우루스",
         "stars": [
             "alf Cen B",
             "bet Cen",
@@ -306,6 +325,7 @@
     },
     {
         "name": "Cepheus",
+        "nameUnicode": "세페우스",
         "stars": [
             "alf Cep",
             "bet Cep",
@@ -320,6 +340,7 @@
     },
     {
         "name": "Cetus",
+        "nameUnicode": "고래",
         "stars": [
             "ksi01 Cet",
             "ksi02 Cet",
@@ -349,6 +370,7 @@
     },
     {
         "name": "Chamaeleon",
+        "nameUnicode": "카멜레온",
         "stars": [
             "alf Cha",
             "gam Cha",
@@ -360,6 +382,7 @@
     },
     {
         "name": "Circinus",
+        "nameUnicode": "컴퍼스",
         "stars": [
             "bet Cir",
             "tet Cir",
@@ -372,6 +395,7 @@
     },
     {
         "name": "Columba",
+        "nameUnicode": "비둘기",
         "stars": [
             "eps Col",
             "alf Col",
@@ -388,6 +412,7 @@
     },
     {
         "name": "Coma Berenices",
+        "nameUnicode": "머리털",
         "stars": [
             "alf Com",
             "bet Com",
@@ -399,6 +424,7 @@
     },
     {
         "name": "Corona Australis",
+        "nameUnicode": "남쪽왕관",
         "stars": [
             "zet CrA",
             "del CrA",
@@ -413,6 +439,7 @@
     },
     {
         "name": "Corona Borealis",
+        "nameUnicode": "북쪽왕관",
         "stars": [
             "tet CrB",
             "bet CrB",
@@ -428,6 +455,7 @@
     },
     {
         "name": "Corvus",
+        "nameUnicode": "까마귀",
         "stars": [
             "alf Crv",
             "eps Crv",
@@ -441,6 +469,7 @@
     },
     {
         "name": "Crater",
+        "nameUnicode": "컵",
         "stars": [
             "alf Crt",
             "bet Crt",
@@ -458,6 +487,7 @@
     },
     {
         "name": "Crux",
+        "nameUnicode": "남십자",
         "stars": [
             "alf Cru",
             "gam Cru",
@@ -471,6 +501,7 @@
     },
     {
         "name": "Cygnus",
+        "nameUnicode": "백조",
         "stars": [
             "alf Cyg",
             "gam Cyg",
@@ -490,6 +521,7 @@
     },
     {
         "name": "Delphinus",
+        "nameUnicode": "돌고래",
         "stars": [
             "eps Del",
             "bet Del",
@@ -503,6 +535,7 @@
     },
     {
         "name": "Dorado",
+        "nameUnicode": "황새치",
         "stars": [
             "gam Dor",
             "alf Dor",
@@ -516,6 +549,7 @@
     },
     {
         "name": "Draco",
+        "nameUnicode": "용",
         "stars": [
             "gam Dra",
             "bet Dra",
@@ -539,6 +573,7 @@
     },
     {
         "name": "Equuleus",
+        "nameUnicode": "조랑말",
         "stars": [
             "alf Equ",
             "bet Equ",
@@ -551,6 +586,7 @@
     },
     {
         "name": "Eridanus",
+        "nameUnicode": "에리다누스",
         "stars": [
             "alf Eri",
             "chi Eri",
@@ -587,6 +623,7 @@
     },
     {
         "name": "Fornax",
+        "nameUnicode": "화로",
         "stars": [
             "alf For",
             "bet For"
@@ -597,6 +634,7 @@
     },
     {
         "name": "Gemini",
+        "nameUnicode": "쌍둥이",
         "stars": [
             "tet Gem",
             "tau Gem",
@@ -626,6 +664,7 @@
     },
     {
         "name": "Grus",
+        "nameUnicode": "두루미",
         "stars": [
             "gam Gru",
             "lam Gru",
@@ -644,6 +683,7 @@
     },
     {
         "name": "Hercules",
+        "nameUnicode": "허큘리스",
         "stars": [
             "gam Her",
             "bet Her",
@@ -674,6 +714,7 @@
     },
     {
         "name": "Horologium",
+        "nameUnicode": "시계",
         "stars": [
             "alf Hor",
             "zet Hor",
@@ -685,6 +726,7 @@
     },
     {
         "name": "Hydra",
+        "nameUnicode": "바다뱀",
         "stars": [
             "eta Hya",
             "sig Hya",
@@ -711,6 +753,7 @@
     },
     {
         "name": "Hydrus",
+        "nameUnicode": "물뱀",
         "stars": [
             "alf Hyi",
             "del Hyi",
@@ -724,6 +767,7 @@
     },
     {
         "name": "Indus",
+        "nameUnicode": "인디언",
         "stars": [
             "alf Ind",
             "tet Ind",
@@ -735,6 +779,7 @@
     },
     {
         "name": "Lacerta",
+        "nameUnicode": "도마뱀",
         "stars": [
             "1 Lac",
             "6 Lac",
@@ -749,6 +794,7 @@
     },
     {
         "name": "Leo",
+        "nameUnicode": "사자",
         "stars": [
             "eps Leo",
             "mu Leo",
@@ -767,6 +813,7 @@
     },
     {
         "name": "Leo Minor",
+        "nameUnicode": "작은사자",
         "stars": [
             "10 LMi",
             "21 LMi",
@@ -779,6 +826,7 @@
     },
     {
         "name": "Lepus",
+        "nameUnicode": "토끼",
         "stars": [
             "tet Lep",
             "eta Lep",
@@ -802,6 +850,7 @@
     },
     {
         "name": "Libra",
+        "nameUnicode": "천칭",
         "stars": [
             "tet Lib",
             "gam Lib",
@@ -813,8 +862,290 @@
             [0, 1, 2, 3, 4, 1]
         ]
     },
+    {
+        "name": "Lupus",
+        "nameUnicode": "이리",
+        "stars": [
+            "chi Lup",
+            "tet Lup",
+            "eta Lup",
+            "gam Lup",
+            "ome Lup",
+            "zet Lup",
+            "alf Lup",
+            "bet Lup",
+            "del Lup",
+            "phi01 Lup",
+            "rho Lup",
+            "tau02 Lup"
+        ],
+        "lines": [
+            [2, 0, 1, 2, 3, 4, 5, 6, 7, 8, 3],
+            [5, 10],
+            [6, 11],
+            [8, 9]
+        ]
+    },
+    {
+        "name": "Lynx",
+        "nameUnicode": "살쾡이",
+        "stars": [
+            "alf Lyn",
+            "38 Lyn",
+            "HD 77912",
+            "10 UMa",
+            "31 Lyn",
+            "21 Lyn",
+            "15 Lyn",
+            "2 Lyn"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 5, 6, 7]
+        ]
+    },
+    {
+        "name": "Lyra",
+        "nameUnicode": "거문고",
+        "stars": [
+            "alf Lyr",
+            "zet01 Lyr",
+            "del02 Lyr",
+            "gam Lyr",
+            "bet Lyr"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 1]
+        ]
+    },
+    {
+        "name": "Mensa",
+        "nameUnicode": "테이블산",
+        "stars": [
+            "alf Men",
+            "gam Men",
+            "eta Men",
+            "bet Men"
+        ],
+        "lines": [
+            [0, 1, 2, 3]
+        ]
+    },
+    {
+        "name": "Microscopium",
+        "nameUnicode": "현미경",
+        "stars": [
+            "alf Mic",
+            "gam Mic",
+            "eps Mic",
+            "tet01 Mic"
+        ],
+        "lines": [
+            [0, 1, 2, 3]
+        ]
+    },
+    {
+        "name": "Monoceros",
+        "nameUnicode": "외뿔소",
+        "stars": [
+            "alf Mon",
+            "zet Mon",
+            "del Mon",
+            "bet Mon",
+            "gam Mon",
+            "eps Mon A",
+            "HD 42092"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4],
+            [2, 5, 6]
+        ]
+    },
+    {
+        "name": "Musca",
+        "nameUnicode": "파리",
+        "stars": [
+            "alf Mus",
+            "bet Mus",
+            "lam Mus",
+            "gam Mus"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 0]
+        ]
+    },
+    {
+        "name": "Norma",
+        "nameUnicode": "직각자",
+        "stars": [
+            "gam02 Nor",
+            "eta Nor",
+            "eps Nor",
+            "kap Nor"
+        ],
+        "lines": [
+            [0, 1, 2, 0, 3, 1]
+        ]
+    },
+    {
+        "name": "Octans",
+        "nameUnicode": "팔분의",
+        "stars": [
+            "del Oct",
+            "nu Oct",
+            "bet Oct"
+        ],
+        "lines": [
+            [0, 1, 2, 0]
+        ]
+    },
+    {
+        "name": "Ophiuchus",
+        "nameUnicode": "뱀주인",
+        "stars": [
+            "c Oph",
+            "eta Oph",
+            "zet Oph",
+            "eps Oph",
+            "kap Oph",
+            "alf Oph",
+            "bet Oph"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 5, 6, 1]
+        ]
+    },
+    {
+        "name": "Orion",
+        "nameUnicode": "오리온",
+        "stars": [
+            "alf Ori",
+            "zet Ori",
+            "kap Ori",
+            "bet Ori",
+            "del Ori",
+            "gam Ori",
+            "lam Ori",
+            "mu Ori",
+            "ksi Ori",
+            "64 Ori",
+            "nu Ori",
+            "54 Ori",
+            "eps Ori",
+            "pi.01 Ori",
+            "pi.02 Ori",
+            "pi.03 Ori",
+            "pi.04 Ori",
+            "pi.05 Ori",
+            "pi.06 Ori"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 5, 6, 0, 7, 8, 9],
+            [1, 12, 4],
+            [5, 15],
+            [7, 10, 11],
+            [8, 10],
+            [13, 14, 15, 16, 17, 18]
+        ]
+    },
+    {
+        "name": "Pavo",
+        "nameUnicode": "공작",
+        "stars": [
+            "kap Pav",
+            "zet Pav",
+            "eps Pav",
+            "del Pav",
+            "alf Pav",
+            "gam Pav",
+            "bet Pav",
+            "lam Pav",
+            "ksi Pav",
+            "pi Pav",
+            "eta Pav"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 5, 6, 3, 0, 7, 8, 9, 7],
+            [9, 10]
+        ]
+    },
+    {
+        "name": "Pegasus",
+        "nameUnicode": "페가수스",
+        "stars": [
+            "alf Peg",
+            "gam Peg",
+            "del Peg",
+            "bet Peg",
+            "ksi Peg",
+            "zet Peg",
+            "tet Peg",
+            "eps Peg",
+            "mu Peg",
+            "lam Peg",
+            "iot Peg",
+            "kap Peg",
+            "eta Peg",
+            "pi Peg"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 0, 4, 5, 6, 7],
+            [3, 8, 9, 10, 11],
+            [13, 12, 3]
+        ]
+    },
+    {
+        "name": "Perseus",
+        "nameUnicode": "페르세우스",
+        "stars": [
+            "eta Per",
+            "gam Per",
+            "alf Per",
+            "del Per",
+            "eps Per",
+            "ksi Per",
+            "zet Per",
+            "omi Per",
+            "bet Per",
+            "rho Per",
+            "16 Per"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 5, 6, 7],
+            [2, 8, 9, 10]
+        ]
+    },
+    {
+        "name": "Phoenix",
+        "nameUnicode": "봉황",
+        "stars": [
+            "bet Phe",
+            "del Phe",
+            "psi Phe",
+            "gam Phe",
+            "kap Phe",
+            "alf Phe",
+            "eps Phe",
+            "zet Phe"
+        ],
+        "lines": [
+            [0, 1, 2, 0, 3, 4, 5, 6, 4, 7, 0, 4]
+        ]
+    },
+    {
+        "name": "Pictor",
+        "nameUnicode": "화가",
+        "stars": [
+            "alf Pic",
+            "gam Pic",
+            "bet Pic"
+        ],
+        "lines": [
+            [0, 1, 2]
+        ]
+    },
     {   
         "name": "Pisces",
+        "nameUnicode": "물고기",
         "stars": [
             "sig Psc",
             "ups Psc",
@@ -840,30 +1171,80 @@
         ]
     },
     {
-        "name": "Scorpius",
+        "name": "Piscis Austrinus",
+        "nameUnicode": "남쪽물고기",
         "stars": [
-            "lam Sco",
-            "kap Sco",
-            "iot Sco",
-            "tet Sco",
-            "eta Sco",
-            "zet01 Sco",
-            "mu01 Sco",
-            "eps Sco",
-            "tau Sco",
-            "alf Sco",
-            "bet01 Sco",
-            "del Sco",
-            "pi Sco"
+            "alf PsA",
+            "eps PsA",
+            "eta PsA",
+            "tet PsA",
+            "tau PsA",
+            "bet PsA",
+            "del PsA"
         ],
         "lines": [
-            [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-            [9, 11],
-            [12, 9]
+            [0, 1, 2, 3, 4, 5, 6]
+        ]
+    },
+    {
+        "name": "Puppis",
+        "nameUnicode": "고물",
+        "stars": [
+            "rho Pup",
+            "zet Pup",
+            "sig Pup",
+            "tau Pup",
+            "nu Pup",
+            "pi Pup",
+            "ksi Pup"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 5, 6, 0]
+        ]
+    },
+    {
+        "name": "Pyxis",
+        "nameUnicode": "나침반",
+        "stars": [
+            "bet Pyx",
+            "alf Pyx",
+            "gam Pyx"
+        ],
+        "lines": [
+            [0, 1, 2]
+        ]
+    },
+    {
+        "name": "Reticulum",
+        "nameUnicode": "그물",
+        "stars": [
+            "alf Ret",
+            "bet Ret",
+            "del Ret",
+            "eps Ret"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 0]
+        ]
+    },
+    {
+        "name": "Sagitta",
+        "nameUnicode": "화살",
+        "stars": [
+            "eta Sge",
+            "gam Sge",
+            "del Sge",
+            "bet Sge",
+            "alf Sge"
+        ],
+        "lines": [
+            [0, 1, 2, 3],
+            [2, 4]
         ]
     },
     {
         "name": "Sagittarius",
+        "nameUnicode": "궁수",
         "stars": [
             "alf Sgr",
             "bet01 Sgr",
@@ -897,7 +1278,92 @@
         ]
     },
     {
+        "name": "Scorpius",
+        "nameUnicode": "전갈",
+        "stars": [
+            "lam Sco",
+            "kap Sco",
+            "iot Sco",
+            "tet Sco",
+            "eta Sco",
+            "zet01 Sco",
+            "mu01 Sco",
+            "eps Sco",
+            "tau Sco",
+            "alf Sco",
+            "bet01 Sco",
+            "del Sco",
+            "pi Sco"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            [9, 11],
+            [12, 9]
+        ]
+    },
+    {
+        "name": "Sculptor",
+        "nameUnicode": "조각가",
+        "stars": [
+            "alf Scl",
+            "bet Scl",
+            "gam Scl"
+        ],
+        "lines": [
+            [0, 1, 2, 0]
+        ]
+    },
+    {
+        "name": "Scutum",
+        "nameUnicode": "방패",
+        "stars": [
+            "alf Sct",
+            "bet Sct",
+            "R Sct",
+            "HD 175156",
+            "gam Sct"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 0]
+        ]
+    },
+    {
+        "name": "Serpens",
+        "nameUnicode": "뱀",
+        "stars": [
+            "kap Ser",
+            "gam Ser",
+            "bet Ser",
+            "del Ser",
+            "alf Ser",
+            "eps Ser",
+            "mu Ser",
+            "nu Ser",
+            "ksi Ser",
+            "omi Ser",
+            "eta Ser",
+            "tet01 Ser"
+        ],
+        "lines": [
+            [2, 0, 1, 2, 3, 4, 5, 6],
+            [7, 8, 9, 10, 11]
+        ]
+    },
+    {
+        "name": "Sextans",
+        "nameUnicode": "육분의",
+        "stars": [
+            "bet Sex",
+            "alf Sex",
+            "gam Sex"
+        ],
+        "lines": [
+            [0, 1, 2]
+        ]
+    },
+    {
         "name": "Taurus",
+        "nameUnicode": "황소",
         "stars": [
             "bet Tau",
             "tau Tau",
@@ -919,7 +1385,123 @@
         ]
     },
     {
+        "name": "Telescopium",
+        "nameUnicode": "망원경",
+        "stars": [
+            "alf Tel",
+            "zet Tel"
+        ],
+        "lines": [
+            [0, 1]
+        ]
+    },
+    {
+        "name": "Triangulum",
+        "nameUnicode": "삼각형",
+        "stars": [
+            "alf Tri",
+            "bet Tri",
+            "gam Tri"
+        ],
+        "lines": [
+            [0, 1, 2, 0]
+        ]
+    },
+    {
+        "name": "Triangulum Australe",
+        "nameUnicode": "남쪽삼각형",
+        "stars": [
+            "alf TrA",
+            "bet TrA",
+            "gam TrA"
+        ],
+        "lines": [
+            [0, 1, 2, 0]
+        ]
+    },
+    {
+        "name": "Tucana",
+        "nameUnicode": "큰부리새",
+        "stars": [
+            "alf Tuc",
+            "gam Tuc",
+            "bet01 Tuc",
+            "zet Tuc"
+        ],
+        "lines": [
+            [0, 1, 2],
+            [1, 3]
+        ]
+    },
+    {
+        "name": "Ursa Major",
+        "nameUnicode": "큰곰",
+        "stars": [
+            "alf UMa",
+            "del UMa",
+            "gam UMa",
+            "bet UMa",
+            "phi UMa",
+            "ups UMa",
+            "omi UMa",
+            "h UMa",
+            "eps UMa",
+            "zet UMa",
+            "eta UMa",
+            "chi UMa",
+            "psi UMa",
+            "mu UMa",
+            "lam UMa",
+            "tet UMa",
+            "kap UMa",
+            "iot UMa"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 5, 6, 7, 0, 3],
+            [1, 8, 9, 10],
+            [2, 11, 12, 13],
+            [4, 15, 16],
+            [12, 14],
+            [15, 17]
+        ]
+    },
+    {
+        "name": "Ursa Minor",
+        "nameUnicode": "작은곰",
+        "stars": [
+            "alf UMi",
+            "del UMi",
+            "eps UMi",
+            "zet UMi",
+            "bet UMi",
+            "gam UMi",
+            "eta UMi"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 5, 6, 3]
+        ]
+    },
+    {
+        "name": "Vela",
+        "nameUnicode": "돛",
+        "stars": [
+            "gam Vel",
+            "lam Vel",
+            "psi Vel",
+            "q Vel",
+            "p Vel",
+            "mu Vel",
+            "phi Vel",
+            "del Vel",
+            "omi Vel"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 4, 5, 6, 7, 8]
+        ]
+    },
+    {
         "name": "Virgo",
+        "nameUnicode": "처녀",
         "stars": [
             "nu Vir",
             "eta Vir",
@@ -939,6 +1521,32 @@
             [4, 3, 5, 6, 7],
             [3, 4],
             [5, 8]
+        ]
+    },
+    {
+        "name": "Volans",
+        "nameUnicode": "날치",
+        "stars": [
+            "del Vol",
+            "eps Vol",
+            "alf Vol",
+            "bet Vol",
+            "zet Vol",
+            "gam02 Vol"
+        ],
+        "lines": [
+            [0, 1, 2, 3, 1, 4, 5, 1]
+        ]
+    },
+    {
+        "name": "Vulpecula",
+        "nameUnicode": "작은여우",
+        "stars": [
+            "alf Vul",
+            "15 Vul"
+        ],
+        "lines": [
+            [0, 1]
         ]
     }
 ]
