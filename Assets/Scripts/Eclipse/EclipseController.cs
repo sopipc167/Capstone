@@ -12,16 +12,33 @@ public class EclipseController : MonoBehaviour
 
     private ColorGrading colorGrading;
 
+    [SerializeField]
+    private Toggle toggle;
+
     // Start is called before the first frame update
     void Start()
     {
         postProcessVolume.profile.TryGetSettings(out colorGrading);
 
         ARCameraManager.frameReceived += FrameLightUpdated;
+
+        toggle.onValueChanged.AddListener(onToggle);
+    }
+
+    public void onToggle(bool isOn)
+    {
+        if(!isOn)
+        {
+            colorGrading.postExposure.value = 0f;
+            colorGrading.saturation.value = 0f;
+            colorGrading.gamma.value = new Vector4(1f, 1f, 1f, 0);
+        }
     }
 
     public void FrameLightUpdated(ARCameraFrameEventArgs args)
     {
+        if(!toggle.isOn) return;
+
         var brightness = args.lightEstimation.averageBrightness;
 
         if(brightness.HasValue)

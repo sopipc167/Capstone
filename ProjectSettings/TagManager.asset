@@ -6,6 +6,8 @@ TagManager:
   tags:
   - baseSDK
   - particle
+  - Actors
+  - TrackingObject
   layers:
   - Default
   - TransparentFX
@@ -15,7 +17,7 @@ TagManager:
   - UI
   - PostProcessing
   - PlacedObject
-  - 
+  - NoPostProcessing
   - 
   - 
   - 
