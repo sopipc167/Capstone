@@ -11,13 +11,13 @@ GameObject:
   - component: {fileID: 4743709103564672}
   - component: {fileID: 198040655577477136}
   - component: {fileID: 199940970818216614}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Glow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4743709103564672
 Transform:
   m_ObjectHideFlags: 0
@@ -4790,7 +4790,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 10301, guid: 0000000000000000f000000000000000, type: 0}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4854,7 +4853,7 @@ GameObject:
   - component: {fileID: 4128824095967350}
   - component: {fileID: 33203147953996400}
   - component: {fileID: 23857910435866848}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Moon_Lod
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4937,7 +4936,7 @@ GameObject:
   - component: {fileID: 4693579709242440}
   - component: {fileID: 205066459857805224}
   - component: {fileID: 6353123651212667173}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Moon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4953,8 +4952,8 @@ Transform:
   m_GameObject: {fileID: 1408581670749804}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9, y: 0, z: 3}
-  m_LocalScale: {x: 0.03, y: 0.03, z: 0.03}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4743709103564672}
@@ -5020,7 +5019,7 @@ GameObject:
   - component: {fileID: 4678793919378768}
   - component: {fileID: 33110794514905866}
   - component: {fileID: 23811930558839548}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Moon
   m_TagString: Untagged
   m_Icon: {fileID: 0}

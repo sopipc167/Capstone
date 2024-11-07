@@ -1,0 +1,7 @@
+The following files included in the project are in the public domain.
+Additional important information on NASA's usage policy can be found at: https://www.nasa.gov/nasa-brand-center/images-and-media/
+
+"Physically Based Night Sky\Textures\Constellations.tif"
+"Physically Based Night Sky\Textures\Moon Surface.tif"
+"Physically Based Night Sky\Textures\Stars 1.exr"
+"Physically Based Night Sky\Textures\Stars 2.exr"

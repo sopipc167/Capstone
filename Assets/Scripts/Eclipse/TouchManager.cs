@@ -6,6 +6,7 @@ using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
+using UnityEngine.EventSystems;
 
 public class TouchManager : MonoBehaviour
 {
@@ -18,66 +19,110 @@ public class TouchManager : MonoBehaviour
     [SerializeField]
     private PostProcessVolume postProcessVolume;
     [SerializeField]
-    private Button sunSpawnButton;
+    private Button totalEclipseButton;
+    [SerializeField]
+    private Button annularEclipseButton;
+    [SerializeField]
+    private Button leftButton;
+    [SerializeField]
+    private Button rightButton;
 
+    private const float MOVE_DISTANCE = 0.02f;
 
     private GameObject sunInstance;
     private GameObject moonInstance;
     
     private bool touched = false;
-    private GameObject selectedObj;
     private ColorGrading colorGrading;
 
-    private float maxDistance = 0.06f;
-    private Material sunMaterial;
-    private Color originalEmissionColor;
 
-    private float sunDiameter = 0.06f;
+    private float sunDiameter = 0.5f;
+    private float moonFixedOffset = -0.05f;
+    private float moonZPos;
+    private Vector3 touchOffset;
 
-    private float moonFixedOffset = 0.01f;
+    bool isTotalEclipse = true;
 
+    private bool isLeftButtonPressed = false;
+    private bool isRightButtonPressed = false;
 
-    // Start is called before the first frame update
+    Material maskMaterial;
+
     void Start()
     {
+        maskMaterial = new Material(Shader.Find("Custom/Mask"));
+        moonPrefab.GetComponent<MeshRenderer>().material = maskMaterial;
         postProcessVolume.profile.TryGetSettings(out colorGrading);
+        totalEclipseButton.onClick.AddListener(()=>SetEclipseMode(true));
+        annularEclipseButton.onClick.AddListener(()=>SetEclipseMode(false));
 
-        // Transform sphereTransform = sunPrefab.transform.Find("Shpere");
-        // Renderer sphereRenderer = sphereTransform.GetComponent<Renderer>();
-        // sunMaterial = sphereRenderer.material;
-        // if(sunMaterial.HasProperty("_EmissionColor"))
-        // {
-        //     originalEmissionColor = sunMaterial.GetColor("_EmissionColor");
-        //     sunMaterial.EnableKeyword("_EMISSION");
-        // }
+        // 기존 리스너 제거
+        leftButton.onClick.RemoveAllListeners();
+        rightButton.onClick.RemoveAllListeners();
 
-        sunSpawnButton.onClick.AddListener(SpawnSun);
+        // 새로운 이벤트 리스너 추가
+        leftButton.GetComponent<UnityEngine.UI.Button>().onClick.RemoveAllListeners();
+        rightButton.GetComponent<UnityEngine.UI.Button>().onClick.RemoveAllListeners();
+
+        // PointerDown/Up 이벤트 추가
+        EventTrigger leftTrigger = leftButton.gameObject.AddComponent<EventTrigger>();
+        EventTrigger rightTrigger = rightButton.gameObject.AddComponent<EventTrigger>();
+
+        // 왼쪽 버튼 이벤트
+        EventTrigger.Entry leftPointerDown = new EventTrigger.Entry();
+        leftPointerDown.eventID = EventTriggerType.PointerDown;
+        leftPointerDown.callback.AddListener((data) => { isLeftButtonPressed = true; });
+        leftTrigger.triggers.Add(leftPointerDown);
+
+        EventTrigger.Entry leftPointerUp = new EventTrigger.Entry();
+        leftPointerUp.eventID = EventTriggerType.PointerUp;
+        leftPointerUp.callback.AddListener((data) => { isLeftButtonPressed = false; });
+        leftTrigger.triggers.Add(leftPointerUp);
+
+        // 오른쪽 버튼 이벤트
+        EventTrigger.Entry rightPointerDown = new EventTrigger.Entry();
+        rightPointerDown.eventID = EventTriggerType.PointerDown;
+        rightPointerDown.callback.AddListener((data) => { isRightButtonPressed = true; });
+        rightTrigger.triggers.Add(rightPointerDown);
+
+        EventTrigger.Entry rightPointerUp = new EventTrigger.Entry();
+        rightPointerUp.eventID = EventTriggerType.PointerUp;
+        rightPointerUp.callback.AddListener((data) => { isRightButtonPressed = false; });
+        rightTrigger.triggers.Add(rightPointerUp);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if(Input.touchCount == 0) return;
+        if(Input.touchCount == 0 || sunInstance == null) return;
         Touch touch = Input.GetTouch(0);
 
         if(touch.phase == TouchPhase.Began) 
         {
             if (moonInstance == null)
             {
-                // Instantiate moonPrefab at touch position for the first time
+                // 초기 터치한 곳에 달 프리펩 생성
                 Vector3 spawnPosition = arCamera.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, sunInstance.transform.position.z + moonFixedOffset));
                 moonInstance = Instantiate(moonPrefab, spawnPosition, Quaternion.identity);
+
+                Vector3 newScale = moonInstance.transform.localScale;
+                newScale.x = isTotalEclipse ? sunInstance.transform.localScale.x : sunInstance.transform.localScale.x * 0.9f;
+                newScale.y = isTotalEclipse ? sunInstance.transform.localScale.y : sunInstance.transform.localScale.y * 0.9f;
+                moonInstance.transform.localScale = newScale;
+
+                moonZPos = moonInstance.transform.position.z;
                 touched = true;
             }
             else
             {
-                // Raycast to check if selectedObj was touched
+                // 달이 이미 존재하고 그 달을 터치하고 있으면 touched를 true로 세팅
                 Ray ray = arCamera.ScreenPointToRay(touch.position);
-                RaycastHit hit;
+                RaycastHit hit;    
 
                 if (Physics.Raycast(ray, out hit) && hit.collider.gameObject == moonInstance)
                 {
-                    touched = true; // Set to true if the existing object is touched
+                    Vector3 touchWorldPosition = arCamera.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, moonZPos));
+                    touchOffset = moonInstance.transform.position - touchWorldPosition;
+                    touched = true;
                 }
             }
         }
@@ -87,20 +132,49 @@ public class TouchManager : MonoBehaviour
         }
         if (touched && moonInstance != null)
         {
-            Vector3 newPosition = arCamera.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, sunInstance.transform.position.z + moonFixedOffset));
+            // 달을 드래그해서 움직임
+            Vector3 touchPosition = new Vector3(touch.position.x, touch.position.y, moonZPos);
+            Vector3 newPosition = arCamera.ScreenToWorldPoint(touchPosition) + touchOffset;
+            newPosition.z = moonZPos; // Lock z position
             moonInstance.transform.position = newPosition;
         }
 
         AdjustBrightness();
+
+        // 버튼 상태에 따른 지속적인 이동
+        if (moonInstance != null)
+        {
+            if (isLeftButtonPressed)
+            {
+                Vector3 newPosition = moonInstance.transform.position;
+                newPosition.x -= MOVE_DISTANCE;
+                moonInstance.transform.position = newPosition;
+            }
+            if (isRightButtonPressed)
+            {
+                Vector3 newPosition = moonInstance.transform.position;
+                newPosition.x += MOVE_DISTANCE;
+                moonInstance.transform.position = newPosition;
+            }
+        }
     }
 
-    private void SpawnSun()
+    private void SetEclipseMode(bool isTotal)
     {
+        isTotalEclipse = isTotal;
+        
         if(sunInstance == null)
         {
-            sunInstance = Instantiate(sunPrefab, new Vector3(0,0.2f,0.5f), Quaternion.identity);
-            sunInstance.transform.localScale = new Vector3(0.03f, 0.03f, 0.03f);
+            sunInstance = Instantiate(sunPrefab, new Vector3(0,6.0f,15.0f), Quaternion.identity);
+            sunInstance.transform.localScale = new Vector3(1.0f, 1.0f, 0.01f);
         }
+        if(moonInstance != null)
+        {
+            Vector3 newScale = moonInstance.transform.localScale;
+            newScale.x = isTotalEclipse ? sunInstance.transform.localScale.x : sunInstance.transform.localScale.x * 0.9f;
+            newScale.y = isTotalEclipse ? sunInstance.transform.localScale.y : sunInstance.transform.localScale.y * 0.9f;
+            moonInstance.transform.localScale = newScale;
+        }    
     }
 
     private void AdjustBrightness()
@@ -108,65 +182,32 @@ public class TouchManager : MonoBehaviour
         if (moonInstance == null || sunInstance == null || colorGrading == null)
             return;
 
-        // Calculate the direction from sun to moon and distance
+        // 태양-달, 태양-카메라 거리 계산
         Vector3 sunToMoon = moonInstance.transform.position - sunInstance.transform.position;
         Vector3 sunToCamera = arCamera.transform.position - sunInstance.transform.position;
 
-        // --FIRST--
-        // // Check if moon is roughly in front of the sun from camera's perspective
-        // float distanceThreshold = 0.2f; // Adjust this value based on desired proximity
-        // bool isMoonInFrontOfSun = Vector3.Dot(sunToCamera.normalized, sunToMoon.normalized) > 0.98f && sunToMoon.magnitude < distanceThreshold;
-
-        // if (isMoonInFrontOfSun)
-        // {
-        //     colorGrading.postExposure.value = Mathf.Lerp(colorGrading.postExposure.value, -3f, 0.5f * Time.deltaTime);
-        //     colorGrading.saturation.value = -50f;
-        // }
-        // else
-        // {
-        //     colorGrading.postExposure.value = Mathf.Lerp(colorGrading.postExposure.value, 0f, 0.5f * Time.deltaTime);
-        //     colorGrading.saturation.value = 0f;
-        // }
-
-        // //--SECOND--
-        // // Calculate the distance between sun and moon
-        // float currentDistance = Vector3.Distance(selectedObj.transform.position, sunPrefab.transform.position);
-
-        // // Calculate the normalized "eclipse factor" based on distance
-        // float eclipseFactor = Mathf.Clamp01(1 - (currentDistance / maxDistance));
-
-        // // Adjust post-process settings based on the eclipse factor
-        // colorGrading.postExposure.value = Mathf.Lerp(0f, -5f, eclipseFactor);
-        // colorGrading.saturation.value = Mathf.Lerp(0f, -25f, eclipseFactor);
-
-        // sunMaterial.SetColor("_EmissionColor", originalEmissionColor);
-
-
-        // Calculate the projection of sunToMoon onto sunToCamera
+        // sunToMoon을 sunToCamera에 투영
         float projectionLength = Vector3.Dot(sunToMoon, sunToCamera.normalized);
         Vector3 projectionPoint = sunInstance.transform.position + sunToCamera.normalized * projectionLength;
 
-        // Calculate distance from moon to the projected point on the line
+        // 달에서 투영 포인트까지 거리
         float distanceFromLine = Vector3.Distance(moonInstance.transform.position, projectionPoint);
 
-        // If the projection point is in front of the sun and within the sun's diameter range, start eclipse effect
+        // 달이 태양의 지름 안쪽에 들어오면 일식 진행
         if (projectionLength > 0 && distanceFromLine <= sunDiameter)
         {
-            // Calculate the "eclipse factor" based on how much moon is covering the sun
             float eclipseFactor = Mathf.Clamp01(1 - (distanceFromLine / sunDiameter));
 
-            // Adjust post-process settings based on the eclipse factor
             colorGrading.postExposure.value = Mathf.Lerp(0f, -5f, eclipseFactor);
             colorGrading.saturation.value = Mathf.Lerp(0f, -25f, eclipseFactor);
 
         }
         else
         {
-            // Reset brightness when moon is not in front of the sun-camera line
+            // 태양 범위를 벗어나면 밝기 리셋
             colorGrading.postExposure.value = 0f;
             colorGrading.saturation.value = 0f;
         }
 
     }
 }
-
