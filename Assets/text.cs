@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StarManager : MonoBehaviour
+public class text : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -15,6 +15,4 @@ public class StarManager : MonoBehaviour
     {
         
     }
-
-    
 }
