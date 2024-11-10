@@ -22,18 +22,9 @@ public class JSON_Parser
         }
     }
 
-    public Star_data readJSON(string filename)
+    public Star_data readJSON(string data)
     {
-        Debug.Log(filename);
-        try
-        {
-            json_Data = Resources.Load<TextAsset>(filename);
-        }
-        catch
-        {
-            Debug.Log("파일이 존재하지 않습니다.");
-        }
-        Star_data tmp = JsonUtility.FromJson<Star_data>(json_Data.text);
+        Star_data tmp = JsonUtility.FromJson<Star_data>(data);
         return tmp;
     }
     private void OnDestroy()
@@ -44,5 +35,7 @@ public class JSON_Parser
 [Serializable]
 public class Star_data
 {
-
+    public string name;
+    public string nameUnicode;
+    public string img;
 }
