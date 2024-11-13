@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 649b6e3390d3dc946b7d465c37daa35a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -120,6 +120,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sun: {fileID: 3548356298615962880, guid: 5f776740c447e45afb25edbca842de92, type: 3}
   moon: {fileID: 746407824161179164}
-  maskMaterial: {fileID: 2100000, guid: 649b6e3390d3dc946b7d465c37daa35a, type: 2}
   sunRadius: 0.5
   moonRadius: 1

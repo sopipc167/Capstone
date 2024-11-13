@@ -3,10 +3,10 @@ Shader "Custom/Mask"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _SunPosition ("Sun Position", Vector) = (0,0,0,0)
-        _MoonPosition ("Moon Position", Vector) = (0,0,0,0)
-        _SunRadius ("Sun Radius", Float) = 0.5
-        _MoonRadius ("Moon Radius", Float) = 1.0
+        // _SunPosition ("Sun Position", Vector) = (0,0,0,0)
+        // _MoonPosition ("Moon Position", Vector) = (0,0,0,0)
+        // _SunRadius ("Sun Radius", Float) = 0.5
+        // _MoonRadius ("Moon Radius", Float) = 1.0
     }
     SubShader
     {
@@ -66,11 +66,12 @@ Shader "Custom/Mask"
                 float distToMoon = length(worldPos - _MoonPosition.xyz);
                 float distToSun = length(worldPos - _SunPosition.xyz);
 
-                if (distToMoon < _MoonRadius && distToSun < _SunRadius)
+
+                if (distToMoon <= _MoonRadius && distToSun <= _SunRadius)
                 {
                     return fixed4(0, 0, 0, 1);
                 }
-                return fixed4(0.5, 0.5, 0.5, 1);
+                return fixed4(0.5, 0.5, 0.5, 0);
             }
             ENDCG
         }

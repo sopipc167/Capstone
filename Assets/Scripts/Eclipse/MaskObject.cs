@@ -6,7 +6,7 @@ public class MaskObject : MonoBehaviour
 {
     public GameObject sun;
     public GameObject moon;
-    public Material maskMaterial;
+    //public Material maskMaterial;
     public float sunRadius = 0.5f;
     public float moonRadius = 1.0f;
 
@@ -17,9 +17,11 @@ public class MaskObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        maskMaterial.SetVector("_SunPosition", sun.transform.position);
-        maskMaterial.SetVector("_MoonPosition", moon.transform.position);
-        maskMaterial.SetFloat("_SunRadius", sunRadius);
-        maskMaterial.SetFloat("_MoonRadius", moonRadius);
+        Shader.SetGlobalVector("_SunPosition", sun.transform.position);
+        Shader.SetGlobalVector("_MoonPosition", moon.transform.position); 
+        Shader.SetGlobalFloat("_SunRadius", sunRadius);
+        Shader.SetGlobalFloat("_MoonRadius", moonRadius);
+
+
     }
 }
