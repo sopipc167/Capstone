@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: BIRP PBR Night Sky
+  m_Shader: {fileID: 4800000, guid: 566def24fe9a00246b08353591ef3c66, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _ConstellationsCubeMap:
+        m_Texture: {fileID: 8900000, guid: 59de6472d343112429a20c1dd28b29ec, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MoonColor:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MoonTex:
+        m_Texture: {fileID: 8900000, guid: 4a2ee3c34e31b7948841edd58793b99d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseTexture:
+        m_Texture: {fileID: 2800000, guid: f6be9b822f67eec4bb4ac2dc7db2e3de, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _StarTwinkleNoise:
+        m_Texture: {fileID: 2800000, guid: 3d8904004ece62a4e963b15b318bf853, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _StarsCubeMap:
+        m_Texture: {fileID: 8900000, guid: 18b91bf72764e8d49ba3f035fad7e298, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TestTex:
+        m_Texture: {fileID: 2800000, guid: 453750ae27d3a784db02f225a8b5b127, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _ConstellationsFade: 0
+    - _Exposure: 3
+    - _FlareFalloff: 0
+    - _FlareSize: 0
+    - _MoonOffset: 1
+    - _MoonRadius: 0.026
+    - _PlanetScale: 0.1
+    - _PlanetsScale: 1
+    - _StarTwinkleIntensity: 0.5
+    - _StarTwinkleNoiseTiling: 5
+    - _StarTwinkleSpeed: 0.5
+    - _StarsTwinkleSpeed: 0.1
+    - _SunDir: 0
+    - _SunSize: 3
+    - _Test: 0
+    - _Test2: 1.29
+    m_Colors:
+    - _Colour: {r: 0.7607844, g: 0.2901961, b: 0.5372549, a: 1}
+    - _Colour2: {r: 0.70980394, g: 0.2901961, b: 0.882353, a: 1}
+    - _FogColour: {r: 1, g: 1, b: 1, a: 1}
+    - _SunDir: {r: -0, g: 0, b: 0, a: 0}
+    - _TestVec1: {r: 0.02, g: 0, b: 0, a: 0}
+    - _TestVec2: {r: 0, g: 0, b: 0, a: 0}
+  m_BuildTextureStacks: []
