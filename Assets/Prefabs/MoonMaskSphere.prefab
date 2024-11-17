@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1326758914423723886}
   - component: {fileID: 4710169544604619903}
   m_Layer: 8
-  m_Name: MaskSphere
+  m_Name: MoonMaskSphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -118,7 +118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c723eb9c31486b84fb54c1b1f2844441, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sun: {fileID: 3548356298615962880, guid: 5f776740c447e45afb25edbca842de92, type: 3}
+  sun: {fileID: 1079297615774672661, guid: c9074bce188fbae4c8bc6339120a8b2e, type: 3}
   moon: {fileID: 746407824161179164}
   sunRadius: 0.5
   moonRadius: 1
