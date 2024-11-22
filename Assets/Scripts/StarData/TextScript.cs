@@ -14,7 +14,7 @@ public class TextScript : MonoBehaviour
 
     void Update()
     {
-        transform.LookAt(Camera.main.transform);
-        transform.Rotate(0, 180, 0);
+        text.transform.LookAt(Camera.main.transform);
+        text.transform.Rotate(0, 180, 0);
     }
 }

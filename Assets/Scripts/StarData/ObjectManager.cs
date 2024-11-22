@@ -1,160 +1,247 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Collections;
 using Unity.VisualScripting;
 using Unity.XR.CoreUtils;
+using UnityEditor.XR;
 using UnityEngine;
 using UnityEngine.Android;
+using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 
 public class ObjectManager : MonoBehaviour
 {
     public TextMeshProUGUI text;
+    public TextMeshProUGUI headAcc;
 
+    public Button Reset;
     public GameObject starPrefab;
     public GameObject moonPrefab;
+    public GameObject sunPrefab;
+    public GameObject otherPrefab;
+    public GameObject arrow;
     public Transform arCamera;
     float radius = 1000.0f;
 
     private DataManager dataManager;
+    private CompassManager compassManager;
 
-    private float sun_alt = 0.0f, sun_az = 0.0f;
-    private float moon_alt = 0.0f, moon_az = 0.0f;
-    private float trueHeading = 0.0f;
-    private bool compassInitialized = false;
-    private GameObject moon, sun;
-    private List<Vector3> points = new List<Vector3>();
-    private List<GameObject> stars = new List<GameObject>();
+    private List<Constellation> constellations = new List<Constellation>();
+    private Dictionary<string, List<GameObject>> constellationObjects = new Dictionary<string, List<GameObject>>();
+    private List<GameObject> solarObjects = new List<GameObject>();
+    private GameObject sun, mercury, venus, mars, jupiter, saturn, uranus, neptune, pluto, moon;
+    private List<GameObject> tmp = new List<GameObject>();
 
     private XROrigin xrOrigin;
+    private float trueNorth = 0.0f;
+    private Vector3 northDirection = Vector3.zero;
+    private bool isInitialized = false;
+    private Quaternion initialRotation;
+
 
     // Start is called before the first frame update
     void Start()
     {
         xrOrigin = FindAnyObjectByType<XROrigin>();
         dataManager = FindAnyObjectByType<DataManager>();
-        Input.location.Start();
-        Input.compass.enabled = true;
+        compassManager = FindAnyObjectByType<CompassManager>();
 
-        #if PLATFORM_ANDROID
-        if (!Permission.HasUserAuthorizedPermission(Permission.CoarseLocation))
-        {
-            Permission.RequestUserPermission(Permission.CoarseLocation);
-        }
-#endif
-        trueHeading = Input.compass.trueHeading;
-        sun = Instantiate(moonPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        moon = Instantiate(moonPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        InitializeObjects();
     }
 
     public void UpdateObjects()
     {
         if (dataManager.celestialObjects.Count >= 98)
         {
-            CelestialObject obj = dataManager.celestialObjects["sun"];
-            sun_alt = obj.alt;
-            sun_az = obj.az;
+            InitializeConstellations();
 
-            obj = dataManager.celestialObjects["moon"];
-            moon_alt = obj.alt;
-            moon_az = obj.az;
         }
     }
 
     void Update()
     {
-        if (!compassInitialized && Input.compass.headingAccuracy > 0)
+        if (!isInitialized)
         {
-            trueHeading = Input.compass.trueHeading;
-            compassInitialized = true;
+            trueNorth = compassManager.GetTrueNorth();
+            if (trueNorth == -1.0f) return;
+
+            isInitialized = true;
         }
 
-        if (compassInitialized)
+        if (isInitialized)
         {
-            xrOrigin.transform.rotation = Quaternion.Euler(0, trueHeading, 0);
+            
+            UpdateSolarObjects();
         }
-
-        text.text = string.Format("TrueHeading: {0}", trueHeading);
-        UpdateStar(sun, sun_alt, sun_az, radius);
-        UpdateStar(moon, moon_alt, moon_az, radius);
     }
 
-    void Sagittarius()
-    {
-        PlaceStar(-19.4f, 233.2f, radius);  // alf
-        PlaceStar(-21.6f, 229.9f, radius);  // bet
-        PlaceStar(-15.3f, 228.6f, radius);  // iot
-        PlaceStar(-10.5f, 233.4f, radius);  // tet
-        PlaceStar(-5.6f, 241.0f, radius);  // ome
-        PlaceStar(-15.1f, 246.5f, radius);  // tau
-        PlaceStar(-17.1f, 245.2f, radius);  // zet
-        PlaceStar(-16.5f, 249.2f, radius);  // sig
-        PlaceStar(-14.7f, 252.4f, radius);  // nu
-        PlaceStar(-12.1f, 251.8f, radius);  // omi
-        PlaceStar(-10.7f, 251.7f, radius);  // pi
-        PlaceStar(-6.6f, 252.6f, radius);  // rho
-        PlaceStar(-18.6f, 249.9f, radius);  // phi
-        PlaceStar(-21.1f, 253.5f, radius);  // lam
-        PlaceStar(-26.4f, 245.6f, radius);  // eps
-        PlaceStar(-24.7f, 250.3f, radius);  // del
-        PlaceStar(-28.7f, 243.9f, radius);  // eta
-        PlaceStar(-21.5f, 259.4f, radius);  // mu
-        PlaceStar(-27.9f, 251.6f, radius);  // gam
+    
 
-        DrawConstellationLine(new List<int> { 1, 2, 3, 4, 5, 7, 8, 9, 10, 11 });
-        DrawConstellationLine(new List<int> { 0, 2 });
-        DrawConstellationLine(new List<int> { 7, 12, 13, 17 });
-        DrawConstellationLine(new List<int> { 5, 6, 12, 15, 18, 14, 16 });
-        DrawConstellationLine(new List<int> { 6, 14, 15, 13 });
+    void UpdateSolarObjects()
+    {
+        CelestialObject obj;
+
+        obj = dataManager.celestialObjects["sun"];
+        UpdateStar(sun, obj.alt, obj.az, radius);
+
+        obj = dataManager.celestialObjects["mercury"];
+        UpdateStar(mercury, obj.alt, obj.az, radius);
+
+        obj = dataManager.celestialObjects["venus"];
+        UpdateStar(venus, obj.alt, obj.az, radius);
+
+        obj = dataManager.celestialObjects["mars"];
+        UpdateStar(mars, obj.alt, obj.az, radius);
+
+        obj = dataManager.celestialObjects["jupiter"];
+        UpdateStar(jupiter, obj.alt, obj.az, radius);
+
+        obj = dataManager.celestialObjects["saturn"];
+        UpdateStar(saturn, obj.alt, obj.az, radius);
+
+        obj = dataManager.celestialObjects["uranus"];
+        UpdateStar(uranus, obj.alt, obj.az, radius);
+
+        obj = dataManager.celestialObjects["neptune"];
+        UpdateStar(neptune, obj.alt, obj.az, radius);
+
+        obj = dataManager.celestialObjects["pluto"];
+        UpdateStar(pluto, obj.alt, obj.az, radius);
+
+        obj = dataManager.celestialObjects["moon"];
+        UpdateStar(moon, obj.alt, obj.az, radius);
+
+        UpdateConstellations();
     }
 
-    void DrawConstellationLine(List<int> lines)
+    private void UpdateConstellations()
     {
-        int startIndex = lines[0];
-        LineRenderer line = stars[startIndex].AddComponent<LineRenderer>();
-        line.startColor = Color.yellow;
-        line.endColor = Color.yellow;
-        line.positionCount = lines.Count;
-        line.startWidth = 2f;
-        line.endWidth = 2f;
-        int i = 0;
-        lines.RemoveAt(0);
+        Constellation obj;
 
-        foreach (int endIndex in lines)
+        obj = dataManager.celestialObjects["orion"].ConvertTo<Constellation>();
+
+        for (int i = 0; i < obj.stars.Count; i++)
         {
-            line.SetPosition(i, points[startIndex]);
-            line.SetPosition(i+1, points[endIndex]);
-
-            i++;
-            startIndex = endIndex;
+            Star star = obj.stars[i];
+            UpdateStar(tmp[i], star.alt, star.az, radius);
+            UpdateConstellationLine(tmp, obj.lines);
         }
     }
 
     public void UpdateStar(GameObject star, float altitude, float azimuth, float distance)
     {
-        //float adjustedAzimuth = azimuth - trueHeading;
-
-        Vector3 starPosition = SphericalToCartesian(altitude, azimuth, distance);
+        float adjustedAzimuth = azimuth - trueNorth;
+        Vector3 starPosition = SphericalToCartesian(altitude, adjustedAzimuth, distance);
+        //Vector3 starPosition = GetStarPosition(altitude, azimuth, distance, northDirection);
 
         star.transform.position = starPosition;
     }
 
-    public void PlaceStar(float altitude, float azimuth, float distance)
+    private void InitializeObjects()
     {
-        Vector3 starPosition = WorldPosition(SphericalToCartesian(altitude, azimuth, distance));
-        points.Add(starPosition);
-
-        GameObject star = Instantiate(starPrefab, starPosition, Quaternion.identity);
-        stars.Add(star);
+        sun = Instantiate(sunPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        mercury = Instantiate(otherPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        mercury.GetComponent<TextScript>().SetText("Mercury");
+        venus = Instantiate(otherPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        venus.GetComponent<TextScript>().SetText("Venus");
+        mars = Instantiate(otherPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        mars.GetComponent<TextScript>().SetText("Mars");
+        jupiter = Instantiate(otherPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        jupiter.GetComponent<TextScript>().SetText("Jupiter");
+        saturn = Instantiate(otherPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        saturn.GetComponent<TextScript>().SetText("Saturn");
+        uranus = Instantiate(otherPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        uranus.GetComponent<TextScript>().SetText("Uranus");
+        neptune = Instantiate(otherPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        neptune.GetComponent<TextScript>().SetText("Neptune");
+        pluto = Instantiate(otherPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        pluto.GetComponent<TextScript>().SetText("Pluto");
+        moon = Instantiate(otherPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        moon.GetComponent<TextScript>().SetText("Moon");
     }
 
-    Vector3 WorldPosition(Vector3 position)
+    private void InitializeConstellations()
     {
-        Vector3 worldPosition = arCamera.position + arCamera.rotation * position;
+        Constellation obj;
 
-        return worldPosition;
+        obj = dataManager.celestialObjects["orion"].ConvertTo<Constellation>();
+        foreach (Star star in obj.stars)
+        {
+            GameObject newStar = Instantiate(starPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+            tmp.Add(newStar);
+        }
+
+        foreach (GameObject go in tmp)
+        {
+            Debug.Log(go.transform.position);
+        }
+
+        InitializeConstellationLine(tmp, obj.lines);
     }
 
+    private void UpdateConstellationLine(List<GameObject> starObjects, List<List<int>> lines)
+    {
+        
+        
+        foreach (List<int> newLine in lines)
+        {
+            int startIndex = newLine[0];
+            LineRenderer line = starObjects[startIndex].GetComponent<LineRenderer>();
+            if (line == null) return;
+            line.positionCount = newLine.Count;
+            int i = 0;
+            newLine.RemoveAt(0);
+
+            foreach (int endIndex in newLine)
+            {
+                line.SetPosition(i, starObjects[startIndex].transform.position);
+                line.SetPosition(i + 1, starObjects[endIndex].transform.position);
+                
+
+                i++;
+                startIndex = endIndex;
+            }
+        }
+    }
+
+    void InitializeConstellationLine(List<GameObject> starObjects, List<List<int>> lines)
+    {
+        foreach (List<int> newLine in lines)
+        {
+            int startIndex = newLine[0];
+            LineRenderer line = starObjects[startIndex].AddComponent<LineRenderer>();
+            line.material = new Material(Shader.Find("Sprites/Default"));
+            line.startColor = Color.yellow;
+            line.endColor = Color.yellow;
+            line.startWidth = 0.1f;
+            line.endWidth = 0.1f;
+        }
+        
+    }
+
+    Vector3 GetStarPosition(float altitude, float azimuth, float distance, Vector3 northDirection)
+    {
+        float azimuthRad = azimuth * Mathf.Deg2Rad;
+        float altitudeRad = altitude * Mathf.Deg2Rad;
+
+        float horizontalProjection = Mathf.Cos(altitudeRad);
+
+        Vector3 starDirection = new Vector3(
+            horizontalProjection * Mathf.Sin(azimuthRad),  // X component
+            Mathf.Sin(altitudeRad),                        // Y component (up)
+            horizontalProjection * Mathf.Cos(azimuthRad)   // Z component
+        );
+
+        Quaternion rotationToNorth = Quaternion.FromToRotation(Vector3.forward, northDirection);
+
+        Vector3 rotatedDirection = rotationToNorth * starDirection;
+        Vector3 observerPosition = Camera.main.transform.position;
+        Vector3 starPosition = observerPosition + (rotatedDirection * distance);
+
+        return starPosition;
+    }
     Vector3 SphericalToCartesian(float altitude, float azimuth, float radius)
     {
         float alt_radian = altitude * Mathf.Deg2Rad;

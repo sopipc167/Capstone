@@ -1,14 +1,14 @@
+
+from fastapi import FastAPI, WebSocket
 from astroquery.simbad import Simbad
 from astroquery.jplhorizons import Horizons
 from astropy.coordinates import SkyCoord, EarthLocation, AltAz
 from astropy.time import Time
 import astropy.units as u
 import asyncio
-import websockets
 import json
 import numpy as np
 
-received_data = {}
 greek_alphabet_order = {
     "α": 1, "β": 2, "γ": 3, "δ": 4, "ε": 5, "ζ": 6, "η": 7, "θ": 8, "ι": 9, "κ": 10,
     "λ": 11, "μ": 12, "ν": 13, "ξ": 14, "ο": 15, "π": 16, "ρ": 17, "σ": 18, "τ": 19, 
@@ -36,26 +36,23 @@ planets = [
     # -125544,  # International Space Station
 ]
 
-# 데이터 처리 후 응답 생성
-def process_data(data):
-    # 데이터 처리
-    return {'response': f'Received data from Unity: {data}'}
+app = FastAPI()
 
-# WebSocket 서버 핸들러
-async def data_server(websocket, path):
-    global received_data
+# WebSocket 엔드포인트
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
 
-    # 별자리 데이터 파싱
-    parsed_data = parse_constellations_data()
-
-    # Unity에서 보낸 메시지 파싱
-    init_msg = await websocket.recv()
-    received_data = json.loads(init_msg)
-    location = (received_data['location'][0], received_data['location'][1])
-
-    # 데이터 생성 및 전송
-    while True:
-        try:
+    try:
+        # 별자리 데이터 파싱
+        parsed_data = parse_constellations_data()
+        
+        # Unity로부터 GPS정보 받아오기
+        data = await websocket.receive_text()
+        received_data = json.loads(data)
+        location = (received_data['location'][0], received_data['location'][1])
+        
+        while True:
             cst = []
             for obj in parsed_data:
                 cst_name = obj['name']
@@ -68,27 +65,23 @@ async def data_server(websocket, path):
                 }
                 cst.append(new_cst)
 
-            new_data = {
+            server_data = {
                 'location': received_data['location'],
                 'time': Time.now().strftime('%Y-%m-%d %H:%M:%S'),
                 'constellations': cst
             }
 
-            print(new_data)
-            json_data = json.dumps(new_data)
-            await websocket.send(json_data)
-            print(f'Sent data: {json_data}')
+            # print(new_data)
+            await websocket.send_text(json.dumps(server_data))
 
-            await asyncio.sleep(60)  # 60초마다 데이터 전송
-        except websockets.ConnectionClosed:
-            print('Connection closed by client.')
-            break
+            # n초마다 데이터를 보냄
+            await asyncio.sleep(60)
+    except Exception as e:
+        print(f'Connection error: {e}')
 
-# 서버 실행 함수
-async def main():
-    async with websockets.serve(data_server, 'localhost', 8765):
-        print('WebSocket server started on ws://localhost:8765')
-        await asyncio.Future()  # 서버를 무기한 실행
+    finally:
+        # WebSocket 연결 종료
+        await websocket.close()
 
 # 태양계 외부 천체 검색 (SIMBAD)
 def get_star_datas(star_names, obs_loc):
@@ -143,6 +136,7 @@ def get_star_data(star_name):
     result_table = simbad.query_object("Betelgeuse")
 
     # 정보 추출
+    name = result_table['NAME'][0]
     ra = result_table['RA'][0]
     dec = result_table['DEC'][0]
     pm_ra_cosdec = result_table['PMRA'][0]
@@ -219,13 +213,16 @@ def get_planet_data(planet_id, obs_loc):
 
 # 별자리 데이터 파싱
 def parse_constellations_data():
-    with open('constellation.json', 'r') as f:
+    with open('constellation.json', 'r', encoding="UTF8") as f:
         data = json.load(f)
     return data
 
 if __name__ == '__main__':
+    data = parse_constellations_data()
+    print(data[0])
+    pass
     # 서버 실행
-    asyncio.run(main())
+    #asyncio.run(main())
 
     # 예시 코드
     # get_constellation_datas()
