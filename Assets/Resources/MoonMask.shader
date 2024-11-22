@@ -74,15 +74,15 @@ Shader "Custom/MoonMask"
                         // -0.45 ~ 0.45 구간에서 알파값 부드럽게 전환
                         float alpha = 1.0;
                         
-                        if (_MoonPosition.x >= -0.1f && _MoonPosition.x <= 0.1f)
+                        if (_MoonPosition.x >= -0.2f && _MoonPosition.x <= 0.2f)
                         {
                             // 중심부(-0.01 ~ 0.01)에서는 완전 투명으로 전환
-                            alpha = lerp(0.2, 0.0, 1.0 - abs(_MoonPosition.x) / 0.1);
+                            alpha = lerp(0.2, 0.0, 1.0 - abs(_MoonPosition.x) / 0.2);
                         }
                         else
                         {
                             // -0.45 ~ -0.01 또는 0.01 ~ 0.45 구간에서는 반투명으로 전환
-                            alpha = lerp(1.0, 0.2, 1.0 - (abs(_MoonPosition.x) - 0.01) / 0.44);
+                            alpha = lerp(1.0, 0.2, 1.0 - (abs(_MoonPosition.x) - 0.2) / 0.45);
                         }
                         
                         return fixed4(0, 0, 0, alpha);
