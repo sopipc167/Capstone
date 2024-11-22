@@ -33,11 +33,13 @@ public class ObjectManager : MonoBehaviour
     private List<GameObject> solarObjects = new List<GameObject>();
     private GameObject sun, mercury, venus, mars, jupiter, saturn, uranus, neptune, pluto, moon;
     private List<GameObject> tmp = new List<GameObject>();
+    private List<GameObject> ursaMinor = new List<GameObject>();
 
     private XROrigin xrOrigin;
     private float trueNorth = 0.0f;
     private Vector3 northDirection = Vector3.zero;
     private bool isInitialized = false;
+    private bool isConstellationInitialized = false;
     private Quaternion initialRotation;
 
 
@@ -55,8 +57,12 @@ public class ObjectManager : MonoBehaviour
     {
         if (dataManager.celestialObjects.Count >= 98)
         {
-            InitializeConstellations();
-
+            if (!isConstellationInitialized)
+            {
+                InitializeConstellations();
+                isConstellationInitialized = true;
+            }
+            
         }
     }
 
@@ -72,6 +78,7 @@ public class ObjectManager : MonoBehaviour
 
         if (isInitialized)
         {
+            
             
             UpdateSolarObjects();
         }
@@ -126,8 +133,17 @@ public class ObjectManager : MonoBehaviour
         {
             Star star = obj.stars[i];
             UpdateStar(tmp[i], star.alt, star.az, radius);
-            UpdateConstellationLine(tmp, obj.lines);
         }
+        UpdateConstellationLine(tmp, obj.lines);
+
+        obj = dataManager.celestialObjects["ursaminor"].ConvertTo<Constellation>();
+
+        for (int i = 0; i < obj.stars.Count; i++)
+        {
+            Star star = obj.stars[i];
+            UpdateStar(ursaMinor[i], star.alt, star.az, radius);
+        }
+        UpdateConstellationLine(ursaMinor, obj.lines);
     }
 
     public void UpdateStar(GameObject star, float altitude, float azimuth, float distance)
@@ -173,12 +189,16 @@ public class ObjectManager : MonoBehaviour
             tmp.Add(newStar);
         }
 
-        foreach (GameObject go in tmp)
+        InitializeConstellationLine(tmp, obj.lines);
+
+        obj = dataManager.celestialObjects["ursaminor"].ConvertTo<Constellation>();
+        foreach (Star star in obj.stars)
         {
-            Debug.Log(go.transform.position);
+            GameObject newStar = Instantiate(starPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+            ursaMinor.Add(newStar);
         }
 
-        InitializeConstellationLine(tmp, obj.lines);
+        InitializeConstellationLine(ursaMinor, obj.lines);
     }
 
     private void UpdateConstellationLine(List<GameObject> starObjects, List<List<int>> lines)
@@ -189,7 +209,7 @@ public class ObjectManager : MonoBehaviour
         {
             int startIndex = newLine[0];
             LineRenderer line = starObjects[startIndex].GetComponent<LineRenderer>();
-            if (line == null) return;
+            if (line == null) continue;
             line.positionCount = newLine.Count;
             int i = 0;
             newLine.RemoveAt(0);
@@ -198,7 +218,7 @@ public class ObjectManager : MonoBehaviour
             {
                 line.SetPosition(i, starObjects[startIndex].transform.position);
                 line.SetPosition(i + 1, starObjects[endIndex].transform.position);
-                
+                //Debug.Log(string.Format("[{0}]: {1}", endIndex, starObjects[endIndex].transform.position));
 
                 i++;
                 startIndex = endIndex;
@@ -215,8 +235,8 @@ public class ObjectManager : MonoBehaviour
             line.material = new Material(Shader.Find("Sprites/Default"));
             line.startColor = Color.yellow;
             line.endColor = Color.yellow;
-            line.startWidth = 0.1f;
-            line.endWidth = 0.1f;
+            line.startWidth = 0.5f;
+            line.endWidth = 0.5f;
         }
         
     }
