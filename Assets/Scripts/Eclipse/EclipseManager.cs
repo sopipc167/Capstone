@@ -6,15 +6,27 @@ using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
+using Unity.XR.CoreUtils;
 using UnityEngine.EventSystems;
+using System;
 
-public class TouchManager : MonoBehaviour
+public class EclipseManager : MonoBehaviour
 {
+    /* Manager */
+    private XROrigin xrOrigin;
+    private DataManager dataManager;
+    private CompassManager compassManager;
+    private bool isInitialized = false;
+    private float trueNorth = 0.0f;
+
     /* 카메라 */
     [SerializeField]
     private Camera arCamera;
     [SerializeField]
     private ARCameraManager ARCameraManager;
+
+    private const float DISTANCE_FROM_CAMERA = 15.0f;
+    private const float Y_OFFSET = 6.0f;
 
     /* 오브젝트 */
     [SerializeField]
@@ -47,6 +59,8 @@ public class TouchManager : MonoBehaviour
     private bool isAutoMoving = false;
     [SerializeField]
     private Button backButton;
+
+    public Material maskMaterial;
 
     /* 상수 */
     private const float AUTO_MOVE_DISTANCE = 0.005f;
@@ -92,6 +106,10 @@ public class TouchManager : MonoBehaviour
 
     void Start()
     {
+        xrOrigin = FindAnyObjectByType<XROrigin>();
+        dataManager = FindAnyObjectByType<DataManager>();
+        compassManager = FindAnyObjectByType<CompassManager>();
+        
         postProcessVolume.profile.TryGetSettings(out colorGrading);
 
         ARCameraManager.frameReceived += FrameLightUpdated;
@@ -103,14 +121,16 @@ public class TouchManager : MonoBehaviour
             eclipseType = EclipseType.Solar;
             if(sunInstance == null)
             {
-                sunInstance = Instantiate(sunPrefab, new Vector3(0,6.0f,15.0f), Quaternion.identity);
+                Vector3 sunPosition = arCamera.transform.position + arCamera.transform.forward * 15.0f + arCamera.transform.up * 6.0f;
+                sunInstance = Instantiate(sunPrefab, sunPosition, Quaternion.identity);
                 sunInstance.transform.localScale = new Vector3(1.0f, 1.0f, 0.01f);
                 sunGlow = sunInstance.transform.Find("Sun Glow").gameObject;
             }
             if (maskInstance == null)
             {
-                Vector3 spawnPosition = new Vector3(1.3f, 5.7f, 14.97f);
-                maskInstance = Instantiate(sunMaskPrefab, spawnPosition, Quaternion.identity);
+                Vector3 maskPosition = arCamera.transform.position + arCamera.transform.forward * 14.97f + arCamera.transform.right * 1.3f + arCamera.transform.up * 5.7f;
+                Vector3 spawnPosition = new Vector3(arCamera.transform.position.x + 1.3f, arCamera.transform.position.y + 5.7f, arCamera.transform.position.z + 14.97f);
+                maskInstance = Instantiate(sunMaskPrefab, maskPosition, Quaternion.identity);
             }
         });
 
@@ -127,6 +147,8 @@ public class TouchManager : MonoBehaviour
                 maskInstance = Instantiate(moonMaskPrefab, spawnPosition, Quaternion.identity);
             }
         });
+
+        
 
         totalEclipseButton.onClick.AddListener(()=>SetEclipseMode(true));
         annularEclipseButton.onClick.AddListener(()=>SetEclipseMode(false));
@@ -195,10 +217,68 @@ public class TouchManager : MonoBehaviour
 
     void Update()
     {
+        if (!isInitialized)
+        {
+            trueNorth = compassManager.GetTrueNorth();
+            if (trueNorth == -1.0f) return;
+
+            isInitialized = true;
+        }
+
+        if (isInitialized)
+        {
+            //UpdateSolarObjects();
+        }
+        /*
+        if(arCamera != null)
+        {
+            // 카메라의 전방 벡터를 기준으로 위치 계산
+            Vector3 cameraForward = arCamera.transform.forward;
+            Vector3 cameraRight = arCamera.transform.right;
+            Vector3 basePosition = arCamera.transform.position + cameraForward * DISTANCE_FROM_CAMERA;
+            
+            // 태양 위치 동기화
+            if(sunInstance != null)
+            {
+                Vector3 sunPos = basePosition;
+                sunPos.x = basePosition.x + (sunInstance.transform.position.x - basePosition.x);
+                sunPos.y = basePosition.y + Y_OFFSET;
+                sunInstance.transform.position = sunPos;
+            }
+
+            // 달 위치 동기화 (현재 위치의 x, y 오프셋 유지)
+            if(moonInstance != null)
+            {
+                Vector3 moonPos = basePosition;
+                // 현재 x, y 오프셋 유지
+                moonPos.x = basePosition.x + (moonInstance.transform.position.x - basePosition.x);
+                moonPos.y = arCamera.transform.position.y + Y_OFFSET;
+                moonInstance.transform.position = moonPos;
+            }
+
+            // 마스크 위치 동기화
+            if(maskInstance != null)
+            {
+                Vector3 maskPos = basePosition;
+                // 현재 x, y 오프셋 유지
+                maskPos.x = basePosition.x + (maskInstance.transform.position.x - basePosition.x);
+                maskPos.y = basePosition.y + Y_OFFSET;
+                maskPos.z = basePosition.z - 0.03f;
+                maskInstance.transform.position = maskPos;
+            }
+        }
+        */
+        // if (sunInstance != null && moonInstance != null)
+        // {
+        //     maskMaterial.SetVector("_SunPosition", sunInstance.transform.position);
+        //     maskMaterial.SetVector("_MoonPosition", maskInstance.transform.position);
+        // }
         // 일식 효과
         if(eclipseType == EclipseType.Solar)
         {
             if(sunInstance == null || maskInstance == null) return;
+            Shader.SetGlobalVector("_SunPosition", sunInstance.transform.position);
+            Shader.SetGlobalVector("_MoonPosition", maskInstance.transform.position); 
 
             //AdjustBrightness();
             sunGlow = sunInstance.transform.Find("Sun Glow").gameObject;
@@ -208,14 +288,18 @@ public class TouchManager : MonoBehaviour
             if (maskInstance != null)
             {
                 Vector3 newPosition = maskInstance.transform.position;
+                float newX = maskInstance.transform.position.x;
+                float newY = maskInstance.transform.position.y;
+                Vector3 sunPos = sunInstance.transform.position;
+
                 float previousX = newPosition.x;
                 Vector3 scale = sunGlow.transform.localScale;
 
                 if (isLeftButtonPressed)
                 {
-                    newPosition.x = Mathf.Max(MIN_X_RANGE, newPosition.x - MOVE_DISTANCE);
+                    newPosition.x = Mathf.Max(MIN_X_RANGE+sunPos.x, newPosition.x - MOVE_DISTANCE);
 
-                    if(newPosition.x <= 0)
+                    if(newPosition.x <= sunPos.x)
                     {
                         newPosition.y = Mathf.Max(MIN_Y_RANGE, newPosition.y - MOVE_Y_DISTANCE);
                     }
@@ -229,9 +313,9 @@ public class TouchManager : MonoBehaviour
                 }
                 if (isRightButtonPressed)
                 {
-                    newPosition.x = Mathf.Min(MAX_X_RANGE, newPosition.x + MOVE_DISTANCE);
+                    newPosition.x = Mathf.Min(MAX_X_RANGE+sunPos.x, newPosition.x + MOVE_DISTANCE);
                     // x가 0보다 작으면 y 감소, 크면 y 증가
-                    if (newPosition.x <= 0)
+                    if (newPosition.x <= sunPos.x)
                     {
                         newPosition.y = Mathf.Min(MAX_Y_RANGE, newPosition.y + MOVE_Y_DISTANCE);
                     }
@@ -242,7 +326,7 @@ public class TouchManager : MonoBehaviour
                     maskInstance.transform.position = newPosition;
                 }
 
-                if (Mathf.Abs(newPosition.x) <= 1.0f)
+                if (Mathf.Abs(newPosition.x) <= sunPos.x + 1.0f)
                 {
                     // 현재 스케일 가져오기
                     Vector3 currentScale = sunGlow.transform.localScale;
@@ -362,6 +446,23 @@ public class TouchManager : MonoBehaviour
         }
     }
 
+    public void UpdateSolarObjects()
+    {
+        CelestialObject obj;
+
+        obj = dataManager.celestialObjects["sun"];
+        //UpdateStar(sun, obj.alt, obj.az, radius);
+    }
+
+    public void UpdateStar(GameObject star, float altitude, float azimuth, float distance)
+    {
+        float adjustedAzimuth = azimuth - trueNorth;
+        Vector3 starPosition = SphericalToCartesian(altitude, adjustedAzimuth, distance);
+        //Vector3 starPosition = GetStarPosition(altitude, azimuth, distance, northDirection);
+
+        star.transform.position = starPosition;
+    }
+
     private void SetEclipseMode(bool isTotal)
     {
         isTotalEclipse = isTotal;
@@ -385,10 +486,10 @@ public class TouchManager : MonoBehaviour
 
         if(brightness.HasValue)
         {
-            if(brightness.Value <= 0.35f)
+            if(brightness.Value <= 0.25f)
             {
                 colorGrading.postExposure.value = Mathf.Lerp(colorGrading.postExposure.value, 2.5f, 0.5f*Time.deltaTime);
-                colorGrading.saturation.value = (colorGrading.saturation.value,25f,0.5f*Time.deltaTime);
+                colorGrading.saturation.value = Mathf.Lerp(colorGrading.saturation.value,25f,0.5f*Time.deltaTime);
                 colorGrading.gamma.value = new Vector4(0.65f,0.65f,0.65f,0);
                 AdjustBrightness(args);
             } 
@@ -489,5 +590,17 @@ public class TouchManager : MonoBehaviour
             colorGrading.postExposure.value = 0f;
             colorGrading.saturation.value = 0f;
         }
+    }
+
+    Vector3 SphericalToCartesian(float altitude, float azimuth, float radius)
+    {
+        float alt_radian = altitude * Mathf.Deg2Rad;
+        float az_radian = azimuth * Mathf.Deg2Rad;
+
+        float x = radius * Mathf.Cos(alt_radian) * Mathf.Sin(az_radian);
+        float y = radius * Mathf.Sin(alt_radian);
+        float z = radius * Mathf.Cos(alt_radian) * Mathf.Cos(az_radian);
+
+        return new Vector3(x, y, z);
     }
 }

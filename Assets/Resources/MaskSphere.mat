@@ -70,13 +70,13 @@ Material:
     - _GlossyReflections: 1
     - _Metallic: 0
     - _Mode: 0
-    - _MoonRadius: 1
+    - _MoonRadius: 0.5
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _SunRadius: 0.5
+    - _SunRadius: 1
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
