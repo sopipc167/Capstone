@@ -42,6 +42,7 @@ public class ObjectManager : MonoBehaviour
     private bool isConstellationInitialized = false;
     private Quaternion initialRotation;
 
+    Dictionary<GameObject,Star> starList = new Dictionary<GameObject,Star>();
 
     // Start is called before the first frame update
     void Start()
@@ -62,7 +63,7 @@ public class ObjectManager : MonoBehaviour
                 InitializeConstellations();
                 isConstellationInitialized = true;
             }
-            
+
         }
     }
 
@@ -78,13 +79,11 @@ public class ObjectManager : MonoBehaviour
 
         if (isInitialized)
         {
-            
-            
             UpdateSolarObjects();
         }
     }
 
-    
+
 
     void UpdateSolarObjects()
     {
@@ -203,8 +202,8 @@ public class ObjectManager : MonoBehaviour
 
     private void UpdateConstellationLine(List<GameObject> starObjects, List<List<int>> lines)
     {
-        
-        
+
+
         foreach (List<int> newLine in lines)
         {
             int startIndex = newLine[0];
@@ -238,7 +237,7 @@ public class ObjectManager : MonoBehaviour
             line.startWidth = 0.5f;
             line.endWidth = 0.5f;
         }
-        
+
     }
 
     Vector3 GetStarPosition(float altitude, float azimuth, float distance, Vector3 northDirection)
@@ -272,5 +271,20 @@ public class ObjectManager : MonoBehaviour
         float z = radius * Mathf.Cos(alt_radian) * Mathf.Cos(az_radian);
 
         return new Vector3(x, y, z);
+    }
+    public void AddStarToGameObject(GameObject starObject, Star starData)
+    {
+        if (!starList.ContainsKey(starObject))
+        {
+            starList[starObject] = starData;
+        }
+    }
+    public Star GetStarFromGameObject(GameObject starObject)
+    {
+        return starList.ContainsKey(starObject) ? starList[starObject] : null;
+    }
+    public List<Star> GetAllStars()
+    {
+        return new List<Star>(starList.Values);
     }
 }

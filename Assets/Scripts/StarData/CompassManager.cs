@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Android;
 using System;
 using Unity.XR.CoreUtils;
+using UnityEngine.UI;
 
 public class CompassManager : MonoBehaviour
 {

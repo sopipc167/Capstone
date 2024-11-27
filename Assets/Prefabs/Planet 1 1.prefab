@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2205022801011938780}
   - component: {fileID: 5792094282163971491}
   - component: {fileID: 88315744563260861}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Planet 1 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 5046322789920020270}
   - component: {fileID: 4604356297788093723}
   - component: {fileID: 7740691363688256236}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
