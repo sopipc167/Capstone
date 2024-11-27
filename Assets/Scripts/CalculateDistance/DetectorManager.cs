@@ -9,6 +9,7 @@ public class DetectorManager : MonoBehaviour
     private bool isRaycastActive = false;
     private int layerMask;
     private DistanceManager distanceManager;
+    public Button Confirm;
 
     void Start()
     {

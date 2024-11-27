@@ -23,7 +23,7 @@ public class DistanceManager : MonoBehaviour
         DistanceCalculate.onClick.AddListener(StartSelectionProcess);
     }
 
-    private void StartSelectionProcess()
+    public void StartSelectionProcess()
     {
         selected.Clear();
         starCollider.ActivateColliders();
