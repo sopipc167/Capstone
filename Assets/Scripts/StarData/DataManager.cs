@@ -6,11 +6,20 @@ using Newtonsoft.Json.Linq;
 
 public class DataManager : MonoBehaviour
 {
+    public bool isUpdated = false;
     public Dictionary<string, CelestialObject> celestialObjects = new Dictionary<string, CelestialObject>();
 
     public void ParseData(string json)
     {
         JArray array = JArray.Parse(json);
+        if (array.Count == 13)
+        {
+            isUpdated = true;
+        }
+        else
+        {
+            isUpdated = false;
+        }
 
         foreach (var item in array)
         {

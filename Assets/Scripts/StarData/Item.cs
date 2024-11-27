@@ -17,6 +17,7 @@ public class CelestialObject
     public string type;
     public float alt;
     public float az;
+    public float distance;
 }
 
 [System.Serializable]

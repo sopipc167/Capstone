@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.Collections;
 using Unity.VisualScripting;
@@ -23,30 +24,25 @@ public class ObjectManager : MonoBehaviour
     public GameObject otherPrefab;
     public GameObject arrow;
     public Transform arCamera;
-    float radius = 1000.0f;
+    public GameObject originObject;
+    public Vector3 origin = Vector3.zero;
+    public float radius = 1000.0f;
+    public float lineWidth = 0.5f;
 
     private DataManager dataManager;
     private CompassManager compassManager;
 
-    private List<Constellation> constellations = new List<Constellation>();
-    private Dictionary<string, List<GameObject>> constellationObjects = new Dictionary<string, List<GameObject>>();
-    private List<GameObject> solarObjects = new List<GameObject>();
     private GameObject sun, mercury, venus, mars, jupiter, saturn, uranus, neptune, pluto, moon;
+    private List<List<GameObject>> constellationObjects = new List<List<GameObject>>();
     private List<GameObject> tmp = new List<GameObject>();
     private List<GameObject> ursaMinor = new List<GameObject>();
 
-    private XROrigin xrOrigin;
     private float trueNorth = 0.0f;
-    private Vector3 northDirection = Vector3.zero;
     private bool isInitialized = false;
     private bool isConstellationInitialized = false;
-    private Quaternion initialRotation;
 
-
-    // Start is called before the first frame update
     void Start()
     {
-        xrOrigin = FindAnyObjectByType<XROrigin>();
         dataManager = FindAnyObjectByType<DataManager>();
         compassManager = FindAnyObjectByType<CompassManager>();
 
@@ -55,15 +51,18 @@ public class ObjectManager : MonoBehaviour
 
     public void UpdateObjects()
     {
-        if (dataManager.celestialObjects.Count >= 98)
+        if (!isConstellationInitialized)
         {
-            if (!isConstellationInitialized)
-            {
-                InitializeConstellations();
-                isConstellationInitialized = true;
-            }
-            
+            InitializeConstellations();
+            isConstellationInitialized = true;
         }
+        /*
+        if (isInitialized)
+        {
+            UpdateSolarObjects();
+            UpdateConstellations();
+        }
+        */
     }
 
     void Update()
@@ -73,19 +72,19 @@ public class ObjectManager : MonoBehaviour
             trueNorth = compassManager.GetTrueNorth();
             if (trueNorth == -1.0f) return;
 
+            
             isInitialized = true;
         }
 
         if (isInitialized)
         {
-            
-            
             UpdateSolarObjects();
+            UpdateConstellations();
         }
     }
 
     
-
+    // 태양계 천체 위치 업데이트
     void UpdateSolarObjects()
     {
         CelestialObject obj;
@@ -119,106 +118,124 @@ public class ObjectManager : MonoBehaviour
 
         obj = dataManager.celestialObjects["moon"];
         UpdateStar(moon, obj.alt, obj.az, radius);
-
-        UpdateConstellations();
     }
 
+    // 별자리 위치 업데이트
     private void UpdateConstellations()
     {
-        Constellation obj;
+        int i = 0;
 
-        obj = dataManager.celestialObjects["orion"].ConvertTo<Constellation>();
-
-        for (int i = 0; i < obj.stars.Count; i++)
+        foreach (KeyValuePair<string, CelestialObject> kvp in dataManager.celestialObjects)
         {
-            Star star = obj.stars[i];
-            UpdateStar(tmp[i], star.alt, star.az, radius);
-        }
-        UpdateConstellationLine(tmp, obj.lines);
+            if (kvp.Value.type != "constellation")
+            {
+                continue;
+            }
 
-        obj = dataManager.celestialObjects["ursaminor"].ConvertTo<Constellation>();
+            Constellation obj = kvp.Value.ConvertTo<Constellation>();
 
-        for (int i = 0; i < obj.stars.Count; i++)
-        {
-            Star star = obj.stars[i];
-            UpdateStar(ursaMinor[i], star.alt, star.az, radius);
+            for (int j = 0; j < obj.stars.Count; j++)
+            {
+                Star star = obj.stars[j];
+                UpdateStar(constellationObjects[i][j], star.alt, star.az, radius);
+            }
+            UpdateConstellationLine(constellationObjects[i], obj.lines);
+
+            i++;
         }
-        UpdateConstellationLine(ursaMinor, obj.lines);
     }
 
+    // 천체 위치 업데이트
     public void UpdateStar(GameObject star, float altitude, float azimuth, float distance)
     {
         float adjustedAzimuth = azimuth - trueNorth;
         Vector3 starPosition = SphericalToCartesian(altitude, adjustedAzimuth, distance);
-        //Vector3 starPosition = GetStarPosition(altitude, azimuth, distance, northDirection);
 
         star.transform.position = starPosition;
     }
 
+    // 태양계 천체 오브젝트 초기화
     private void InitializeObjects()
     {
         sun = Instantiate(sunPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        sun.name = "Sun";
         mercury = Instantiate(otherPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         mercury.GetComponent<TextScript>().SetText("Mercury");
+        mercury.name = "Mercury";
         venus = Instantiate(otherPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         venus.GetComponent<TextScript>().SetText("Venus");
+        venus.name = "Venus";
         mars = Instantiate(otherPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         mars.GetComponent<TextScript>().SetText("Mars");
+        mars.name = "Mars";
         jupiter = Instantiate(otherPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         jupiter.GetComponent<TextScript>().SetText("Jupiter");
+        jupiter.name = "Jupiter";
         saturn = Instantiate(otherPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         saturn.GetComponent<TextScript>().SetText("Saturn");
+        saturn.name = "Saturn";
         uranus = Instantiate(otherPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         uranus.GetComponent<TextScript>().SetText("Uranus");
+        uranus.name = "Uranus";
         neptune = Instantiate(otherPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         neptune.GetComponent<TextScript>().SetText("Neptune");
+        neptune.name = "Neptune";
         pluto = Instantiate(otherPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         pluto.GetComponent<TextScript>().SetText("Pluto");
+        pluto.name = "Pluto";
         moon = Instantiate(otherPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         moon.GetComponent<TextScript>().SetText("Moon");
+        moon.name = "Moon";
     }
 
+    // 별자리 오브젝트 초기화
     private void InitializeConstellations()
     {
-        Constellation obj;
+        int i = 0;
 
-        obj = dataManager.celestialObjects["orion"].ConvertTo<Constellation>();
-        foreach (Star star in obj.stars)
+        foreach (KeyValuePair<string, CelestialObject> kvp in dataManager.celestialObjects)
         {
-            GameObject newStar = Instantiate(starPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-            tmp.Add(newStar);
+            if (kvp.Value.type != "constellation")
+            {
+                continue;
+            }
+
+            Constellation obj = kvp.Value.ConvertTo<Constellation>();
+            constellationObjects.Add(new List<GameObject>());
+
+            foreach (Star star in obj.stars)
+            {
+                GameObject newStar = Instantiate(starPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+                newStar.name = star.name;
+                
+                constellationObjects[i].Add(newStar);
+            }
+            InitializeConstellationLine(constellationObjects[i], obj.lines);
+
+            i++;
         }
-
-        InitializeConstellationLine(tmp, obj.lines);
-
-        obj = dataManager.celestialObjects["ursaminor"].ConvertTo<Constellation>();
-        foreach (Star star in obj.stars)
-        {
-            GameObject newStar = Instantiate(starPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-            ursaMinor.Add(newStar);
-        }
-
-        InitializeConstellationLine(ursaMinor, obj.lines);
     }
 
+    // 별자리 선 업데이트
     private void UpdateConstellationLine(List<GameObject> starObjects, List<List<int>> lines)
     {
-        
-        
         foreach (List<int> newLine in lines)
         {
-            int startIndex = newLine[0];
+            List<int> tmp = newLine.ToList();
+
+            int startIndex = tmp[0];
             LineRenderer line = starObjects[startIndex].GetComponent<LineRenderer>();
             if (line == null) continue;
             line.positionCount = newLine.Count;
+            line.startWidth = lineWidth;
+            line.endWidth = lineWidth;
             int i = 0;
-            newLine.RemoveAt(0);
+            tmp.RemoveAt(0);
 
-            foreach (int endIndex in newLine)
+            foreach (int endIndex in tmp)
             {
                 line.SetPosition(i, starObjects[startIndex].transform.position);
                 line.SetPosition(i + 1, starObjects[endIndex].transform.position);
-                //Debug.Log(string.Format("[{0}]: {1}", endIndex, starObjects[endIndex].transform.position));
 
                 i++;
                 startIndex = endIndex;
@@ -226,6 +243,7 @@ public class ObjectManager : MonoBehaviour
         }
     }
 
+    // 별자리 선 표시하기 위한 LineRenderer 초기화
     void InitializeConstellationLine(List<GameObject> starObjects, List<List<int>> lines)
     {
         foreach (List<int> newLine in lines)
@@ -235,33 +253,12 @@ public class ObjectManager : MonoBehaviour
             line.material = new Material(Shader.Find("Sprites/Default"));
             line.startColor = Color.yellow;
             line.endColor = Color.yellow;
-            line.startWidth = 0.5f;
-            line.endWidth = 0.5f;
+            line.startWidth = lineWidth;
+            line.endWidth = lineWidth;
         }
-        
     }
 
-    Vector3 GetStarPosition(float altitude, float azimuth, float distance, Vector3 northDirection)
-    {
-        float azimuthRad = azimuth * Mathf.Deg2Rad;
-        float altitudeRad = altitude * Mathf.Deg2Rad;
-
-        float horizontalProjection = Mathf.Cos(altitudeRad);
-
-        Vector3 starDirection = new Vector3(
-            horizontalProjection * Mathf.Sin(azimuthRad),  // X component
-            Mathf.Sin(altitudeRad),                        // Y component (up)
-            horizontalProjection * Mathf.Cos(azimuthRad)   // Z component
-        );
-
-        Quaternion rotationToNorth = Quaternion.FromToRotation(Vector3.forward, northDirection);
-
-        Vector3 rotatedDirection = rotationToNorth * starDirection;
-        Vector3 observerPosition = Camera.main.transform.position;
-        Vector3 starPosition = observerPosition + (rotatedDirection * distance);
-
-        return starPosition;
-    }
+    // 고도와 방위각을 월드 좌표계로 변환
     Vector3 SphericalToCartesian(float altitude, float azimuth, float radius)
     {
         float alt_radian = altitude * Mathf.Deg2Rad;
@@ -271,6 +268,6 @@ public class ObjectManager : MonoBehaviour
         float y = radius * Mathf.Sin(alt_radian);
         float z = radius * Mathf.Cos(alt_radian) * Mathf.Cos(az_radian);
 
-        return new Vector3(x, y, z);
+        return new Vector3(x, y, z) + originObject.transform.position;
     }
 }

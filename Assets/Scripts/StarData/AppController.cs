@@ -12,6 +12,8 @@ public class StarManager : MonoBehaviour
 
     void Start()
     {
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+
         webSocketManager = FindObjectOfType<WebSocketManager>();
         dataManager = FindObjectOfType<DataManager>();
         objectManager = FindObjectOfType<ObjectManager>();
@@ -22,6 +24,7 @@ public class StarManager : MonoBehaviour
     private void HandleMessageReceived(string json)
     {
         dataManager.ParseData(json);
-        objectManager.UpdateObjects();
+        if (dataManager.isUpdated)
+            objectManager.UpdateObjects();
     }
 }

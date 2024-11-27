@@ -22,7 +22,6 @@ public class CompassManager : MonoBehaviour
     public bool isCalibrated = false;
 
     public XROrigin xrOrigin;
-    public TextMeshProUGUI initialText;
     public TextMeshProUGUI message;
     private LineRenderer northLine;
 
@@ -33,7 +32,6 @@ public class CompassManager : MonoBehaviour
     private int samples = 20;
     private List<float> angles = new List<float>();
     private bool isInitialized = false;
-    private Quaternion initialRotation;
 
 
     IEnumerator Start()
@@ -123,7 +121,6 @@ public class CompassManager : MonoBehaviour
                     initialHeading = GetAngleMean(angles);
                     if (initialHeading < 0) initialHeading += 360f;
                     Vector3 northDirection = Quaternion.Euler(0, initialHeading, 0) * Vector3.forward;
-                    initialText.text = "NorthDirection: " + northDirection;
                     DrawTrueNorthLine(initialHeading);
                     isInitialized = true;
                 }
