@@ -12,12 +12,12 @@ public class DetectorManager : MonoBehaviour
 
     void Start()
     {
-        layerMask = LayerMask.GetMask("StarLayer");
+        layerMask = LayerMask.GetMask("Default");
+        distanceManager = FindAnyObjectByType<DistanceManager>();
     }
 
-    public void StartRaycast(DistanceManager dm)
+    public void StartRaycast()
     {
-        distanceManager = dm;
         isRaycastActive = true;
     }
 
@@ -40,10 +40,24 @@ public class DetectorManager : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
         {
             GameObject hitObject = hit.collider.gameObject;
-            if (Input.GetMouseButtonDown(0)) // 마우스 클릭 또는 터치로 선택
+            if (Input.GetMouseButtonDown(0)) // 클릭 시 선택
             {
-                distanceManager.AddSelected(hitObject);
+                Star starData = GetStarData(hitObject);
+                if (starData != null)
+                {
+                    distanceManager.AddSelected(hitObject, starData);
+                }
             }
         }
+    }
+
+    private Star GetStarData(GameObject starObject)
+    {
+        ObjectManager objectManager = FindAnyObjectByType<ObjectManager>();
+        if (objectManager != null && objectManager.starList.ContainsKey(starObject))
+        {
+            return objectManager.starList[starObject];
+        }
+        return null;
     }
 }
