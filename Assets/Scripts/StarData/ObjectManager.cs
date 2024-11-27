@@ -42,7 +42,7 @@ public class ObjectManager : MonoBehaviour
     private bool isConstellationInitialized = false;
     private Quaternion initialRotation;
 
-    Dictionary<GameObject,Star> starList = new Dictionary<GameObject,Star>();
+    public Dictionary<GameObject, Star> starList = new Dictionary<GameObject, Star>();
 
     // Start is called before the first frame update
     void Start()
@@ -50,6 +50,7 @@ public class ObjectManager : MonoBehaviour
         xrOrigin = FindAnyObjectByType<XROrigin>();
         dataManager = FindAnyObjectByType<DataManager>();
         compassManager = FindAnyObjectByType<CompassManager>();
+        UpdateStarObjects();
 
         InitializeObjects();
     }
@@ -272,19 +273,21 @@ public class ObjectManager : MonoBehaviour
 
         return new Vector3(x, y, z);
     }
-    public void AddStarToGameObject(GameObject starObject, Star starData)
+
+    //별 리스트 생성
+    public void UpdateStarObjects()
     {
-        if (!starList.ContainsKey(starObject))
+        GameObject tmp;
+        foreach (var celestialObject in dataManager.celestialObjects.Values)
         {
-            starList[starObject] = starData;
+            tmp = new GameObject();
+            if (celestialObject.type == "star" && celestialObject is Star star)
+            {
+                starList.Add(tmp, celestialObject.ConvertTo<Star>());
+            }
+            tmp = null;
         }
     }
-    public Star GetStarFromGameObject(GameObject starObject)
-    {
-        return starList.ContainsKey(starObject) ? starList[starObject] : null;
-    }
-    public List<Star> GetAllStars()
-    {
-        return new List<Star>(starList.Values);
-    }
+
+    //public Dictionary<GameObject, Star> GetStarObjects() { return starList; }
 }

@@ -21,19 +21,6 @@ public class DataManager : MonoBehaviour
             if (celestialObjects.ContainsKey(name))
             {
                 UpdateCelestialObject(celestialObjects[name], item);
-                if (type == "star")
-                {
-                    Star s = new Star();
-                    s.name = name;
-                    s.alt = item["alt"].ToObject<float>();
-                    s.az = item["az"].ToObject<float>();
-                    s.fluxV = item["fluxV"].ToObject<float>();
-                    s.distance = item["distance"].ToObject<float>();
-                    s.collider.enabled = false;
-                    s.collider.radius = 3f;
-                    GameObject starObject = new GameObject(name);
-                    obj.AddStarToGameObject(starObject, s);
-                }
             }
             else
             {

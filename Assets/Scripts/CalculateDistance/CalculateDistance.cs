@@ -12,7 +12,6 @@ public class CalculateDistance : MonoBehaviour
     void Start()
     {
         distance = -1;
-        SetStars();
     }
 
     // Update is called once per frame
@@ -20,14 +19,14 @@ public class CalculateDistance : MonoBehaviour
     {
         
     }
-    private float calculate()
+    public float Calculate()
     {
         float radAL1 = DegToRad(s1.alt);
         float radAL2 = DegToRad(s2.alt);
         float radAZ1 = DegToRad(s1.az);
         float radAZ2 = DegToRad(s2.az);
-        float dis1 = s1.distance;
-        float dis2 = s2.distance;
+        float dis1 = 1000;
+        float dis2 = 1287;
         float deltaAL = radAL1 - radAL2;
         float deltaAZ = radAZ1 - radAZ2;
         float term1 = (float)Math.Pow(dis1, 2) + (float)Math.Pow(dis2, 2);
@@ -35,11 +34,9 @@ public class CalculateDistance : MonoBehaviour
         distance = (float)Math.Sqrt(term1 - term2);
         return distance;
     }
-    public void SetStars()
+    public void SetStars(GameObject star1, GameObject star2)
     {
-        List<Star> temp = DM.GetSelectedStars();
-        s1=temp[0];
-        s2=temp[1];
+        Debug.Log($"Stars set for calculation: {star1.name}, {star2.name}");
     }
     float DegToRad(float degrees)
     {

@@ -24,7 +24,6 @@ public class CelestialObject
 public class Star : CelestialObject
 {
     public float fluxV;
-    public SphereCollider collider;
 }
 
 [System.Serializable]

@@ -1,61 +1,56 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Unity.VisualScripting.Antlr3.Runtime.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class DistanceManager : MonoBehaviour
 {
-
-    //천체에 콜리더 추가를 위한 변수
     public Button DistanceCalculate;
-    public ObjectManager obj;
-    public DetectorManager detectorManager;
-    public CalculateDistance calculator;
-    private Dictionary<GameObject, Star> selected = new Dictionary<GameObject, Star>();
-    //public 
+    private StarCollider starCollider;
+    private DetectorManager detectorManager;
+    private CalculateDistance calculator;
 
-    // Start is called before the first frame update
+    private List<GameObject> selected = new List<GameObject>(); // 선택된 천체 리스트
 
     void Start()
     {
-        // 버튼 클릭 이벤트 등록
-        DistanceCalculate.enabled = true;
-        DistanceCalculate.onClick.AddListener(ActivateColliders);
-        detectorManager.enabled = false;
+        starCollider = FindAnyObjectByType<StarCollider>();
+        detectorManager = FindAnyObjectByType<DetectorManager>();
+        calculator = FindAnyObjectByType<CalculateDistance>();
+
+        DistanceCalculate.onClick.AddListener(StartSelectionProcess);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    void ActivateColliders()
-    {
-        DistanceCalculate.enabled = false;
-        foreach (Star star in obj.GetAllStars())
-        {
-            star.collider.enabled = true;
-        }
-        detectorManager.enabled = true;
-    }
-
-    void DeactivateColliders()
+    private void StartSelectionProcess()
     {
         selected.Clear();
-        foreach (Star star in obj.GetAllStars())
+        starCollider.ActivateColliders();
+        detectorManager.StartRaycast(this);
+    }
+
+    public void AddSelected(GameObject star)
+    {
+        if (selected.Count < 2 && !selected.Contains(star))
         {
-            star.collider.enabled = false;
+            selected.Add(star);
+            Debug.Log($"Selected {star.name}");
+
+            if (selected.Count == 2)
+            {
+                detectorManager.StopRaycast();
+                calculator.SetStars(selected[0], selected[1]);
+                float distance = calculator.Calculate();
+                Debug.Log($"Distance between stars: {distance}");
+                EndSelectionProcess();
+            }
         }
-        detectorManager.enabled = false;
     }
-    public void addSelected(GameObject s)
+
+    private void EndSelectionProcess()
     {
-        selected[s] = s.GetComponent<Star>();
-    }
-    public List<Star> GetSelectedStars()
-    {
-        return new List<Star>(selected.Values);
+        starCollider.DeactivateColliders();
+        selected.Clear();
     }
 }
