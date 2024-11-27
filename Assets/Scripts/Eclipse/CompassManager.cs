@@ -10,20 +10,17 @@ public class CompassManager : MonoBehaviour
 {
     public bool gps_ok = false;
 
-    public GameObject compass;
+    //public GameObject compass;
 
     float timeDelay = 0.25f; //delay update, reduces jitter
     float updateDelay = 5.0f;
 
-    private float xRotation = 0f;
-    private float yRotation = 0f;
-    private float zRotation = 0f;
     private const float totalRotation = 360f;
     public bool isCalibrated = false;
 
     public XROrigin xrOrigin;
-    public TextMeshProUGUI initialText;
-    public TextMeshProUGUI message;
+    //public TextMeshProUGUI initialText;
+    //public TextMeshProUGUI message;
     private LineRenderer northLine;
 
     private Vector3 sum = Vector3.zero;
@@ -48,12 +45,12 @@ public class CompassManager : MonoBehaviour
         Input.compass.enabled = true;
         Input.gyro.enabled = true;
 
-        northLine = gameObject.AddComponent<LineRenderer>();
-        northLine.material = new Material(Shader.Find("Sprites/Default"));
-        northLine.startColor = Color.magenta;
-        northLine.endColor = Color.magenta;
-        northLine.startWidth = 0.05f;
-        northLine.endWidth = 0.05f;
+        // northLine = gameObject.AddComponent<LineRenderer>();
+        // northLine.material = new Material(Shader.Find("Sprites/Default"));
+        // northLine.startColor = Color.magenta;
+        // northLine.endColor = Color.magenta;
+        // northLine.startWidth = 0.05f;
+        // northLine.endWidth = 0.05f;
 
         // Waits until the location service initializes
         int maxWait = 20;
@@ -123,7 +120,7 @@ public class CompassManager : MonoBehaviour
                     initialHeading = GetAngleMean(angles);
                     if (initialHeading < 0) initialHeading += 360f;
                     Vector3 northDirection = Quaternion.Euler(0, initialHeading, 0) * Vector3.forward;
-                    initialText.text = "NorthDirection: " + northDirection;
+                    //initialText.text = "NorthDirection: " + northDirection;
                     //DrawTrueNorthLine(initialHeading);
                     isInitialized = true;
                 }
@@ -132,8 +129,8 @@ public class CompassManager : MonoBehaviour
             {
                 timeDelay = 0.25f;
                 trueNorth = Input.compass.trueHeading;
-                message.text = "TrueNorth: " + trueNorth;
-                compass.transform.localEulerAngles = new Vector3(0, 0, trueNorth);
+                //message.text = "TrueNorth: " + trueNorth;
+                //compass.transform.localEulerAngles = new Vector3(0, 0, trueNorth);
                 
             }
             if (updateDelay < 0)

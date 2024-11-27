@@ -25,9 +25,6 @@ public class EclipseManager : MonoBehaviour
     [SerializeField]
     private ARCameraManager ARCameraManager;
 
-    private const float DISTANCE_FROM_CAMERA = 15.0f;
-    private const float Y_OFFSET = 6.0f;
-
     /* 오브젝트 */
     [SerializeField]
     private GameObject moonPrefab;
@@ -35,11 +32,14 @@ public class EclipseManager : MonoBehaviour
     private GameObject sunPrefab;
     private GameObject sunGlow;
     [SerializeField]
+    private GameObject realSunPrefab;
+    [SerializeField]
     private GameObject sunMaskPrefab;
     [SerializeField]
     private GameObject moonMaskPrefab;
     [SerializeField]
     private PostProcessVolume postProcessVolume;
+    private GameObject realSun;
 
     /* UI */
     [SerializeField]
@@ -53,14 +53,15 @@ public class EclipseManager : MonoBehaviour
     [SerializeField]
     private Button SolarEclipseButton;
     [SerializeField]
+    private Button RealSolarEclipseButton;
+    [SerializeField]
     private Button LunarEclipseButton;
     [SerializeField]
     private Toggle autoMoveToggle;
-    private bool isAutoMoving = false;
     [SerializeField]
     private Button backButton;
-
-    public Material maskMaterial;
+    [SerializeField]
+    private Toggle virtualToggle;
 
     /* 상수 */
     private const float AUTO_MOVE_DISTANCE = 0.005f;
@@ -73,28 +74,23 @@ public class EclipseManager : MonoBehaviour
     private const float MIN_Y_RANGE = 5.7f;  // 최소 Y 좌표
     private const float MIN_SCALE = 0.4f;   // Sun Glow 최소 스케일
     private const float MAX_SCALE = 1.0f;    // Sun Glow 최대 스케일
+    float radius = 50.0f;
 
     /* 오브젝트 인스턴스 */
     private GameObject sunInstance;
     private GameObject moonInstance;
     private GameObject maskInstance;
-    
-    private bool touched = false;
     private ColorGrading colorGrading;
 
     /* 일식 관련 변수 */
+    private float realSunDiameter = 2.0f;
     private float sunDiameter = 0.5f;
     bool isTotalEclipse = true;
-
-    private float moonDiameter = 0.25f;
-    private float moonFixedOffset = -0.03f;
-    private float moonZPos;
-    private Vector3 touchOffset;
 
     /* 버튼 변수 */
     private bool isLeftButtonPressed = false;
     private bool isRightButtonPressed = false;
-    private bool isMovingUp = true;
+    private float currentOffset = 0.0f;
 
     private enum EclipseType
     {
@@ -109,6 +105,7 @@ public class EclipseManager : MonoBehaviour
         xrOrigin = FindAnyObjectByType<XROrigin>();
         dataManager = FindAnyObjectByType<DataManager>();
         compassManager = FindAnyObjectByType<CompassManager>();
+        realSun = Instantiate(realSunPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity);
         
         postProcessVolume.profile.TryGetSettings(out colorGrading);
 
@@ -121,16 +118,16 @@ public class EclipseManager : MonoBehaviour
             eclipseType = EclipseType.Solar;
             if(sunInstance == null)
             {
-                Vector3 sunPosition = arCamera.transform.position + arCamera.transform.forward * 15.0f + arCamera.transform.up * 6.0f;
-                sunInstance = Instantiate(sunPrefab, sunPosition, Quaternion.identity);
+                //Vector3 sunPosition = arCamera.transform.position + arCamera.transform.forward * 15.0f + arCamera.transform.up * 6.0f;
+                sunInstance = Instantiate(sunPrefab, new Vector3(0f, 6f, 15.0f), Quaternion.identity);
                 sunInstance.transform.localScale = new Vector3(1.0f, 1.0f, 0.01f);
                 sunGlow = sunInstance.transform.Find("Sun Glow").gameObject;
             }
             if (maskInstance == null)
             {
-                Vector3 maskPosition = arCamera.transform.position + arCamera.transform.forward * 14.97f + arCamera.transform.right * 1.3f + arCamera.transform.up * 5.7f;
-                Vector3 spawnPosition = new Vector3(arCamera.transform.position.x + 1.3f, arCamera.transform.position.y + 5.7f, arCamera.transform.position.z + 14.97f);
-                maskInstance = Instantiate(sunMaskPrefab, maskPosition, Quaternion.identity);
+                //Vector3 maskPosition = arCamera.transform.position + arCamera.transform.forward * 14.97f + arCamera.transform.right * 1.3f + arCamera.transform.up * 5.7f;
+                //Vector3 spawnPosition = new Vector3(arCamera.transform.position.x + 1.3f, arCamera.transform.position.y + 5.7f, arCamera.transform.position.z + 14.97f);
+                maskInstance = Instantiate(sunMaskPrefab, new Vector3(1.3f, 5.7f, 14.97f), Quaternion.identity);
             }
         });
 
@@ -145,6 +142,43 @@ public class EclipseManager : MonoBehaviour
             {
                 Vector3 spawnPosition = new Vector3(1.3f, 5.7f, 14.97f);
                 maskInstance = Instantiate(moonMaskPrefab, spawnPosition, Quaternion.identity);
+            }
+        });
+
+        RealSolarEclipseButton.onClick.AddListener(() => {
+            eclipseType = EclipseType.Solar;
+            // maskInstance가 없을 때만 생성
+            if(maskInstance == null && realSun != null)
+            {
+                // realSun의 위치 가져오기
+                Vector3 realSunPosition = realSun.transform.position;
+                
+                // 카메라에서 realSun까지의 방향 벡터
+                Vector3 directionToSun = (realSunPosition - arCamera.transform.position).normalized;
+
+                // 위쪽 방향과 태양 방향의 외적으로 오른쪽 방향 계산
+                Vector3 rightDirection = Vector3.Cross(Vector3.up, directionToSun).normalized;
+                
+                // realSun보다 약간 앞에 위치하도록 설정 (z축으로 약간 앞으로)
+                float distanceFromCamera = Vector3.Distance(arCamera.transform.position, realSunPosition);
+                Vector3 maskPosition = arCamera.transform.position + directionToSun * (distanceFromCamera - 2.0f);
+
+                float rightOffset = 200.0f;
+                maskPosition += rightDirection * rightOffset;
+                // 마스크 생성
+                maskInstance = Instantiate(sunMaskPrefab, maskPosition, arCamera.transform.rotation);
+                maskInstance.transform.localScale = new Vector3(4, 4, 0);
+            }
+
+            // maskInstance가 이미 존재하는 경우, realSun 앞에 위치하도록 업데이트
+            if(maskInstance != null && realSun != null)
+            {
+                Vector3 realSunPosition = realSun.transform.position;
+                Vector3 directionToSun = (realSunPosition - arCamera.transform.position).normalized;
+                float distanceFromCamera = Vector3.Distance(arCamera.transform.position, realSunPosition);
+                
+                maskInstance.transform.position = arCamera.transform.position + directionToSun * (distanceFromCamera - 0.03f);
+                maskInstance.transform.rotation = arCamera.transform.rotation;
             }
         });
 
@@ -200,8 +234,6 @@ public class EclipseManager : MonoBehaviour
 
         // 변수들 초기화
         eclipseType = EclipseType.None;
-        isAutoMoving = false;
-        touched = false;
         
         // 토글 상태 초기화
         if(autoMoveToggle != null)
@@ -217,231 +249,258 @@ public class EclipseManager : MonoBehaviour
 
     void Update()
     {
-        if (!isInitialized)
+        // 실제 태양으로 진행
+        if(!virtualToggle.isOn)
         {
-            trueNorth = compassManager.GetTrueNorth();
-            if (trueNorth == -1.0f) return;
-
-            isInitialized = true;
-        }
-
-        if (isInitialized)
-        {
-            //UpdateSolarObjects();
-        }
-        /*
-        if(arCamera != null)
-        {
-            // 카메라의 전방 벡터를 기준으로 위치 계산
-            Vector3 cameraForward = arCamera.transform.forward;
-            Vector3 cameraRight = arCamera.transform.right;
-            Vector3 basePosition = arCamera.transform.position + cameraForward * DISTANCE_FROM_CAMERA;
-            
-            // 태양 위치 동기화
-            if(sunInstance != null)
+            realSun.SetActive(true);
+            if (!isInitialized)
             {
-                Vector3 sunPos = basePosition;
-                sunPos.x = basePosition.x + (sunInstance.transform.position.x - basePosition.x);
-                sunPos.y = basePosition.y + Y_OFFSET;
-                sunInstance.transform.position = sunPos;
+                trueNorth = compassManager.GetTrueNorth();
+                if (trueNorth == -1.0f) return;
+
+                isInitialized = true;
             }
 
-            // 달 위치 동기화 (현재 위치의 x, y 오프셋 유지)
-            if(moonInstance != null)
+            if (isInitialized)
             {
-                Vector3 moonPos = basePosition;
-                // 현재 x, y 오프셋 유지
-                moonPos.x = basePosition.x + (moonInstance.transform.position.x - basePosition.x);
-                moonPos.y = arCamera.transform.position.y + Y_OFFSET;
-                moonInstance.transform.position = moonPos;
+                UpdateSolarObjects();
             }
-
-            // 마스크 위치 동기화
-            if(maskInstance != null)
-            {
-                Vector3 maskPos = basePosition;
-                // 현재 x, y 오프셋 유지
-                maskPos.x = basePosition.x + (maskInstance.transform.position.x - basePosition.x);
-                maskPos.y = basePosition.y + Y_OFFSET;
-                maskPos.z = basePosition.z - 0.03f;
-                maskInstance.transform.position = maskPos;
-            }
-        }
-        */
-        // if (sunInstance != null && moonInstance != null)
-        // {
-        //     maskMaterial.SetVector("_SunPosition", sunInstance.transform.position);
-        //     maskMaterial.SetVector("_MoonPosition", maskInstance.transform.position);
-        // }
-        // 일식 효과
-        if(eclipseType == EclipseType.Solar)
-        {
-            if(sunInstance == null || maskInstance == null) return;
-            Shader.SetGlobalVector("_SunPosition", sunInstance.transform.position);
+            if(realSun == null || maskInstance == null) return;
+            Shader.SetGlobalVector("_SunPosition", realSun.transform.position);
             Shader.SetGlobalVector("_MoonPosition", maskInstance.transform.position); 
+            Shader.SetGlobalFloat("_SunRadius", 2.0f);
+            Shader.SetGlobalFloat("_MoonRadius", 4.0f);
 
-            //AdjustBrightness();
-            sunGlow = sunInstance.transform.Find("Sun Glow").gameObject;
-
-
-            // 버튼 상태에 따른 지속적인 이동
-            if (maskInstance != null)
+            if(maskInstance != null && realSun != null)
             {
-                Vector3 newPosition = maskInstance.transform.position;
-                float newX = maskInstance.transform.position.x;
-                float newY = maskInstance.transform.position.y;
-                Vector3 sunPos = sunInstance.transform.position;
+                Vector3 realSunPosition = realSun.transform.position;
+                Vector3 directionToSun = (realSunPosition - arCamera.transform.position).normalized;
+                Vector3 rightDirection = Vector3.Cross(Vector3.up, directionToSun).normalized;
+                float distanceFromCamera = Vector3.Distance(arCamera.transform.position, realSunPosition);
 
-                float previousX = newPosition.x;
-                Vector3 scale = sunGlow.transform.localScale;
+                Vector3 basePosition = arCamera.transform.position + directionToSun * (distanceFromCamera - 0.03f);
 
-                if (isLeftButtonPressed)
+                if(isLeftButtonPressed)
                 {
-                    newPosition.x = Mathf.Max(MIN_X_RANGE+sunPos.x, newPosition.x - MOVE_DISTANCE);
+                    currentOffset = Mathf.Max(-4.0f, currentOffset - 0.04f);
+                }
+                if(isRightButtonPressed)
+                {
+                    currentOffset = Mathf.Min(4.0f, currentOffset + 0.04f);
+                }
 
+                Vector3 newPosition = basePosition + rightDirection * currentOffset;
+                newPosition.y = realSunPosition.y;
+
+                maskInstance.transform.position = newPosition;
+                //maskInstance.transform.rotation = arCamera.transform.rotation;
+            }
+
+            if(maskInstance != null && autoMoveToggle.isOn)
+            {
+                Vector3 realSunPosition = realSun.transform.position;
+                Vector3 directionToSun = (realSunPosition - arCamera.transform.position).normalized;
+                Vector3 rightDirection = Vector3.Cross(Vector3.up, directionToSun).normalized;
+                rightDirection = new Vector3(rightDirection.x, rightDirection.y, rightDirection.z * 0.1f);
+                rightDirection.Normalize();
+                float distanceFromCamera = Vector3.Distance(arCamera.transform.position, realSunPosition);
+
+                Vector3 basePosition = arCamera.transform.position + directionToSun * (distanceFromCamera - 0.03f);
+
+                currentOffset = Mathf.Max(-4.0f, currentOffset - 0.005f);
+                Vector3 newPosition = basePosition + rightDirection * currentOffset;
+                newPosition.y = realSunPosition.y;
+
+                maskInstance.transform.position = newPosition;
+            }
+
+            RealAdjustBrightness();
+        }
+
+        // 가상으로 진행
+        if(virtualToggle.isOn)
+        {
+            realSun.SetActive(false);
+            // 일식 효과
+            if(eclipseType == EclipseType.Solar)
+            {
+                if(sunInstance == null || maskInstance == null) return;
+                Shader.SetGlobalVector("_SunPosition", sunInstance.transform.position);
+                Shader.SetGlobalVector("_MoonPosition", maskInstance.transform.position); 
+                Shader.SetGlobalFloat("_SunRadius", 0.5f);
+                Shader.SetGlobalFloat("_MoonRadius", 1.0f);
+
+                //AdjustBrightness();
+                sunGlow = sunInstance.transform.Find("Sun Glow").gameObject;
+
+                sunInstance.transform.rotation = arCamera.transform.rotation;
+
+                // 버튼 상태에 따른 지속적인 이동
+                if (maskInstance != null)
+                {
+                    Vector3 newPosition = maskInstance.transform.position;
+                    float newX = maskInstance.transform.position.x;
+                    float newY = maskInstance.transform.position.y;
+                    Vector3 sunPos = sunInstance.transform.position;
+
+                    float previousX = newPosition.x;
+                    Vector3 scale = sunGlow.transform.localScale;
+
+                    if (isLeftButtonPressed)
+                    {
+                        newPosition.x = Mathf.Max(MIN_X_RANGE+sunPos.x, newPosition.x - MOVE_DISTANCE);
+
+                        if(newPosition.x <= sunPos.x)
+                        {
+                            newPosition.y = Mathf.Max(MIN_Y_RANGE, newPosition.y - MOVE_Y_DISTANCE);
+                        }
+                        else
+                        {
+                            newPosition.y = Mathf.Min(MAX_Y_RANGE, newPosition.y + MOVE_Y_DISTANCE);
+                        }
+                        
+                        maskInstance.transform.position = newPosition;
+                        
+                    }
+                    if (isRightButtonPressed)
+                    {
+                        newPosition.x = Mathf.Min(MAX_X_RANGE+sunPos.x, newPosition.x + MOVE_DISTANCE);
+                        // x가 0보다 작으면 y 감소, 크면 y 증가
+                        if (newPosition.x <= sunPos.x)
+                        {
+                            newPosition.y = Mathf.Min(MAX_Y_RANGE, newPosition.y + MOVE_Y_DISTANCE);
+                        }
+                        else
+                        {
+                            newPosition.y = Mathf.Max(MIN_Y_RANGE, newPosition.y - MOVE_Y_DISTANCE);
+                        }
+                        maskInstance.transform.position = newPosition;
+                    }
+
+                    if (Mathf.Abs(newPosition.x) <= sunPos.x + 1.0f)
+                    {
+                        // 현재 스케일 가져오기
+                        Vector3 currentScale = sunGlow.transform.localScale;
+                        
+                        // |x| 값이 0에 가까울수록 MIN_SCALE에 가까워지고, 1에 가까울수록 MAX_SCALE에 가까워짐
+                        float targetScale = Mathf.Lerp(MIN_SCALE, MAX_SCALE, Mathf.Abs(newPosition.x));
+
+                        Vector3 newScale = new Vector3(
+                            Mathf.Lerp(currentScale.x, targetScale, 0.1f),
+                            Mathf.Lerp(currentScale.y, targetScale, 0.1f),
+                            currentScale.z
+                        );
+                        
+                        sunGlow.transform.localScale = newScale;
+                    }
+                }
+
+                if(maskInstance != null && autoMoveToggle.isOn)
+                {
+                    Vector3 newPosition = maskInstance.transform.position;
+                    Vector3 sunPos = sunInstance.transform.position;
+                    newPosition.x = Mathf.Max(MIN_X_RANGE+sunPos.x, newPosition.x - AUTO_MOVE_DISTANCE);
                     if(newPosition.x <= sunPos.x)
                     {
-                        newPosition.y = Mathf.Max(MIN_Y_RANGE, newPosition.y - MOVE_Y_DISTANCE);
+                        newPosition.y = Mathf.Max(MIN_Y_RANGE, newPosition.y - AUTO_MOVE_DISTANCE_Y);
                     }
                     else
                     {
-                        newPosition.y = Mathf.Min(MAX_Y_RANGE, newPosition.y + MOVE_Y_DISTANCE);
-                    }
-                    
-                    maskInstance.transform.position = newPosition;
-                    
-                }
-                if (isRightButtonPressed)
-                {
-                    newPosition.x = Mathf.Min(MAX_X_RANGE+sunPos.x, newPosition.x + MOVE_DISTANCE);
-                    // x가 0보다 작으면 y 감소, 크면 y 증가
-                    if (newPosition.x <= sunPos.x)
-                    {
-                        newPosition.y = Mathf.Min(MAX_Y_RANGE, newPosition.y + MOVE_Y_DISTANCE);
-                    }
-                    else
-                    {
-                        newPosition.y = Mathf.Max(MIN_Y_RANGE, newPosition.y - MOVE_Y_DISTANCE);
+                        newPosition.y = Mathf.Min(MAX_Y_RANGE, newPosition.y + AUTO_MOVE_DISTANCE_Y);
                     }
                     maskInstance.transform.position = newPosition;
                 }
 
-                if (Mathf.Abs(newPosition.x) <= sunPos.x + 1.0f)
-                {
-                    // 현재 스케일 가져오기
-                    Vector3 currentScale = sunGlow.transform.localScale;
-                    
-                    // |x| 값이 0에 가까울수록 MIN_SCALE에 가까워지고, 1에 가까울수록 MAX_SCALE에 가까워짐
-                    float targetScale = Mathf.Lerp(MIN_SCALE, MAX_SCALE, Mathf.Abs(newPosition.x));
-
-                    Vector3 newScale = new Vector3(
-                        Mathf.Lerp(currentScale.x, targetScale, 0.1f),
-                        Mathf.Lerp(currentScale.y, targetScale, 0.1f),
-                        currentScale.z
-                    );
-                    
-                    sunGlow.transform.localScale = newScale;
-                }
+                AdjustBrightness();
             }
-
-            if(maskInstance != null && autoMoveToggle.isOn)
+            // 월식 효과
+            else if(eclipseType == EclipseType.Lunar)
             {
-                Vector3 newPosition = maskInstance.transform.position;
-                newPosition.x = Mathf.Max(MIN_X_RANGE, newPosition.x - AUTO_MOVE_DISTANCE);
-                if(newPosition.x < 0)
-                {
-                    newPosition.y = Mathf.Max(MIN_Y_RANGE, newPosition.y - AUTO_MOVE_DISTANCE_Y);
-                }
-                else
-                {
-                    newPosition.y = Mathf.Min(MAX_Y_RANGE, newPosition.y + AUTO_MOVE_DISTANCE_Y);
-                }
-                maskInstance.transform.position = newPosition;
-            }
-        }
-        // 월식 효과
-        else if(eclipseType == EclipseType.Lunar)
-        {
-            if(moonInstance == null || maskInstance == null) return;
+                if(moonInstance == null || maskInstance == null) return;
 
-            
+                Shader.SetGlobalVector("_SunPosition", moonInstance.transform.position);
+                Shader.SetGlobalVector("_MoonPosition", maskInstance.transform.position); 
+                Shader.SetGlobalFloat("_SunRadius", 0.5f);
+                Shader.SetGlobalFloat("_MoonRadius", 1.0f);
+                
 
-            // 버튼 상태에 따른 지속적인 이동
-            if (maskInstance != null)
-            {
-                Vector3 newPosition = maskInstance.transform.position;
-
-                if (isLeftButtonPressed)
+                // 버튼 상태에 따른 지속적인 이동
+                if (maskInstance != null)
                 {
-                    newPosition.x = Mathf.Max(MIN_X_RANGE, newPosition.x - MOVE_DISTANCE);
+                    Vector3 newPosition = maskInstance.transform.position;
 
-                    if(newPosition.x <= 0)
+                    if (isLeftButtonPressed)
                     {
-                        newPosition.y = Mathf.Max(MIN_Y_RANGE, newPosition.y - MOVE_Y_DISTANCE);
-                    }
-                    else
-                    {
-                        newPosition.y = Mathf.Min(MAX_Y_RANGE, newPosition.y + MOVE_Y_DISTANCE);
-                    }
-                    
-                    maskInstance.transform.position = newPosition;
-                    
-                }
-                if (isRightButtonPressed)
-                {
-                    newPosition.x = Mathf.Min(MAX_X_RANGE, newPosition.x + MOVE_DISTANCE);
-                    // x가 0보다 작으면 y 감소, 크면 y 증가
-                    if (newPosition.x <= 0)
-                    {
-                        newPosition.y = Mathf.Min(MAX_Y_RANGE, newPosition.y + MOVE_Y_DISTANCE);
-                    }
-                    else
-                    {
-                        newPosition.y = Mathf.Max(MIN_Y_RANGE, newPosition.y - MOVE_Y_DISTANCE);
-                    }
-                    maskInstance.transform.position = newPosition;
-                }
+                        newPosition.x = Mathf.Max(MIN_X_RANGE, newPosition.x - MOVE_DISTANCE);
 
-                if (Mathf.Abs(newPosition.x) <= 0.33f)
-                {
-                    Renderer moonRenderer = moonInstance.GetComponent<Renderer>();
-                    if (moonRenderer != null)
-                    {
-                        Color originalColor = Color.white; // 원래 색상
-                        Color targetColor = Color.red;    // 목표 색상 (빨간색)
+                        if(newPosition.x <= 0)
+                        {
+                            newPosition.y = Mathf.Max(MIN_Y_RANGE, newPosition.y - MOVE_Y_DISTANCE);
+                        }
+                        else
+                        {
+                            newPosition.y = Mathf.Min(MAX_Y_RANGE, newPosition.y + MOVE_Y_DISTANCE);
+                        }
                         
-                        // |x| 값이 0에 가까울수록 빨간색, 1에 가까울수록 원래 색상
-                        Color lerpedColor = Color.Lerp(targetColor, originalColor, Mathf.Abs(newPosition.x));
+                        maskInstance.transform.position = newPosition;
                         
-                        // 현재 색에서 계산된 색상으로 부드럽게 전환
+                    }
+                    if (isRightButtonPressed)
+                    {
+                        newPosition.x = Mathf.Min(MAX_X_RANGE, newPosition.x + MOVE_DISTANCE);
+                        // x가 0보다 작으면 y 감소, 크면 y 증가
+                        if (newPosition.x <= 0)
+                        {
+                            newPosition.y = Mathf.Min(MAX_Y_RANGE, newPosition.y + MOVE_Y_DISTANCE);
+                        }
+                        else
+                        {
+                            newPosition.y = Mathf.Max(MIN_Y_RANGE, newPosition.y - MOVE_Y_DISTANCE);
+                        }
+                        maskInstance.transform.position = newPosition;
+                    }
+
+                    if (Mathf.Abs(newPosition.x) <= 0.33f)
+                    {
+                        Renderer moonRenderer = moonInstance.GetComponent<Renderer>();
+                        if (moonRenderer != null)
+                        {
+                            Color originalColor = Color.white; // 원래 색상
+                            Color targetColor = Color.red;    // 목표 색상 (빨간색)
+                            
+                            // |x| 값이 0에 가까울수록 빨간색, 1에 가까울수록 원래 색상
+                            Color lerpedColor = Color.Lerp(targetColor, originalColor, Mathf.Abs(newPosition.x));
+                            
+                            // 현재 색에서 계산된 색상으로 부드럽게 전환
+                            Color currentColor = moonRenderer.material.color;
+                            Color newColor = Color.Lerp(currentColor, lerpedColor, 0.1f);
+                            
+                            moonRenderer.material.color = newColor;
+                        }
+                    } 
+                    else 
+                    {
+                        Renderer moonRenderer = moonInstance.GetComponent<Renderer>();
                         Color currentColor = moonRenderer.material.color;
-                        Color newColor = Color.Lerp(currentColor, lerpedColor, 0.1f);
-                        
-                        moonRenderer.material.color = newColor;
+                        Color originalColor = Color.Lerp(currentColor, Color.white, 0.1f);
+                        moonRenderer.material.color = originalColor;
                     }
-                } 
-                else 
-                {
-                    Renderer moonRenderer = moonInstance.GetComponent<Renderer>();
-                    Color currentColor = moonRenderer.material.color;
-                    Color originalColor = Color.Lerp(currentColor, Color.white, 0.1f);
-                    moonRenderer.material.color = originalColor;
                 }
-            }
 
-            if(maskInstance != null && autoMoveToggle.isOn)
-            {
-                Vector3 newPosition = maskInstance.transform.position;
-                newPosition.x = Mathf.Max(MIN_X_RANGE, newPosition.x - AUTO_MOVE_DISTANCE);
-                if(newPosition.x < 0)
+                if(maskInstance != null && autoMoveToggle.isOn)
                 {
-                    newPosition.y = Mathf.Max(MIN_Y_RANGE, newPosition.y - AUTO_MOVE_DISTANCE_Y);
+                    Vector3 newPosition = maskInstance.transform.position;
+                    newPosition.x = Mathf.Max(MIN_X_RANGE, newPosition.x - AUTO_MOVE_DISTANCE);
+                    if(newPosition.x < 0)
+                    {
+                        newPosition.y = Mathf.Max(MIN_Y_RANGE, newPosition.y - AUTO_MOVE_DISTANCE_Y);
+                    }
+                    else
+                    {
+                        newPosition.y = Mathf.Min(MAX_Y_RANGE, newPosition.y + AUTO_MOVE_DISTANCE_Y);
+                    }
+                    maskInstance.transform.position = newPosition;
                 }
-                else
-                {
-                    newPosition.y = Mathf.Min(MAX_Y_RANGE, newPosition.y + AUTO_MOVE_DISTANCE_Y);
-                }
-                maskInstance.transform.position = newPosition;
             }
         }
     }
@@ -451,7 +510,7 @@ public class EclipseManager : MonoBehaviour
         CelestialObject obj;
 
         obj = dataManager.celestialObjects["sun"];
-        //UpdateStar(sun, obj.alt, obj.az, radius);
+        UpdateStar(realSun, obj.alt, obj.az, radius);
     }
 
     public void UpdateStar(GameObject star, float altitude, float azimuth, float distance)
@@ -559,18 +618,19 @@ public class EclipseManager : MonoBehaviour
 
     }
 
-    private void LunarEclipseEffect()
+    private void AdjustBrightness()
     {
-        if (maskInstance == null || moonInstance == null || colorGrading == null)
+        if (maskInstance == null || sunInstance == null || colorGrading == null)
             return;
+        
 
         // 태양-달, 태양-카메라 거리 계산
-        Vector3 sunToMoon = maskInstance.transform.position - moonInstance.transform.position;
-        Vector3 sunToCamera = arCamera.transform.position - moonInstance.transform.position;
+        Vector3 sunToMoon = maskInstance.transform.position - sunInstance.transform.position;
+        Vector3 sunToCamera = arCamera.transform.position - sunInstance.transform.position;
 
         // sunToMoon을 sunToCamera에 투영
         float projectionLength = Vector3.Dot(sunToMoon, sunToCamera.normalized);
-        Vector3 projectionPoint = moonInstance.transform.position + sunToCamera.normalized * projectionLength;
+        Vector3 projectionPoint = sunInstance.transform.position + sunToCamera.normalized * projectionLength;
 
         // 달에서 투영 포인트까지 거리
         float distanceFromLine = Vector3.Distance(maskInstance.transform.position, projectionPoint);
@@ -579,6 +639,7 @@ public class EclipseManager : MonoBehaviour
         if (projectionLength > 0 && distanceFromLine <= sunDiameter)
         {
             float eclipseFactor = Mathf.Clamp01(1 - (distanceFromLine / sunDiameter));
+
 
             colorGrading.postExposure.value = Mathf.Lerp(0f, -5f, eclipseFactor);
             colorGrading.saturation.value = Mathf.Lerp(0f, -25f, eclipseFactor);
@@ -590,6 +651,45 @@ public class EclipseManager : MonoBehaviour
             colorGrading.postExposure.value = 0f;
             colorGrading.saturation.value = 0f;
         }
+
+    }
+
+    private void RealAdjustBrightness()
+    {
+        if (maskInstance == null || realSun == null || colorGrading == null)
+        {   
+            return;
+        }
+        
+
+        // 태양-달, 태양-카메라 거리 계산
+        Vector3 sunToMoon = maskInstance.transform.position - realSun.transform.position;
+        Vector3 sunToCamera = arCamera.transform.position - realSun.transform.position;
+
+        // sunToMoon을 sunToCamera에 투영
+        float projectionLength = Vector3.Dot(sunToMoon, sunToCamera.normalized);
+        Vector3 projectionPoint = realSun.transform.position + sunToCamera.normalized * projectionLength;
+
+        // 달에서 투영 포인트까지 거리
+        float distanceFromLine = Vector3.Distance(maskInstance.transform.position, projectionPoint);
+
+        // 달이 태양의 지름 안쪽에 들어오면 일식 진행
+        if (projectionLength > 0 && distanceFromLine <= realSunDiameter)
+        {
+            float eclipseFactor = Mathf.Clamp01(1 - (distanceFromLine / realSunDiameter));
+
+
+            colorGrading.postExposure.value = Mathf.Lerp(0f, -5f, eclipseFactor);
+            colorGrading.saturation.value = Mathf.Lerp(0f, -25f, eclipseFactor);
+        }
+        else
+        {
+            float eclipseFactor = Mathf.Clamp01(1 - (distanceFromLine / realSunDiameter));
+            // 태양 범위를 벗어나면 밝기 리셋
+            colorGrading.postExposure.value = Mathf.Lerp(colorGrading.postExposure.value, 0f, eclipseFactor);
+            colorGrading.saturation.value = Mathf.Lerp(colorGrading.saturation.value, 0f, eclipseFactor);
+        }
+
     }
 
     Vector3 SphericalToCartesian(float altitude, float azimuth, float radius)

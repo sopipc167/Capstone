@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 5036714317703904698}
   - component: {fileID: 5044166734127142343}
   - component: {fileID: 1326758914423723886}
-  - component: {fileID: 4710169544604619903}
   m_Layer: 8
   m_Name: SunMaskSphere
   m_TagString: Untagged
@@ -106,19 +105,3 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4710169544604619903
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 746407824161179164}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c723eb9c31486b84fb54c1b1f2844441, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sun: {fileID: 3548356298615962880, guid: 5f776740c447e45afb25edbca842de92, type: 3}
-  moon: {fileID: 746407824161179164}
-  sunRadius: 0.5
-  moonRadius: 1
