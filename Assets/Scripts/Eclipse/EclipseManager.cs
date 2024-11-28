@@ -61,7 +61,7 @@ public class EclipseManager : MonoBehaviour
     [SerializeField]
     private Button backButton;
     [SerializeField]
-    private Toggle virtualToggle;
+    private Toggle realTimeToggle;
 
     /* 상수 */
     private const float AUTO_MOVE_DISTANCE = 0.005f;
@@ -170,16 +170,16 @@ public class EclipseManager : MonoBehaviour
                 maskInstance.transform.localScale = new Vector3(4, 4, 0);
             }
 
-            // maskInstance가 이미 존재하는 경우, realSun 앞에 위치하도록 업데이트
-            if(maskInstance != null && realSun != null)
-            {
-                Vector3 realSunPosition = realSun.transform.position;
-                Vector3 directionToSun = (realSunPosition - arCamera.transform.position).normalized;
-                float distanceFromCamera = Vector3.Distance(arCamera.transform.position, realSunPosition);
+            // // maskInstance가 이미 존재하는 경우, realSun 앞에 위치하도록 업데이트
+            // if(maskInstance != null && realSun != null)
+            // {
+            //     Vector3 realSunPosition = realSun.transform.position;
+            //     Vector3 directionToSun = (realSunPosition - arCamera.transform.position).normalized;
+            //     float distanceFromCamera = Vector3.Distance(arCamera.transform.position, realSunPosition);
                 
-                maskInstance.transform.position = arCamera.transform.position + directionToSun * (distanceFromCamera - 0.03f);
-                maskInstance.transform.rotation = arCamera.transform.rotation;
-            }
+            //     maskInstance.transform.position = arCamera.transform.position + directionToSun * (distanceFromCamera - 0.03f);
+            //     maskInstance.transform.rotation = arCamera.transform.rotation;
+            // }
         });
 
         
@@ -230,7 +230,10 @@ public class EclipseManager : MonoBehaviour
         if(moonInstance != null) 
             Destroy(moonInstance);
         if(maskInstance != null) 
+        {    
             Destroy(maskInstance);
+            maskInstance = null;
+        }
 
         // 변수들 초기화
         eclipseType = EclipseType.None;
@@ -250,7 +253,7 @@ public class EclipseManager : MonoBehaviour
     void Update()
     {
         // 실제 태양으로 진행
-        if(!virtualToggle.isOn)
+        if(realTimeToggle.isOn)
         {
             realSun.SetActive(true);
             if (!isInitialized)
@@ -301,13 +304,11 @@ public class EclipseManager : MonoBehaviour
                 Vector3 realSunPosition = realSun.transform.position;
                 Vector3 directionToSun = (realSunPosition - arCamera.transform.position).normalized;
                 Vector3 rightDirection = Vector3.Cross(Vector3.up, directionToSun).normalized;
-                rightDirection = new Vector3(rightDirection.x, rightDirection.y, rightDirection.z * 0.1f);
-                rightDirection.Normalize();
                 float distanceFromCamera = Vector3.Distance(arCamera.transform.position, realSunPosition);
 
                 Vector3 basePosition = arCamera.transform.position + directionToSun * (distanceFromCamera - 0.03f);
 
-                currentOffset = Mathf.Max(-4.0f, currentOffset - 0.005f);
+                currentOffset = Mathf.Max(-4.0f, currentOffset - 0.01f);
                 Vector3 newPosition = basePosition + rightDirection * currentOffset;
                 newPosition.y = realSunPosition.y;
 
@@ -318,7 +319,7 @@ public class EclipseManager : MonoBehaviour
         }
 
         // 가상으로 진행
-        if(virtualToggle.isOn)
+        if(!realTimeToggle.isOn)
         {
             realSun.SetActive(false);
             // 일식 효과
@@ -527,14 +528,22 @@ public class EclipseManager : MonoBehaviour
         isTotalEclipse = isTotal;
         
         
-        if(maskInstance != null)
+        if(maskInstance != null && sunInstance != null)
         {
             // 달 크기 조절
             Vector3 newScale = maskInstance.transform.localScale;
             newScale.x = isTotalEclipse ? sunInstance.transform.localScale.x : sunInstance.transform.localScale.x * 0.9f;
             newScale.y = isTotalEclipse ? sunInstance.transform.localScale.y : sunInstance.transform.localScale.y * 0.9f;
             maskInstance.transform.localScale = newScale;
-        }    
+        }
+        if(maskInstance != null && realSun != null)
+        {
+            // 달 크기 조절
+            Vector3 newScale = maskInstance.transform.localScale;
+            newScale.x = isTotalEclipse ? realSun.transform.localScale.x : realSun.transform.localScale.x * 0.9f;
+            newScale.y = isTotalEclipse ? realSun.transform.localScale.y : realSun.transform.localScale.y * 0.9f;
+            maskInstance.transform.localScale = newScale;
+        }   
     }
 
     public void FrameLightUpdated(ARCameraFrameEventArgs args)
