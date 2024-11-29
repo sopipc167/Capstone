@@ -66,10 +66,10 @@ public class EclipseManager : MonoBehaviour
     /* 상수 */
     private const float AUTO_MOVE_DISTANCE = 0.005f;
     private const float AUTO_MOVE_DISTANCE_Y = 0.0012f;
-    private const float MOVE_DISTANCE = 0.02f;
-    private const float MOVE_Y_DISTANCE = 0.0046f;
-    private const float MAX_X_RANGE = 1.3f;  // 최대 X 좌표
-    private const float MIN_X_RANGE = -1.3f; // 최소 X 좌표
+    private const float MOVE_DISTANCE = 0.03f;
+    private const float MOVE_Y_DISTANCE = 0.0055f;
+    private const float MAX_X_RANGE = 1.5f;  // 최대 X 좌표
+    private const float MIN_X_RANGE = -1.5f; // 최소 X 좌표
     private const float MAX_Y_RANGE = 6.0f;  // 최대 Y 좌표
     private const float MIN_Y_RANGE = 5.7f;  // 최소 Y 좌표
     private const float MIN_SCALE = 0.4f;   // Sun Glow 최소 스케일
@@ -83,8 +83,8 @@ public class EclipseManager : MonoBehaviour
     private ColorGrading colorGrading;
 
     /* 일식 관련 변수 */
-    private float realSunDiameter = 2.0f;
-    private float sunDiameter = 0.5f;
+    private float realSunDiameter = 1.25f;
+    private float sunDiameter = 0.75f;
     bool isTotalEclipse = true;
 
     /* 버튼 변수 */
@@ -120,14 +120,15 @@ public class EclipseManager : MonoBehaviour
             {
                 //Vector3 sunPosition = arCamera.transform.position + arCamera.transform.forward * 15.0f + arCamera.transform.up * 6.0f;
                 sunInstance = Instantiate(sunPrefab, new Vector3(0f, 6f, 15.0f), Quaternion.identity);
-                sunInstance.transform.localScale = new Vector3(1.0f, 1.0f, 0.01f);
+                sunInstance.transform.localScale = new Vector3(1.5f, 1.5f, 0.01f);
                 sunGlow = sunInstance.transform.Find("Sun Glow").gameObject;
             }
             if (maskInstance == null)
             {
                 //Vector3 maskPosition = arCamera.transform.position + arCamera.transform.forward * 14.97f + arCamera.transform.right * 1.3f + arCamera.transform.up * 5.7f;
                 //Vector3 spawnPosition = new Vector3(arCamera.transform.position.x + 1.3f, arCamera.transform.position.y + 5.7f, arCamera.transform.position.z + 14.97f);
-                maskInstance = Instantiate(sunMaskPrefab, new Vector3(1.3f, 5.7f, 14.97f), Quaternion.identity);
+                maskInstance = Instantiate(sunMaskPrefab, new Vector3(1.5f, 5.7f, 14.97f), Quaternion.identity);
+                maskInstance.transform.localScale = new Vector3(1.5f, 1.5f, 0);
             }
         });
 
@@ -136,12 +137,13 @@ public class EclipseManager : MonoBehaviour
             if(moonInstance == null)
             {
                 moonInstance = Instantiate(moonPrefab, new Vector3(0f, 6f, 15.0f), Quaternion.identity);
-                moonInstance.transform.localScale = new Vector3(0.5f, 0.5f, 0.01f);
+                moonInstance.transform.localScale = new Vector3(0.75f, 0.75f, 0.01f);
             }
             if(maskInstance == null)
             {
-                Vector3 spawnPosition = new Vector3(1.3f, 5.7f, 14.97f);
+                Vector3 spawnPosition = new Vector3(1.5f, 5.7f, 14.97f);
                 maskInstance = Instantiate(moonMaskPrefab, spawnPosition, Quaternion.identity);
+                maskInstance.transform.localScale = new Vector3(1.5f, 1.5f, 0);
             }
         });
 
@@ -167,7 +169,7 @@ public class EclipseManager : MonoBehaviour
                 maskPosition += rightDirection * rightOffset;
                 // 마스크 생성
                 maskInstance = Instantiate(sunMaskPrefab, maskPosition, arCamera.transform.rotation);
-                maskInstance.transform.localScale = new Vector3(4, 4, 0);
+                maskInstance.transform.localScale = new Vector3(2.5f, 2.5f, 0);
             }
 
             // // maskInstance가 이미 존재하는 경우, realSun 앞에 위치하도록 업데이트
@@ -271,8 +273,8 @@ public class EclipseManager : MonoBehaviour
             if(realSun == null || maskInstance == null) return;
             Shader.SetGlobalVector("_SunPosition", realSun.transform.position);
             Shader.SetGlobalVector("_MoonPosition", maskInstance.transform.position); 
-            Shader.SetGlobalFloat("_SunRadius", 2.0f);
-            Shader.SetGlobalFloat("_MoonRadius", 4.0f);
+            Shader.SetGlobalFloat("_SunRadius", 1.25f);
+            Shader.SetGlobalFloat("_MoonRadius", 2.5f);
 
             if(maskInstance != null && realSun != null)
             {
@@ -328,8 +330,8 @@ public class EclipseManager : MonoBehaviour
                 if(sunInstance == null || maskInstance == null) return;
                 Shader.SetGlobalVector("_SunPosition", sunInstance.transform.position);
                 Shader.SetGlobalVector("_MoonPosition", maskInstance.transform.position); 
-                Shader.SetGlobalFloat("_SunRadius", 0.5f);
-                Shader.SetGlobalFloat("_MoonRadius", 1.0f);
+                Shader.SetGlobalFloat("_SunRadius", 0.75f);
+                Shader.SetGlobalFloat("_MoonRadius", 1.5f);
 
                 //AdjustBrightness();
                 sunGlow = sunInstance.transform.Find("Sun Glow").gameObject;
@@ -421,20 +423,21 @@ public class EclipseManager : MonoBehaviour
 
                 Shader.SetGlobalVector("_SunPosition", moonInstance.transform.position);
                 Shader.SetGlobalVector("_MoonPosition", maskInstance.transform.position); 
-                Shader.SetGlobalFloat("_SunRadius", 0.5f);
-                Shader.SetGlobalFloat("_MoonRadius", 1.0f);
+                Shader.SetGlobalFloat("_SunRadius", 0.75f);
+                Shader.SetGlobalFloat("_MoonRadius", 1.5f);
                 
 
                 // 버튼 상태에 따른 지속적인 이동
                 if (maskInstance != null)
                 {
                     Vector3 newPosition = maskInstance.transform.position;
+                    Vector3 moonPos = moonInstance.transform.position;
 
                     if (isLeftButtonPressed)
                     {
                         newPosition.x = Mathf.Max(MIN_X_RANGE, newPosition.x - MOVE_DISTANCE);
 
-                        if(newPosition.x <= 0)
+                        if(newPosition.x <= moonPos.x)
                         {
                             newPosition.y = Mathf.Max(MIN_Y_RANGE, newPosition.y - MOVE_Y_DISTANCE);
                         }
@@ -450,7 +453,7 @@ public class EclipseManager : MonoBehaviour
                     {
                         newPosition.x = Mathf.Min(MAX_X_RANGE, newPosition.x + MOVE_DISTANCE);
                         // x가 0보다 작으면 y 감소, 크면 y 증가
-                        if (newPosition.x <= 0)
+                        if (newPosition.x <= moonPos.x)
                         {
                             newPosition.y = Mathf.Min(MAX_Y_RANGE, newPosition.y + MOVE_Y_DISTANCE);
                         }
@@ -461,7 +464,7 @@ public class EclipseManager : MonoBehaviour
                         maskInstance.transform.position = newPosition;
                     }
 
-                    if (Mathf.Abs(newPosition.x) <= 0.33f)
+                    if (Mathf.Abs(newPosition.x) <= moonPos.x + 0.33f)
                     {
                         Renderer moonRenderer = moonInstance.GetComponent<Renderer>();
                         if (moonRenderer != null)
@@ -491,8 +494,9 @@ public class EclipseManager : MonoBehaviour
                 if(maskInstance != null && autoMoveToggle.isOn)
                 {
                     Vector3 newPosition = maskInstance.transform.position;
+                    Vector3 moonPos = moonInstance.transform.position;
                     newPosition.x = Mathf.Max(MIN_X_RANGE, newPosition.x - AUTO_MOVE_DISTANCE);
-                    if(newPosition.x < 0)
+                    if(newPosition.x < moonPos.x)
                     {
                         newPosition.y = Mathf.Max(MIN_Y_RANGE, newPosition.y - AUTO_MOVE_DISTANCE_Y);
                     }
@@ -528,7 +532,7 @@ public class EclipseManager : MonoBehaviour
         isTotalEclipse = isTotal;
         
         
-        if(maskInstance != null && sunInstance != null)
+        if(maskInstance != null && sunInstance != null && !realTimeToggle.isOn)
         {
             // 달 크기 조절
             Vector3 newScale = maskInstance.transform.localScale;
@@ -536,7 +540,7 @@ public class EclipseManager : MonoBehaviour
             newScale.y = isTotalEclipse ? sunInstance.transform.localScale.y : sunInstance.transform.localScale.y * 0.9f;
             maskInstance.transform.localScale = newScale;
         }
-        if(maskInstance != null && realSun != null)
+        if(maskInstance != null && realSun != null && realTimeToggle.isOn)
         {
             // 달 크기 조절
             Vector3 newScale = maskInstance.transform.localScale;
