@@ -22,7 +22,7 @@ public class StarCollider : MonoBehaviour
         {
             foreach (var starObject in obj.starList)
             {
-                GameObject tmp = starObject.Key;
+                GameObject tmp = starObject.GO;
                 if (tmp != null)
                 {
                     Collider collider = gameObject.GetComponent<Collider>();
@@ -41,9 +41,9 @@ public class StarCollider : MonoBehaviour
     {
         if (obj != null)
         {
-            foreach (var starObject in obj.starList.Keys)
+            foreach (var starObject in obj.starList)
             {
-                GameObject gameObject = starObject;
+                GameObject gameObject = starObject.GO;
                 if (gameObject != null)
                 {
                     Collider collider = gameObject.GetComponent<Collider>();

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,22 +10,28 @@ public class DetectorManager : MonoBehaviour
     private bool isRaycastActive = false;
     private int layerMask;
     private DistanceManager distanceManager;
+    private int hit;
     public Button Confirm;
+    private GameObject currentHitObject;
 
     void Start()
     {
         layerMask = LayerMask.GetMask("Default");
         distanceManager = FindAnyObjectByType<DistanceManager>();
+        Confirm.onClick.AddListener(OnConfirmClicked);
+        Confirm.gameObject.SetActive(false);
     }
 
     public void StartRaycast()
     {
+        hit = 0;
         isRaycastActive = true;
     }
 
     public void StopRaycast()
     {
         isRaycastActive = false;
+        Confirm.gameObject.SetActive(false);
     }
 
     void Update()
@@ -41,24 +48,42 @@ public class DetectorManager : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
         {
             GameObject hitObject = hit.collider.gameObject;
-            if (Input.GetMouseButtonDown(0)) // 클릭 시 선택
+            if (currentHitObject != hitObject)
             {
-                Star starData = GetStarData(hitObject);
-                if (starData != null)
-                {
-                    distanceManager.AddSelected(hitObject, starData);
-                }
+                currentHitObject = hitObject;
+                Confirm.gameObject.SetActive(true);
             }
+        }
+        else
+        {
+            currentHitObject = null;
+            Confirm.gameObject.SetActive(false);
         }
     }
 
-    private Star GetStarData(GameObject starObject)
+    private tmpStar GetStarData(GameObject starObject)
     {
-        ObjectManager objectManager = FindAnyObjectByType<ObjectManager>();
-        if (objectManager != null && objectManager.starList.ContainsKey(starObject))
+        ObjectManager obj = FindAnyObjectByType<ObjectManager>();
+        tmpStar star = obj.starList.FirstOrDefault(s => s.gameObject == starObject);
+        if (star != null)
         {
-            return objectManager.starList[starObject];
+            return star;
         }
         return null;
+    }
+    private void OnConfirmClicked()
+    {
+        if (currentHitObject != null)
+        {
+            tmpStar starData = GetStarData(currentHitObject);
+            if (starData != null)
+            {
+                distanceManager.AddSelected(currentHitObject, starData);
+                Confirm.gameObject.SetActive(false);
+                currentHitObject = null;
+                hit++;
+            }
+        }
+        if (hit == 2) isRaycastActive = false;
     }
 }

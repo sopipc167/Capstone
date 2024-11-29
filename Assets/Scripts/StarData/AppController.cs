@@ -9,12 +9,13 @@ public class StarManager : MonoBehaviour
     private WebSocketManager webSocketManager;
     private DataManager dataManager;
     private ObjectManager objectManager;
-
+    private DistanceManager distanceManager;
     void Start()
     {
         webSocketManager = FindObjectOfType<WebSocketManager>();
         dataManager = FindObjectOfType<DataManager>();
         objectManager = FindObjectOfType<ObjectManager>();
+        distanceManager = FindObjectOfType<DistanceManager>();
 
         webSocketManager.OnReceive += HandleMessageReceived;
     }

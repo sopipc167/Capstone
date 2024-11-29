@@ -11,6 +11,22 @@ using UnityEngine.Android;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 
+public class tmpStar : MonoBehaviour
+{
+    public GameObject GO;
+    public float altitude;
+    public float azimuth;
+    public float distance;
+
+    public tmpStar(GameObject g, float al, float az, float dis)
+    {
+        GO = g;
+        altitude = al;
+        azimuth = az;
+        distance = dis;
+    }
+}
+
 public class ObjectManager : MonoBehaviour
 {
     public TextMeshProUGUI text;
@@ -42,7 +58,8 @@ public class ObjectManager : MonoBehaviour
     private bool isConstellationInitialized = false;
     private Quaternion initialRotation;
 
-    public Dictionary<GameObject, Star> starList = new Dictionary<GameObject, Star>();
+    public List<tmpStar> starList = new List<tmpStar>();
+    private DistanceManager DM;
 
     // Start is called before the first frame update
     void Start()
@@ -50,9 +67,14 @@ public class ObjectManager : MonoBehaviour
         xrOrigin = FindAnyObjectByType<XROrigin>();
         dataManager = FindAnyObjectByType<DataManager>();
         compassManager = FindAnyObjectByType<CompassManager>();
-        UpdateStarObjects();
+        DM = FindAnyObjectByType<DistanceManager>();
+        if(DM == null)
+        {
+            Debug.Log("DistanceManager Not available");
+        }
 
         InitializeObjects();
+        Debug.Log("Starlist Size : " + starList.Count);
     }
 
     public void UpdateObjects()
@@ -150,6 +172,7 @@ public class ObjectManager : MonoBehaviour
     {
         float adjustedAzimuth = azimuth - trueNorth;
         Vector3 starPosition = SphericalToCartesian(altitude, adjustedAzimuth, distance);
+        starList.Add(new tmpStar(star, altitude, azimuth, distance));
         //Vector3 starPosition = GetStarPosition(altitude, azimuth, distance, northDirection);
 
         star.transform.position = starPosition;
@@ -273,21 +296,4 @@ public class ObjectManager : MonoBehaviour
 
         return new Vector3(x, y, z);
     }
-
-    //별 리스트 생성
-    public void UpdateStarObjects()
-    {
-        GameObject tmp;
-        foreach (var celestialObject in dataManager.celestialObjects.Values)
-        {
-            tmp = new GameObject();
-            if (celestialObject.type == "star" && celestialObject is Star star)
-            {
-                starList.Add(tmp, celestialObject.ConvertTo<Star>());
-            }
-            tmp = null;
-        }
-    }
-
-    //public Dictionary<GameObject, Star> GetStarObjects() { return starList; }
 }

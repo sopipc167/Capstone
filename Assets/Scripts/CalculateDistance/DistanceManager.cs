@@ -13,25 +13,28 @@ public class DistanceManager : MonoBehaviour
     private StarCollider starCollider;
     private DetectorManager detectorManager;
 
-    private Dictionary<GameObject, Star> selected = new Dictionary<GameObject, Star>(); // 선택된 천체 리스트
+    private Dictionary<GameObject, tmpStar> selected = new Dictionary<GameObject, tmpStar>(); // 선택된 천체 리스트
 
     void Start()
     {
-        starCollider = FindAnyObjectByType<StarCollider>();
+        Debug.Log("Distance Manager Acitve");
+        starCollider = FindAnyObjectByType<StarCollider>(); 
         detectorManager = FindAnyObjectByType<DetectorManager>();
+        if (DistanceCalculate == null) Debug.Log("Distance Caculation not available");
 
         DistanceCalculate.onClick.AddListener(StartSelectionProcess);
     }
 
     public void StartSelectionProcess()
     {
+        Debug.Log("Distance Button Pressed");
         selected.Clear();
         starCollider.ActivateColliders();
         detectorManager.StartRaycast();
-        DetectionPanel.SetActive(true);
+        DetectionPanel.gameObject.SetActive(true);
     }
 
-    public void AddSelected(GameObject starObject, Star starData)
+    public void AddSelected(GameObject starObject, tmpStar starData)
     {
         if (selected.Count < 2 && !selected.ContainsKey(starObject))
         {
@@ -40,7 +43,6 @@ public class DistanceManager : MonoBehaviour
 
             if (selected.Count == 2)
             {
-                detectorManager.StopRaycast();
                 DetectionPanel.gameObject.SetActive(false);
                 CalculateDistanceBetweenSelected();
                 EndSelectionProcess();
@@ -50,26 +52,26 @@ public class DistanceManager : MonoBehaviour
 
     private void CalculateDistanceBetweenSelected()
     {
-        var selectedStars = new List<Star>(selected.Values);
+        var selectedStars = new List<tmpStar>(selected.Values);
         if (selectedStars.Count == 2)
         {
-            Star s1 = selectedStars[0];
-            Star s2 = selectedStars[1];
+            tmpStar s1 = selectedStars[0];
+            tmpStar s2 = selectedStars[1];
 
             float distance = CalculateDistance(s1, s2);
             Debug.Log($"Distance between selected stars: {distance}");
         }
     }
 
-    private float CalculateDistance(Star s1, Star s2)
+    private float CalculateDistance(tmpStar s1, tmpStar s2)
     {
-        float radAL1 = Mathf.Deg2Rad * s1.alt;
-        float radAL2 = Mathf.Deg2Rad * s2.alt;
-        float radAZ1 = Mathf.Deg2Rad * s1.az;
-        float radAZ2 = Mathf.Deg2Rad * s2.az;
+        float radAL1 = Mathf.Deg2Rad * s1.altitude;
+        float radAL2 = Mathf.Deg2Rad * s2.altitude;
+        float radAZ1 = Mathf.Deg2Rad * s1.azimuth;
+        float radAZ2 = Mathf.Deg2Rad * s2.azimuth;
 
-        float dis1 = 1000; // Example distances
-        float dis2 = 1287;
+        float dis1 = s1.distance;
+        float dis2 = s2.distance;
 
         float deltaAL = radAL1 - radAL2;
         float deltaAZ = radAZ1 - radAZ2;
@@ -77,7 +79,6 @@ public class DistanceManager : MonoBehaviour
         float term1 = dis1 * dis1 + dis2 * dis2;
         float term2 = 2 * dis1 * dis2 * (Mathf.Sin(radAL1) * Mathf.Sin(radAL2) +
                                          Mathf.Cos(radAL1) * Mathf.Cos(radAL2) * Mathf.Cos(deltaAZ));
-
         return Mathf.Sqrt(term1 - term2);
     }
 
