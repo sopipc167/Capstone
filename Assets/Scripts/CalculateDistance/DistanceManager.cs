@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 public class DistanceManager : MonoBehaviour
 {
-    public Button DistanceCalculate;
     public GameObject DetectionPanel;
     private StarCollider starCollider;
     private DetectorManager detectorManager;
@@ -20,9 +19,6 @@ public class DistanceManager : MonoBehaviour
         Debug.Log("Distance Manager Acitve");
         starCollider = FindAnyObjectByType<StarCollider>(); 
         detectorManager = FindAnyObjectByType<DetectorManager>();
-        if (DistanceCalculate == null) Debug.Log("Distance Caculation not available");
-
-        DistanceCalculate.onClick.AddListener(StartSelectionProcess);
     }
 
     public void StartSelectionProcess()
@@ -65,13 +61,13 @@ public class DistanceManager : MonoBehaviour
 
     private float CalculateDistance(tmpStar s1, tmpStar s2)
     {
-        float radAL1 = Mathf.Deg2Rad * s1.altitude;
-        float radAL2 = Mathf.Deg2Rad * s2.altitude;
-        float radAZ1 = Mathf.Deg2Rad * s1.azimuth;
-        float radAZ2 = Mathf.Deg2Rad * s2.azimuth;
+        float radAL1 = Mathf.Deg2Rad * s1.star.alt;
+        float radAL2 = Mathf.Deg2Rad * s2.star.alt;
+        float radAZ1 = Mathf.Deg2Rad * s1.star.az;
+        float radAZ2 = Mathf.Deg2Rad * s2.star.az;
 
-        float dis1 = s1.distance;
-        float dis2 = s2.distance;
+        float dis1 = s1.star.distance;
+        float dis2 = s2.star.distance;
 
         float deltaAL = radAL1 - radAL2;
         float deltaAZ = radAZ1 - radAZ2;

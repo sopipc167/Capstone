@@ -10,6 +10,7 @@ public class DetectorManager : MonoBehaviour
     private bool isRaycastActive = false;
     private int layerMask;
     private DistanceManager distanceManager;
+    private ObjectManager obj;
     private int hit;
     public Button Confirm;
     private GameObject currentHitObject;
@@ -18,6 +19,7 @@ public class DetectorManager : MonoBehaviour
     {
         layerMask = LayerMask.GetMask("Default");
         distanceManager = FindAnyObjectByType<DistanceManager>();
+        obj = FindAnyObjectByType<ObjectManager>();
         Confirm.onClick.AddListener(OnConfirmClicked);
         Confirm.gameObject.SetActive(false);
     }
@@ -63,13 +65,12 @@ public class DetectorManager : MonoBehaviour
 
     private tmpStar GetStarData(GameObject starObject)
     {
-        ObjectManager obj = FindAnyObjectByType<ObjectManager>();
         tmpStar star = obj.starList.FirstOrDefault(s => s.gameObject == starObject);
         if (star != null)
         {
             return star;
         }
-        return null;
+        else return null;
     }
     private void OnConfirmClicked()
     {

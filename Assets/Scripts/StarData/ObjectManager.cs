@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using TMPro;
 using Unity.Collections;
 using Unity.VisualScripting;
@@ -14,16 +15,12 @@ using UnityEngine.XR.ARFoundation;
 public class tmpStar : MonoBehaviour
 {
     public GameObject GO;
-    public float altitude;
-    public float azimuth;
-    public float distance;
+    public Star star;
 
-    public tmpStar(GameObject g, float al, float az, float dis)
+    public tmpStar(GameObject g, Star s)
     {
         GO = g;
-        altitude = al;
-        azimuth = az;
-        distance = dis;
+        star = s;
     }
 }
 
@@ -59,7 +56,10 @@ public class ObjectManager : MonoBehaviour
     private Quaternion initialRotation;
 
     public List<tmpStar> starList = new List<tmpStar>();
+    private Star tmps;
     private DistanceManager DM;
+    public Button DistanceCalculate;
+    private bool starAdded = false;
 
     // Start is called before the first frame update
     void Start()
@@ -68,13 +68,13 @@ public class ObjectManager : MonoBehaviour
         dataManager = FindAnyObjectByType<DataManager>();
         compassManager = FindAnyObjectByType<CompassManager>();
         DM = FindAnyObjectByType<DistanceManager>();
-        if(DM == null)
+        if (DM == null)
         {
             Debug.Log("DistanceManager Not available");
         }
-
+        starList.Clear();
         InitializeObjects();
-        Debug.Log("Starlist Size : " + starList.Count);
+        DistanceCalculate.onClick.AddListener(DM.StartSelectionProcess);
     }
 
     public void UpdateObjects()
@@ -172,33 +172,64 @@ public class ObjectManager : MonoBehaviour
     {
         float adjustedAzimuth = azimuth - trueNorth;
         Vector3 starPosition = SphericalToCartesian(altitude, adjustedAzimuth, distance);
-        starList.Add(new tmpStar(star, altitude, azimuth, distance));
         //Vector3 starPosition = GetStarPosition(altitude, azimuth, distance, northDirection);
 
         star.transform.position = starPosition;
+        tmps = null;
     }
 
     private void InitializeObjects()
     {
+        CelestialObject obj;
         sun = Instantiate(sunPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        obj = dataManager.celestialObjects["sun"];
+        tmps = obj.ConvertTo<Star>();
+        AddStarList(sun, tmps);
         mercury = Instantiate(otherPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         mercury.GetComponent<TextScript>().SetText("Mercury");
+        obj = dataManager.celestialObjects["mercury"];
+        tmps = obj.ConvertTo<Star>();
+        AddStarList(mercury, tmps);
         venus = Instantiate(otherPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         venus.GetComponent<TextScript>().SetText("Venus");
+        obj = dataManager.celestialObjects["venus"];
+        tmps = obj.ConvertTo<Star>();
+        AddStarList(venus, tmps);
         mars = Instantiate(otherPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         mars.GetComponent<TextScript>().SetText("Mars");
+        obj = dataManager.celestialObjects["mars"];
+        tmps = obj.ConvertTo<Star>();
+        AddStarList(mars, tmps);
         jupiter = Instantiate(otherPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         jupiter.GetComponent<TextScript>().SetText("Jupiter");
+        obj = dataManager.celestialObjects["jupiter"];
+        tmps = obj.ConvertTo<Star>();
+        AddStarList(jupiter, tmps);
         saturn = Instantiate(otherPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         saturn.GetComponent<TextScript>().SetText("Saturn");
+        obj = dataManager.celestialObjects["saturn"];
+        tmps = obj.ConvertTo<Star>();
+        AddStarList(saturn, tmps);
         uranus = Instantiate(otherPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         uranus.GetComponent<TextScript>().SetText("Uranus");
+        obj = dataManager.celestialObjects["uranus"];
+        tmps = obj.ConvertTo<Star>();
+        AddStarList(uranus, tmps);
         neptune = Instantiate(otherPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         neptune.GetComponent<TextScript>().SetText("Neptune");
+        obj = dataManager.celestialObjects["neptune"];
+        tmps = obj.ConvertTo<Star>();
+        AddStarList(neptune, tmps);
         pluto = Instantiate(otherPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         pluto.GetComponent<TextScript>().SetText("Pluto");
+        obj = dataManager.celestialObjects["pluto"];
+        tmps = obj.ConvertTo<Star>();
+        AddStarList(pluto, tmps);
         moon = Instantiate(otherPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         moon.GetComponent<TextScript>().SetText("Moon");
+        obj = dataManager.celestialObjects["moon"];
+        tmps = obj.ConvertTo<Star>();
+        AddStarList(moon, tmps);
     }
 
     private void InitializeConstellations()
@@ -210,6 +241,7 @@ public class ObjectManager : MonoBehaviour
         {
             GameObject newStar = Instantiate(starPrefab, new Vector3(0, 0, 0), Quaternion.identity);
             tmp.Add(newStar);
+            AddStarList(newStar, star);
         }
 
         InitializeConstellationLine(tmp, obj.lines);
@@ -219,8 +251,9 @@ public class ObjectManager : MonoBehaviour
         {
             GameObject newStar = Instantiate(starPrefab, new Vector3(0, 0, 0), Quaternion.identity);
             ursaMinor.Add(newStar);
+            AddStarList(newStar, star);
         }
-
+        if (starAdded == false) CheckStarList();
         InitializeConstellationLine(ursaMinor, obj.lines);
     }
 
@@ -295,5 +328,23 @@ public class ObjectManager : MonoBehaviour
         float z = radius * Mathf.Cos(alt_radian) * Mathf.Cos(az_radian);
 
         return new Vector3(x, y, z);
+    }
+    private void AddStarList(GameObject g, Star s)
+    {
+        starList.Add(new tmpStar(g, s));
+        Debug.Log($"{s.name} added");
+    }
+    private void CheckStarList()
+    {
+        Debug.Log($"star count : {starList.Count}");
+        Debug.Log($"starAdded : {starAdded}");
+        foreach (tmpStar star in starList)
+        {
+            GCHandle handle = GCHandle.Alloc(star, GCHandleType.Pinned);
+            IntPtr address = GCHandle.ToIntPtr(handle);
+            Debug.Log($"address : {address}, name : {star.star.name}");
+        }
+        starAdded = !starAdded;
+        Debug.Log($"starAdded : {starAdded}");
     }
 }

@@ -699,6 +699,7 @@ MonoBehaviour:
   otherPrefab: {fileID: 6625800796070980339, guid: a23a779e900b3954fbfe7d4d8c3effd9, type: 3}
   arrow: {fileID: 1570900723}
   arCamera: {fileID: 1647033414}
+  starList: []
 --- !u!4 &749258189
 Transform:
   m_ObjectHideFlags: 0
