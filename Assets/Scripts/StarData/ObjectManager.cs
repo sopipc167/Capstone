@@ -11,20 +11,23 @@ using UnityEngine;
 using UnityEngine.Android;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
+using static UnityEngine.GraphicsBuffer;
 
 public class ObjectManager : MonoBehaviour
 {
     public TextMeshProUGUI text;
     public TextMeshProUGUI headAcc;
+    public TextMeshProUGUI tracker;
 
     public Button Reset;
+    public Camera arCamera;
     public GameObject starPrefab;
     public GameObject moonPrefab;
     public GameObject sunPrefab;
     public GameObject otherPrefab;
     public GameObject arrow;
-    public Transform arCamera;
     public GameObject originObject;
+    public GameObject pointerObject;
     public Vector3 origin = Vector3.zero;
     public float radius = 1000.0f;
     public float lineWidth = 0.5f;
@@ -34,8 +37,11 @@ public class ObjectManager : MonoBehaviour
 
     private GameObject sun, mercury, venus, mars, jupiter, saturn, uranus, neptune, pluto, moon;
     private List<List<GameObject>> constellationObjects = new List<List<GameObject>>();
-    private List<GameObject> tmp = new List<GameObject>();
-    private List<GameObject> ursaMinor = new List<GameObject>();
+    private GameObject trackingObject;
+
+    private float screenWidth, screenHeight;
+    private float edgeOffset = 25.0f;
+    private float pointerMargin = 100.0f;
 
     private float trueNorth = 0.0f;
     private bool isInitialized = false;
@@ -45,6 +51,9 @@ public class ObjectManager : MonoBehaviour
     {
         dataManager = FindAnyObjectByType<DataManager>();
         compassManager = FindAnyObjectByType<CompassManager>();
+
+        screenWidth = Screen.width;
+        screenHeight = Screen.height;
 
         InitializeObjects();
     }
@@ -81,6 +90,44 @@ public class ObjectManager : MonoBehaviour
             UpdateSolarObjects();
             UpdateConstellations();
         }
+        
+        if (trackingObject)
+        {
+            Vector3 targetScreenPosition = arCamera.WorldToScreenPoint(trackingObject.transform.position);
+            Vector3 targetPositionInScreen = new Vector3(targetScreenPosition.x, targetScreenPosition.y, 0);
+            Vector3 pointerPositionInScreen = new Vector3(pointerObject.transform.position.x, pointerObject.transform.position.y, 0);
+            Vector3 pointerVector = new Vector3(1, 0, 0);
+            Vector3 trackingVector;
+            
+            tracker.text = "Target: " + targetScreenPosition;
+
+            if (targetScreenPosition.z > 0)
+            {
+                trackingVector = targetPositionInScreen - pointerPositionInScreen;
+
+                if (targetScreenPosition.x <= pointerMargin) targetPositionInScreen.x = pointerMargin;
+                if (targetScreenPosition.y <= pointerMargin) targetPositionInScreen.y = pointerMargin;
+                if (targetScreenPosition.x >= screenWidth - pointerMargin) targetPositionInScreen.x = screenWidth - pointerMargin;
+                if (targetScreenPosition.y >= screenHeight - pointerMargin) targetPositionInScreen.y = screenHeight - pointerMargin;
+            }
+            else
+            {
+                targetPositionInScreen.y = screenHeight - targetScreenPosition.y;
+                targetPositionInScreen.x = -targetScreenPosition.x;
+                trackingVector = targetPositionInScreen - pointerPositionInScreen;
+
+                if (targetScreenPosition.x < screenWidth / 2) targetPositionInScreen.x = screenWidth - pointerMargin;
+                else targetPositionInScreen.x = pointerMargin;
+
+                if (targetScreenPosition.y >= screenHeight) targetPositionInScreen.y = screenHeight - pointerMargin;
+                else if (targetScreenPosition.y <= 0) targetPositionInScreen.y = pointerMargin;
+            }
+
+            pointerObject.transform.localEulerAngles = new Vector3(0, 0, Vector3.Angle(pointerVector, trackingVector));
+            pointerObject.transform.position = targetPositionInScreen;
+            pointerObject.SetActive(true);
+        }
+        
     }
 
     
@@ -159,6 +206,7 @@ public class ObjectManager : MonoBehaviour
     {
         sun = Instantiate(sunPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         sun.name = "Sun";
+        trackingObject = sun;
         mercury = Instantiate(otherPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         mercury.GetComponent<TextScript>().SetText("Mercury");
         mercury.name = "Mercury";

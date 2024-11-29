@@ -57,7 +57,6 @@ public class InputManager : MonoBehaviour
                 secondTouch.phase == TouchPhase.Moved)
             {
                 currentDistance = Vector2.Distance(firstTouch.position, secondTouch.position);
-                Debug.Log(currentDistance);
 
                 float deltaDistance = currentDistance - prevDistance;
 
@@ -76,16 +75,14 @@ public class InputManager : MonoBehaviour
 
         if (targetPosition.z > 0)
         {
-            objectManager.originObject.transform.localPosition = Vector3.zero;
-            return;
+            targetPosition = Vector3.zero;
         }
-        if (targetPosition.z < minDistance - 1000.0f)
+        else if (targetPosition.z < minDistance - 1000.0f)
         {
-            objectManager.originObject.transform.localPosition = new Vector3(0, 0, minDistance - 1000.0f);
-            return;
+            targetPosition = new Vector3(0, 0, minDistance - 1000.0f);
         }
 
-        currentZoom = (1000.0f) / (1000.0f + targetPosition.z);
         objectManager.originObject.transform.localPosition = targetPosition;
+        currentZoom = (1000.0f) / (1000.0f + targetPosition.z);
     }
 }
