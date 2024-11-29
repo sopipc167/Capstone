@@ -18,6 +18,9 @@ TagManager:
   - PostProcessing
   - PlacedObject
   - NoPostProcessing
+  - Camera
+  - 
+  - 
   - 
   - 
   - 
