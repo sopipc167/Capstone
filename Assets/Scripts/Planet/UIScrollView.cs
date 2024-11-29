@@ -15,19 +15,8 @@ public class UIScrollView : MonoBehaviour
         GameObject newItem = GameObject.Instantiate(item, content.transform);
         parser = new JSON_Parser();
         Star_data tmp = parser.readJSON(json);
-        Debug.Log(tmp.nameUnicode);
+        newItem.GetComponent<ItemBehavior>().setData(tmp);
         newItem.GetComponent<ItemBehavior>().SetName(tmp.nameUnicode);
         newItem.GetComponent<ItemBehavior>().SImg(tmp.img);
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }

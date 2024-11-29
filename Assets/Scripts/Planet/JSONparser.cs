@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System;
-//½Ì±ÛÅæÀ¸·Î ÆÄ½Ì Å¬·¡½º ÀÛ¼º
+//ï¿½Ì±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ä½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½Û¼ï¿½
 [Serializable]
 public class JSON_Parser
 {
@@ -38,4 +38,11 @@ public class Star_data
     public string name;
     public string nameUnicode;
     public string img;
+    public string lat;
+    public string lon;
+    public string radius;
+    public string ra;
+    public string flux_v;
+    public float distance;
+    public string dec;
 }
