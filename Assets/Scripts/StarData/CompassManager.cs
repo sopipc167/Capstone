@@ -12,20 +12,11 @@ public class CompassManager : MonoBehaviour
 
     public GameObject compass;
 
-    float timeDelay = 0.25f; //delay update, reduces jitter
-    float updateDelay = 5.0f;
-
-    private float xRotation = 0f;
-    private float yRotation = 0f;
-    private float zRotation = 0f;
-    private const float totalRotation = 360f;
-    public bool isCalibrated = false;
+    float timeDelay = 0.25f;
 
     public XROrigin xrOrigin;
-    public TextMeshProUGUI message;
     private LineRenderer northLine;
 
-    private Vector3 sum = Vector3.zero;
     private int index = 0;
     private float trueNorth = 0f;
     private float initialHeading = 0f;
@@ -88,26 +79,9 @@ public class CompassManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*
-        if (!isCalibrated)
-        {
-            xRotation += Mathf.Abs(Input.gyro.rotationRate.x);
-            yRotation += Mathf.Abs(Input.gyro.rotationRate.y);
-            zRotation += Mathf.Abs(Input.gyro.rotationRate.z);
-
-            if (xRotation > totalRotation || yRotation > totalRotation || zRotation > totalRotation)
-            {
-                isCalibrated = true;
-            }
-
-            return;
-        }
-        */
-
         if (gps_ok)
         {
             timeDelay -= Time.deltaTime;
-            updateDelay -= Time.deltaTime;
             if (!isInitialized)
             {
                 if (index < samples)
@@ -120,7 +94,7 @@ public class CompassManager : MonoBehaviour
                 {
                     initialHeading = GetAngleMean(angles);
                     if (initialHeading < 0) initialHeading += 360f;
-                    Vector3 northDirection = Quaternion.Euler(0, initialHeading, 0) * Vector3.forward;
+
                     DrawTrueNorthLine(initialHeading);
                     isInitialized = true;
                 }
@@ -129,13 +103,7 @@ public class CompassManager : MonoBehaviour
             {
                 timeDelay = 0.25f;
                 trueNorth = Input.compass.trueHeading;
-                message.text = "TrueNorth: " + trueNorth;
                 compass.transform.localEulerAngles = new Vector3(0, 0, trueNorth);
-                
-            }
-            if (updateDelay < 0)
-            {
-                
             }
         }
     }
@@ -169,14 +137,5 @@ public class CompassManager : MonoBehaviour
 
         float meanRadians = Mathf.Atan2(sinSum, cosSum);
         return meanRadians * Mathf.Rad2Deg;
-    }
-
-
-    public void OnClickResetButton()
-    {
-        isInitialized = false;
-        sum = Vector3.zero;
-        angles.Clear();
-        index = 0;
     }
 }

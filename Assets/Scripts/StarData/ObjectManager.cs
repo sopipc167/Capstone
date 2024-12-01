@@ -15,17 +15,10 @@ using static UnityEngine.GraphicsBuffer;
 
 public class ObjectManager : MonoBehaviour
 {
-    public TextMeshProUGUI text;
-    public TextMeshProUGUI headAcc;
-    public TextMeshProUGUI tracker;
-
-    public Button Reset;
     public Camera arCamera;
     public GameObject starPrefab;
-    public GameObject moonPrefab;
     public GameObject sunPrefab;
     public GameObject otherPrefab;
-    public GameObject arrow;
     public GameObject originObject;
     public GameObject pointerObject;
     public Vector3 origin = Vector3.zero;
@@ -81,7 +74,7 @@ public class ObjectManager : MonoBehaviour
             trueNorth = compassManager.GetTrueNorth();
             if (trueNorth == -1.0f) return;
 
-            
+
             isInitialized = true;
         }
 
@@ -90,7 +83,7 @@ public class ObjectManager : MonoBehaviour
             UpdateSolarObjects();
             UpdateConstellations();
         }
-        
+
         if (trackingObject)
         {
             Vector3 targetScreenPosition = arCamera.WorldToScreenPoint(trackingObject.transform.position);
@@ -98,8 +91,6 @@ public class ObjectManager : MonoBehaviour
             Vector3 pointerPositionInScreen = new Vector3(pointerObject.transform.position.x, pointerObject.transform.position.y, 0);
             Vector3 pointerVector = new Vector3(1, 0, 0);
             Vector3 trackingVector;
-            
-            tracker.text = "Target: " + targetScreenPosition;
 
             if (targetScreenPosition.z > 0)
             {
@@ -127,11 +118,11 @@ public class ObjectManager : MonoBehaviour
             pointerObject.transform.position = targetPositionInScreen;
             pointerObject.SetActive(true);
         }
-        
+
     }
 
-    
-    // ÅÂ¾ç°è ÃµÃ¼ À§Ä¡ ¾÷µ¥ÀÌÆ®
+
+    // ï¿½Â¾ï¿½ï¿½ ÃµÃ¼ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     void UpdateSolarObjects()
     {
         CelestialObject obj;
@@ -167,7 +158,7 @@ public class ObjectManager : MonoBehaviour
         UpdateStar(moon, obj.alt, obj.az, radius);
     }
 
-    // º°ÀÚ¸® À§Ä¡ ¾÷µ¥ÀÌÆ®
+    // ï¿½ï¿½ï¿½Ú¸ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     private void UpdateConstellations()
     {
         int i = 0;
@@ -192,16 +183,17 @@ public class ObjectManager : MonoBehaviour
         }
     }
 
-    // ÃµÃ¼ À§Ä¡ ¾÷µ¥ÀÌÆ®
+    // ÃµÃ¼ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     public void UpdateStar(GameObject star, float altitude, float azimuth, float distance)
     {
         float adjustedAzimuth = azimuth - trueNorth;
         Vector3 starPosition = SphericalToCartesian(altitude, adjustedAzimuth, distance);
 
         star.transform.position = starPosition;
+        star.transform.LookAt(arCamera.transform.position);
     }
 
-    // ÅÂ¾ç°è ÃµÃ¼ ¿ÀºêÁ§Æ® ÃÊ±âÈ­
+    // ï¿½Â¾ï¿½ï¿½ ÃµÃ¼ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ê±ï¿½È­
     private void InitializeObjects()
     {
         sun = Instantiate(sunPrefab, new Vector3(0, 0, 0), Quaternion.identity);
@@ -236,7 +228,7 @@ public class ObjectManager : MonoBehaviour
         moon.name = "Moon";
     }
 
-    // º°ÀÚ¸® ¿ÀºêÁ§Æ® ÃÊ±âÈ­
+    // ï¿½ï¿½ï¿½Ú¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ê±ï¿½È­
     private void InitializeConstellations()
     {
         int i = 0;
@@ -255,7 +247,7 @@ public class ObjectManager : MonoBehaviour
             {
                 GameObject newStar = Instantiate(starPrefab, new Vector3(0, 0, 0), Quaternion.identity);
                 newStar.name = star.name;
-                
+
                 constellationObjects[i].Add(newStar);
             }
             InitializeConstellationLine(constellationObjects[i], obj.lines);
@@ -264,7 +256,7 @@ public class ObjectManager : MonoBehaviour
         }
     }
 
-    // º°ÀÚ¸® ¼± ¾÷µ¥ÀÌÆ®
+    // ï¿½ï¿½ï¿½Ú¸ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     private void UpdateConstellationLine(List<GameObject> starObjects, List<List<int>> lines)
     {
         foreach (List<int> newLine in lines)
@@ -291,7 +283,7 @@ public class ObjectManager : MonoBehaviour
         }
     }
 
-    // º°ÀÚ¸® ¼± Ç¥½ÃÇÏ±â À§ÇÑ LineRenderer ÃÊ±âÈ­
+    // ï¿½ï¿½ï¿½Ú¸ï¿½ ï¿½ï¿½ Ç¥ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ LineRenderer ï¿½Ê±ï¿½È­
     void InitializeConstellationLine(List<GameObject> starObjects, List<List<int>> lines)
     {
         foreach (List<int> newLine in lines)
@@ -306,7 +298,7 @@ public class ObjectManager : MonoBehaviour
         }
     }
 
-    // °íµµ¿Í ¹æÀ§°¢À» ¿ùµå ÁÂÇ¥°è·Î º¯È¯
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
     Vector3 SphericalToCartesian(float altitude, float azimuth, float radius)
     {
         float alt_radian = altitude * Mathf.Deg2Rad;

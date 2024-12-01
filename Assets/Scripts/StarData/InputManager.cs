@@ -9,18 +9,19 @@ using TouchPhase = UnityEngine.TouchPhase;
 public class InputManager : MonoBehaviour
 {
     public Camera arCamera;
-    
+
     private Touch firstTouch;
     private Touch secondTouch;
 
-    private float minDistance = 200.0f;
+    private float minDistance = 100.0f;
     private float currentZoom = 0.0f;
     private float zoomSpeed = 0.4f;
     private float prevDistance;
     private float currentDistance;
+    [SerializeField]
+    GameObject info;
 
     private ObjectManager objectManager;
-    public TextMeshProUGUI initialText;
     public TextMeshProUGUI objectText;
 
     private void Start()
@@ -35,13 +36,17 @@ public class InputManager : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(screenCenter);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit))
+        if (currentZoom >= 4)
         {
-            objectText.text = hit.collider.gameObject.name;
+            if (Physics.Raycast(ray, out hit))
+            {
+                objectText.text = hit.collider.gameObject.name;
+                Debug.Log(objectText);
+            }
+            info.SetActive(true);
         }
-
-
-        initialText.text = string.Format("Zoom {0}", currentZoom);
+        else if (currentZoom < 4)
+            info.SetActive(false);
 
         if (Input.touchCount >= 2)
         {

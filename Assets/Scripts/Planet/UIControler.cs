@@ -9,4 +9,12 @@ public class UIControler : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+    public void ChangeSim()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("UI");
+    }
+    public void ChangeMap()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("StarData");
+    }
 }
