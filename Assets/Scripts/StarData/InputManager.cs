@@ -20,7 +20,6 @@ public class InputManager : MonoBehaviour
     private float currentDistance;
 
     private ObjectManager objectManager;
-    public TextMeshProUGUI initialText;
     public TextMeshProUGUI objectText;
 
     private void Start()
@@ -35,13 +34,21 @@ public class InputManager : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(screenCenter);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit))
+        if (currentZoom >= 4)
         {
-            objectText.text = hit.collider.gameObject.name;
+            if (Physics.Raycast(ray, out hit))
+            {
+                GameObject go = hit.collider.gameObject;
+                if (go.transform.parent != null)
+                {
+                    objectText.text = go.transform.parent.name + " " + go.name;
+                }
+                else
+                {
+                    objectText.text = go.name;
+                }
+            }
         }
-
-
-        initialText.text = string.Format("Zoom {0}", currentZoom);
 
         if (Input.touchCount >= 2)
         {
