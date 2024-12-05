@@ -15,6 +15,8 @@ public class UIInputField : MonoBehaviour
     private Button search;
     [SerializeField]
     private GameObject contents;
+    [SerializeField]
+    private GameObject inputmanager;
     Dictionary<string, string> fields = new Dictionary<string, string>
     {
         {"Andromeda", "안드로메다자리"},
@@ -128,6 +130,7 @@ public class UIInputField : MonoBehaviour
         }
         StartCoroutine(GetRequest(text));
     }
+    
     IEnumerator GetRequest(string url)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Get("https://port-0-capstoneserver-m2qhwewx334fe436.sel4.cloudtype.app/api/stellar/" + url)) 

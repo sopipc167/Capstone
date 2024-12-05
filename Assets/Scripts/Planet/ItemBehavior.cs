@@ -15,12 +15,12 @@ public class ItemBehavior : MonoBehaviour
     RawImage img;
     Button bt;
     GameObject panel;
-    GameObject info;
+    GameObject obj_manager;
     Star_data dt;
     private void Start()
     {
         panel = GameObject.Find("Canvas");
-        info = panel.transform.Find("Info").gameObject;
+        obj_manager = GameObject.Find("StarManager").gameObject;
         panel= panel.transform.Find("Search").gameObject;
         
         bt = this.gameObject.GetComponent<Button>();
@@ -28,8 +28,7 @@ public class ItemBehavior : MonoBehaviour
     }
     public void btn()
     {
-        info.SetActive(true);
-        info.GetComponent<Info_PanelControler>().setData(dt);
+        obj_manager.GetComponent<ObjectManager>().setTrackingObject(dt.name);
         panel.SetActive(false);
         this.gameObject.SetActive(false);
     }

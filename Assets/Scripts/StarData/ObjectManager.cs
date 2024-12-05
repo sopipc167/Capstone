@@ -310,4 +310,8 @@ public class ObjectManager : MonoBehaviour
 
         return new Vector3(x, y, z) + originObject.transform.position;
     }
+    public void setTrackingObject(string obj)
+    {
+        this.trackingObject = GameObject.Find(obj);
+    }
 }

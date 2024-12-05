@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Policy;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Networking;
 using UnityEngine.XR.ARFoundation;
 using TouchPhase = UnityEngine.TouchPhase;
 
@@ -38,12 +40,14 @@ public class InputManager : MonoBehaviour
 
         if (currentZoom >= 4)
         {
+            info.SetActive(true);
             if (Physics.Raycast(ray, out hit))
             {
-                objectText.text = hit.collider.gameObject.name;
-                Debug.Log(objectText);
+                string name = hit.collider.gameObject.name;
+                objectText.text = name;
+                StartCoroutine(Search(name));
             }
-            info.SetActive(true);
+            
         }
         else if (currentZoom < 4)
             info.SetActive(false);
@@ -69,6 +73,22 @@ public class InputManager : MonoBehaviour
                 objectManager.UpdateObjects();
 
                 prevDistance = currentDistance;
+            }
+        }
+    }
+    private IEnumerator Search(string url)
+    {
+        using (UnityWebRequest webRequest = UnityWebRequest.Get("https://port-0-capstoneserver-m2qhwewx334fe436.sel4.cloudtype.app/api/stellar/" + url))
+        {
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.responseCode == 200)
+            {
+                info.GetComponent<Info_PanelControler>().getData(webRequest.downloadHandler.text);
+            }
+            else
+            {
+                Debug.LogError(webRequest.error);
             }
         }
     }

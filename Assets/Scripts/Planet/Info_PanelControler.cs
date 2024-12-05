@@ -6,6 +6,7 @@ using TMPro;
 
 public class Info_PanelControler : MonoBehaviour
 {
+    private JSON_Parser parser;
     
     Star_data data;
     [SerializeField]
@@ -20,7 +21,13 @@ public class Info_PanelControler : MonoBehaviour
     TMP_Text distance;
     [SerializeField]
     TMP_Text dec;
-
+    Star_data tmp;
+    public void getData(string json)
+    {
+        parser = new JSON_Parser();
+        tmp = parser.readJSON(json);
+        setData(tmp);
+    }
     public void setData(Star_data d)
     {
         this.data = d;
