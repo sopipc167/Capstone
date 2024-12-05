@@ -1,17 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Policy;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Networking;
 using UnityEngine.XR.ARFoundation;
 using TouchPhase = UnityEngine.TouchPhase;
 
 public class InputManager : MonoBehaviour
 {
     public Camera arCamera;
-    
-    private Touch firstTouch;
-    private Touch secondTouch;
 
     private float minDistance = 200.0f;
     private float currentZoom = 0.0f;
@@ -36,6 +35,7 @@ public class InputManager : MonoBehaviour
 
         if (currentZoom >= 4)
         {
+            info.SetActive(true);
             if (Physics.Raycast(ray, out hit))
             {
                 GameObject go = hit.collider.gameObject;
@@ -49,6 +49,8 @@ public class InputManager : MonoBehaviour
                 }
             }
         }
+        else if (currentZoom < 4)
+            info.SetActive(false);
 
         if (Input.touchCount >= 2)
         {
@@ -74,7 +76,6 @@ public class InputManager : MonoBehaviour
             }
         }
     }
-
     private void UpdateZoom(float distance)
     {
         Vector3 direction = -new Vector3(0, 0, 1);

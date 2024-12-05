@@ -8,8 +8,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/StarData.unity
     guid: f780f0fab1028b54cab8b1b641ff75ce
+  - enabled: 1
+    path: Assets/Scenes/UI.unity
+    guid: 42b153d4aed3dfc4aacdb48308008f78
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 1e33cb9e0f422df4497a99f0679483e2, type: 2}
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 74e8613776e19044789e62cc09171275, type: 2}
+    com.unity.input.settings: {fileID: 11400000, guid: edee3005ad2964e4a9cd2449940b4509, type: 2}
     com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: 305e5febfd2fe054bbc3c0bec8f90133, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: acc90e812784d1d4fb1a917dc04b6b68, type: 2}
