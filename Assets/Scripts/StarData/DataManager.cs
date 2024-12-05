@@ -7,16 +7,7 @@ using Newtonsoft.Json.Linq;
 public class DataManager : MonoBehaviour
 {
     public bool isUpdated = false;
-    public bool isUpdatedSunPositions = false;
     public Dictionary<string, CelestialObject> celestialObjects = new Dictionary<string, CelestialObject>();
-    public List<Dictionary<string, float>> sunPositions = new List<Dictionary<string, float>>();
-
-    public void ParseSunData(string json)
-    {
-        sunPositions = JsonConvert.DeserializeObject<List<Dictionary<string, float>>>(json);
-
-        isUpdatedSunPositions = true;
-    }
 
     public void ParseData(string json)
     {
