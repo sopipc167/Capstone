@@ -12,16 +12,11 @@ public class InputManager : MonoBehaviour
 {
     public Camera arCamera;
 
-    private Touch firstTouch;
-    private Touch secondTouch;
-
-    private float minDistance = 100.0f;
+    private float minDistance = 200.0f;
     private float currentZoom = 0.0f;
     private float zoomSpeed = 0.4f;
     private float prevDistance;
     private float currentDistance;
-    [SerializeField]
-    GameObject info;
 
     private ObjectManager objectManager;
     public TextMeshProUGUI objectText;
@@ -43,11 +38,16 @@ public class InputManager : MonoBehaviour
             info.SetActive(true);
             if (Physics.Raycast(ray, out hit))
             {
-                string name = hit.collider.gameObject.name;
-                objectText.text = name;
-                StartCoroutine(Search(name));
+                GameObject go = hit.collider.gameObject;
+                if (go.transform.parent != null)
+                {
+                    objectText.text = go.transform.parent.name + " " + go.name;
+                }
+                else
+                {
+                    objectText.text = go.name;
+                }
             }
-            
         }
         else if (currentZoom < 4)
             info.SetActive(false);
@@ -76,23 +76,6 @@ public class InputManager : MonoBehaviour
             }
         }
     }
-    private IEnumerator Search(string url)
-    {
-        using (UnityWebRequest webRequest = UnityWebRequest.Get("https://port-0-capstoneserver-m2qhwewx334fe436.sel4.cloudtype.app/api/stellar/" + url))
-        {
-            yield return webRequest.SendWebRequest();
-
-            if (webRequest.responseCode == 200)
-            {
-                info.GetComponent<Info_PanelControler>().getData(webRequest.downloadHandler.text);
-            }
-            else
-            {
-                Debug.LogError(webRequest.error);
-            }
-        }
-    }
-
     private void UpdateZoom(float distance)
     {
         Vector3 direction = -new Vector3(0, 0, 1);

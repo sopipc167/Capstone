@@ -23,7 +23,14 @@ public class StarManager : MonoBehaviour
 
     private void HandleMessageReceived(string json)
     {
-        dataManager.ParseData(json);
+        if (!dataManager.isUpdatedSunPositions)
+        {
+            dataManager.ParseSunData(json);
+        }
+        else
+        {
+            dataManager.ParseData(json);
+        }
         if (dataManager.isUpdated)
             objectManager.UpdateObjects();
     }

@@ -10,6 +10,7 @@ using UnityEditor.XR;
 using UnityEngine;
 using UnityEngine.Android;
 using UnityEngine.UI;
+//using UnityEngine.UIElements;
 using UnityEngine.XR.ARFoundation;
 using static UnityEngine.GraphicsBuffer;
 
@@ -21,6 +22,8 @@ public class ObjectManager : MonoBehaviour
     public GameObject otherPrefab;
     public GameObject originObject;
     public GameObject pointerObject;
+    public Toggle lineToggle;
+    public Toggle eclipticToggle;
     public Vector3 origin = Vector3.zero;
     public float radius = 1000.0f;
     public float lineWidth = 0.5f;
@@ -30,6 +33,9 @@ public class ObjectManager : MonoBehaviour
 
     private GameObject sun, mercury, venus, mars, jupiter, saturn, uranus, neptune, pluto, moon;
     private List<List<GameObject>> constellationObjects = new List<List<GameObject>>();
+    private Dictionary<string, List<GameObject>> constellations = new Dictionary<string, List<GameObject>>();
+    private List<Vector3> ecliptic = new List<Vector3>();
+    private GameObject eclipticPoint;
     private GameObject trackingObject;
 
     private float screenWidth, screenHeight;
@@ -49,13 +55,14 @@ public class ObjectManager : MonoBehaviour
         screenHeight = Screen.height;
 
         InitializeObjects();
+        
     }
 
     public void UpdateObjects()
     {
         if (!isConstellationInitialized)
         {
-            InitializeConstellations();
+            NewInitializeConstellations();
             isConstellationInitialized = true;
         }
         /*
@@ -63,6 +70,7 @@ public class ObjectManager : MonoBehaviour
         {
             UpdateSolarObjects();
             UpdateConstellations();
+            DrawEclipticLine();
         }
         */
     }
@@ -74,16 +82,18 @@ public class ObjectManager : MonoBehaviour
             trueNorth = compassManager.GetTrueNorth();
             if (trueNorth == -1.0f) return;
 
-
+            NewInitializeEclipticLine();
             isInitialized = true;
         }
 
         if (isInitialized)
         {
             UpdateSolarObjects();
-            UpdateConstellations();
-        }
+            NewUpdateConstellations();
 
+            DrawEclipticLine();
+        }
+        
         if (trackingObject)
         {
             Vector3 targetScreenPosition = arCamera.WorldToScreenPoint(trackingObject.transform.position);
@@ -118,15 +128,7 @@ public class ObjectManager : MonoBehaviour
             pointerObject.transform.position = targetPositionInScreen;
             pointerObject.SetActive(true);
         }
-
     }
-
-
-    // �¾�� õü ��ġ ������Ʈ
-    void UpdateSolarObjects()
-    {
-        CelestialObject obj;
-
         obj = dataManager.celestialObjects["sun"];
         UpdateStar(sun, obj.alt, obj.az, radius);
 
@@ -159,10 +161,8 @@ public class ObjectManager : MonoBehaviour
     }
 
     // ���ڸ� ��ġ ������Ʈ
-    private void UpdateConstellations()
+    private void NewUpdateConstellations()
     {
-        int i = 0;
-
         foreach (KeyValuePair<string, CelestialObject> kvp in dataManager.celestialObjects)
         {
             if (kvp.Value.type != "constellation")
@@ -171,15 +171,13 @@ public class ObjectManager : MonoBehaviour
             }
 
             Constellation obj = kvp.Value.ConvertTo<Constellation>();
-
-            for (int j = 0; j < obj.stars.Count; j++)
+            int i = 0;
+            foreach (Star star in obj.stars)
             {
-                Star star = obj.stars[j];
-                UpdateStar(constellationObjects[i][j], star.alt, star.az, radius);
+                UpdateStar(constellations[obj.name][i], star.alt, star.az, radius);
+                i++;
             }
-            UpdateConstellationLine(constellationObjects[i], obj.lines);
-
-            i++;
+            UpdateConstellationLine(constellations[obj.name], obj.lines);
         }
     }
 
@@ -229,10 +227,8 @@ public class ObjectManager : MonoBehaviour
     }
 
     // ���ڸ� ������Ʈ �ʱ�ȭ
-    private void InitializeConstellations()
+    private void NewInitializeConstellations()
     {
-        int i = 0;
-
         foreach (KeyValuePair<string, CelestialObject> kvp in dataManager.celestialObjects)
         {
             if (kvp.Value.type != "constellation")
@@ -241,18 +237,22 @@ public class ObjectManager : MonoBehaviour
             }
 
             Constellation obj = kvp.Value.ConvertTo<Constellation>();
-            constellationObjects.Add(new List<GameObject>());
-
-            foreach (Star star in obj.stars)
+            GameObject parentObject = new GameObject(obj.name);
+            if (!constellations.ContainsKey(obj.name))
             {
-                GameObject newStar = Instantiate(starPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-                newStar.name = star.name;
-
-                constellationObjects[i].Add(newStar);
+                List<GameObject> stars = new List<GameObject>();
+                foreach (Star star in obj.stars)
+                {
+                    GameObject newStar = Instantiate(starPrefab, Vector3.zero, Quaternion.identity);
+                    newStar.name = star.name;
+                    float localscale = UnityEngine.Random.Range(1.0f, 4.0f);
+                    newStar.transform.localScale = new Vector3(localscale, localscale, localscale);
+                    newStar.transform.parent = parentObject.transform;
+                    stars.Add(newStar);
+                }
+                constellations[obj.name] = stars;
+                InitializeConstellationLine(constellations[obj.name], obj.lines);
             }
-            InitializeConstellationLine(constellationObjects[i], obj.lines);
-
-            i++;
         }
     }
 
@@ -298,6 +298,111 @@ public class ObjectManager : MonoBehaviour
         }
     }
 
+    private void DrawEclipticLine()
+    {
+        LineRenderer line = eclipticPoint.GetComponent<LineRenderer>();
+        for (int i = 0; i < line.positionCount - 1; i++)
+        {
+            line.SetPosition(i, ecliptic[i]);
+        }
+        line.SetPosition(line.positionCount - 1, ecliptic[0]);
+    }
+
+    private void InitializeEclipticLine()
+    {
+        int pointsCount = 365;
+        float orbitRadius = 1000.0f;
+        eclipticPoint = new GameObject();
+        LineRenderer line = eclipticPoint.AddComponent<LineRenderer>();
+        line.positionCount = pointsCount + 1;
+        line.material = new Material(Shader.Find("Sprites/Default"));
+        line.startColor = new Color(255, 184, 17);
+        line.endColor = new Color(255, 184, 17);
+        line.startWidth = 3f;
+        line.endWidth = 3f;
+
+        for (int i = 0; i < pointsCount; i++)
+        {
+            float angle = i * (360f / 365f);
+            float x = orbitRadius * Mathf.Cos(Mathf.Deg2Rad * angle);
+            float y = Mathf.Sin(Mathf.Deg2Rad * 23.5f) * Mathf.Cos(Mathf.Deg2Rad * angle) * orbitRadius;
+            float z = orbitRadius * Mathf.Sin(Mathf.Deg2Rad * angle);
+            Vector3 position = new Vector3(x, y, z);
+
+            ecliptic.Add(position);
+        }
+
+        Quaternion rotation = Quaternion.Euler(0, trueNorth, 0);
+        for (int i = 0; i < pointsCount; i++)
+        {
+            ecliptic[i] = rotation * ecliptic[i];
+            ecliptic[i] = Quaternion.Euler(0, 90, 0) * ecliptic[i];
+            ecliptic[i] += Quaternion.Euler(0, -trueNorth, 0) * Vector3.forward * 50;
+        }
+    }
+
+    private void NewInitializeEclipticLine()
+    {
+        int pointsCount = dataManager.sunPositions.Count;
+        float radius = 1000.0f;
+        eclipticPoint = new GameObject();
+        LineRenderer line = eclipticPoint.AddComponent<LineRenderer>();
+        line.positionCount = pointsCount + 1;
+        line.startWidth = 3f;
+        line.endWidth = 3f;
+
+        for (int i = 0; i < pointsCount; i++)
+        {
+            Dictionary<string, float> pos = dataManager.sunPositions[i];
+            Vector3 position = SphericalToCartesian(pos["alt"], pos["az"] - trueNorth, radius);
+            ecliptic.Add(position);
+        }
+    }
+
+    public void LineToggle(bool isOn)
+    {
+        int i = 0;
+        foreach (KeyValuePair<string, CelestialObject> kvp in dataManager.celestialObjects)
+        {
+            if (kvp.Value.type != "constellation")
+            {
+                continue;
+            }
+
+            Constellation obj = kvp.Value.ConvertTo<Constellation>();
+
+            for (int j = 0; j < obj.lines.Count; j++)
+            {
+                LineRenderer line = constellations[obj.name][obj.lines[j][0]].GetComponent<LineRenderer>();
+                if (line == null) continue;
+
+                if (isOn)
+                {
+                    line.enabled = true;
+                }
+                else
+                {
+                    line.enabled = false;
+                }
+            }
+            i++;
+        }
+    }
+
+    public void EclipticToggle(bool isOn)
+    {
+        LineRenderer line = eclipticPoint.GetComponent<LineRenderer>();
+        if (line == null) return;
+        if (isOn)
+        {
+            line.enabled = true;
+        }
+        else
+        {
+            line.enabled = false;
+        }
+    }
+
     // ������ �������� ���� ��ǥ��� ��ȯ
     Vector3 SphericalToCartesian(float altitude, float azimuth, float radius)
     {
@@ -309,9 +414,5 @@ public class ObjectManager : MonoBehaviour
         float z = radius * Mathf.Cos(alt_radian) * Mathf.Cos(az_radian);
 
         return new Vector3(x, y, z) + originObject.transform.position;
-    }
-    public void setTrackingObject(string obj)
-    {
-        this.trackingObject = GameObject.Find(obj);
     }
 }
